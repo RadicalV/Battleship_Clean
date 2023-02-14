@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../../output/src/boundary/api",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../../domain"
+    },
+    {
+      "path": "../../services/api"
+    },
+  ]
+}

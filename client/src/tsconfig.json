@@ -1,0 +1,30 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../output/src",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "./boundary/api"
+    },
+    {
+      "path": "./boundary/interactor"
+    },
+    {
+      "path": "./controller"
+    },
+    {
+      "path": "./domain"
+    },
+    {
+      "path": "./services/api"
+    },
+    {
+      "path": "./services/fake"
+    },
+    {
+      "path": "./ui/components"
+    },
+  ]
+}

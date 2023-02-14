@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../output/src/controller",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../boundary/interactor"
+    },
+  ]
+}
