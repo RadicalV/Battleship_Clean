@@ -2,7 +2,7 @@
   "extends": "../tsconfig-base.json",
   "compilerOptions": {
     "outDir": "../output/src",
-    "rootDir": "."
+    "rootDir": ".",
   },
   "references": [
     {
@@ -12,7 +12,13 @@
       "path": "./boundary/interactor"
     },
     {
-      "path": "./controller"
+      "path": "./boundary/model"
+    },
+    {
+      "path": "./controllers/implementation"
+    },
+    {
+      "path": "./controllers/model"
     },
     {
       "path": "./domain"
@@ -25,6 +31,6 @@
     },
     {
       "path": "./ui/components"
-    },
+    }
   ]
 }

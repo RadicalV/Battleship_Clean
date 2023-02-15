@@ -1,4 +1,4 @@
-export default class Game {
+export class ViewGame {
   readonly id: string;
   readonly isActive: boolean;
 

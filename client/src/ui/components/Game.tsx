@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { ViewGame } from "controllers/model/ViewGame";
 import { getGameController } from "config";
+import { useStyles } from "ui/styles";
 
-const GetGame = () => {
-  const [game, setGame] = useState<{ id: string; isActive: boolean }>();
-  const [id, setId] = useState("");
+const Game = () => {
+  const [game, setGame] = useState<ViewGame | undefined>(undefined);
+  const [id, setId] = useState<string | undefined>(undefined);
 
   const handleClick = () => {
+    if (!id) return;
     const result = getGameController.getGame(id);
     setGame(result);
   };
 
+  const { classes } = useStyles();
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "80vh",
-        flexDirection: "column",
-        gap: 4,
-      }}
-    >
+    <Box className={classes.mainWrapper}>
       <Typography variant="h1" component="h1">
         Get active game
       </Typography>
@@ -47,4 +43,4 @@ const GetGame = () => {
     </Box>
   );
 };
-export default GetGame;
+export default Game;

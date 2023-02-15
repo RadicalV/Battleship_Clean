@@ -4,9 +4,13 @@
     "outDir": "../../../output/src/ui/components",
     "rootDir": "."
   },
+  "include": ["src/config.ts"],
   "references": [
     {
-      "path": "../../controller"
+      "path": "../../controllers/model"
     },
+    {
+      "path": "../"
+    }
   ]
 }

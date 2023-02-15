@@ -1,0 +1,7 @@
+{
+  "extends": "../../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../../output/src/boundary/model",
+    "rootDir": "."
+  }
+}

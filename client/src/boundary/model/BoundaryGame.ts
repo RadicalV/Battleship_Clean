@@ -1,4 +1,4 @@
-export default class Game {
+export default class BoundaryGame {
   readonly id: string;
   readonly isActive: boolean;
 

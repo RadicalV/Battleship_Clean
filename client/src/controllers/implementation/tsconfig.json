@@ -1,15 +1,15 @@
 {
   "extends": "../../../tsconfig-base.json",
   "compilerOptions": {
-    "outDir": "../../../output/src/boundary/api",
+    "outDir": "../../../output/src/controllers/implementation",
     "rootDir": "."
   },
   "references": [
     {
-      "path": "../../domain"
+      "path": "../../boundary/interactor"
     },
     {
-      "path": "../../services/api"
+      "path": "../../boundary/model"
     },
     {
       "path": "../model"

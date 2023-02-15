@@ -1,12 +1,12 @@
 import React from "react";
 import { CssBaseline } from "@mui/material";
-import GetGame from "ui/components/GetGame";
+import Game from "ui/components/Game";
 
 function App() {
   return (
     <>
       <CssBaseline />
-      <GetGame />
+      <Game />
     </>
   );
 }
