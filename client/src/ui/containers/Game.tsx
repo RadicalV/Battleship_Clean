@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useStyles } from "ui/styles";
-import { useGetGame } from "./useGetGame";
+import { useGame } from "./useGame";
 
 const Game = () => {
-  const { game, setId, handleClick } = useGetGame();
+  const { game, setId, handleClick } = useGame();
 
   const { classes } = useStyles();
 

@@ -9,7 +9,7 @@ const gameD2BConverter = new GameD2BConverter();
 const gameInteractor = new GetGameInteractor(gameStorage, gameD2BConverter);
 const gameB2VConverter = new GameB2VConverter();
 
-export const getGameController = new GameController(
+export const gameController = new GameController(
   gameInteractor,
   gameB2VConverter
 );
