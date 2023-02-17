@@ -1,24 +1,88 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended"
-  ],
-  "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "project": ["./tsconfig.eslint.json"]
   },
-  "plugins": ["react", "@typescript-eslint", "@emotion"],
+  "extends": [
+    "react-app",
+    "plugin:compat/recommended",
+    "plugin:eslint-plugin-react/recommended",
+    "prettier"
+  ],
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "react/no-unknown-property": ["error", { "ignore": ["css"] }]
+    "prettier/prettier": "warn",
+    "react/jsx-curly-brace-presence": [
+      "warn",
+      {
+        "props": "never",
+        "children": "ignore"
+      }
+    ],
+    "react/display-name": "off",
+    "react/prop-types": [
+      "off"
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          "@mui/*/*",
+          "../*",
+          "!@mui/material/styles",
+          "!@mui/material/colors",
+          "!@mui/material/Slider",
+          "!@mui/x-date-pickers/AdapterDateFns",
+          "!@mui/x-date-pickers/LocalizationProvider"
+        ]
+      }
+    ],
+    "rxjs/finnish":[
+      "error",
+      {
+        "parameters": true,
+        "properties": true,
+        "variables": true,
+        "functions": false,
+        "methods": false
+      }
+    ],
+    "rxjs/throw-error": "error",
+    "rxjs/suffix-subjects": "error",
+    "rxjs/no-unsafe-takeuntil": "error",
+    "rxjs/no-unsafe-subject-next": "error",
+    "rxjs/no-unsafe-first": "error",
+    "rxjs/no-unsafe-catch": "error",
+    "rxjs/no-unbound-methods": "error",
+    "rxjs/no-topromise": "error",
+    "rxjs/no-subject-value": "error",
+    "rxjs/no-subject-unsubscribe": "error",
+    "rxjs/no-subclass": "error",
+    "rxjs/no-sharereplay": [
+      "error",
+      { "allowConfig": true }
+    ],
+    "rxjs/no-redundant-notify": "error",
+    "rxjs/no-nested-subscribe": "error",
+    "rxjs/no-internal": "error",
+    "rxjs/no-index": "error",
+    "rxjs/no-ignored-takewhile-value": "error",
+    "rxjs/no-ignored-replay-buffer": "error",
+    "rxjs/no-ignored-observable": "error",
+    "rxjs/no-ignored-notifier": "error",
+    "rxjs/no-exposed-subjects": "error",
+    "rxjs/no-cyclic-action": "error",
+    "rxjs/no-create": "error",
+    "rxjs/no-compat": "error",
+    "rxjs/no-async-subscribe": "error"
+  },
+  "plugins": [
+    "prettier",
+    "rxjs"
+  ],
+  "settings": {
+    "polyfills": [
+      "URLSearchParams",
+      "URL"
+    ]
   }
 }

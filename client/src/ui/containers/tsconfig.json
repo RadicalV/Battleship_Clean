@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../../../output/src/ui/containers",
+    "rootDir": "."
+  },
+  "include": ["src/config.ts"],
+  "references": [
+    {
+      "path": "../../controllers/model"
+    },
+    {
+      "path": "../../controllers/implementation"
+    },
+    {
+      "path": "../components"
+    }
+  ]
+}
