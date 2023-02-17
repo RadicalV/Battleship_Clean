@@ -6,7 +6,7 @@
   },
   "references": [
     {
-      "path": "../../boundary/interactor"
+      "path": "../../boundary/api"
     },
     {
       "path": "../../boundary/model"

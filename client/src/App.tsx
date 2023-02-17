@@ -1,6 +1,6 @@
 import React from "react";
 import { CssBaseline } from "@mui/material";
-import Game from "ui/components/Game";
+import Game from "ui/containers/Game";
 
 function App() {
   return (
