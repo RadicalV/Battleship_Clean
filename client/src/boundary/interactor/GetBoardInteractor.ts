@@ -1,18 +1,20 @@
 import { GetBoardUC } from "boundary/api/GetBoardUC";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
 import GameStorage from "services/api/GameStorage";
-import { GameD2BConverter } from "./GameD2BConverter";
+import { BoardD2BConverter } from "./BoardD2BConverter";
+
+// Up for deletion if the changes to boundaryGame model and converters are good
 
 export class GetBoardInteractor implements GetBoardUC {
   private gameStorage: GameStorage;
-  private gameConverter: GameD2BConverter;
+  private gameConverter: BoardD2BConverter;
 
-  constructor(gameStorage: GameStorage, gameConverter: GameD2BConverter) {
+  constructor(gameStorage: GameStorage, gameConverter: BoardD2BConverter) {
     this.gameStorage = gameStorage;
     this.gameConverter = gameConverter;
   }
 
   getBoard(gameId: string): BoundaryBoard {
-    return this.gameConverter.convertBoard(this.gameStorage.getBoard(gameId));
+    return this.gameConverter.convert(this.gameStorage.getBoard(gameId));
   }
 }

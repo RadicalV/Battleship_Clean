@@ -1,14 +1,19 @@
 import Game from "domain/Game";
 import BoundaryGame from "boundary/model/BoundaryGame";
-import Board from "domain/Board";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
+import { BoardD2BConverter } from "./BoardD2BConverter";
 
 export class GameD2BConverter {
-  convert(game: Game): BoundaryGame {
-    return new BoundaryGame(game.id, game.isActive);
+  private boardConverter: BoardD2BConverter;
+
+  constructor(boardConverter: BoardD2BConverter) {
+    this.boardConverter = boardConverter;
   }
 
-  convertBoard(board: Board): BoundaryBoard {
-    return new BoundaryBoard(board.grid, board.ships);
+  convert(game: Game): BoundaryGame {
+    return new BoundaryGame(
+      game.id,
+      game.isActive,
+      this.boardConverter.convert(game.board)
+    );
   }
 }

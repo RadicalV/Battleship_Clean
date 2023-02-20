@@ -1,31 +1,29 @@
 import Game from "domain/Game";
+import Board from "domain/Board";
 import BoundaryGame from "boundary/model/BoundaryGame";
 import { GameD2BConverter } from "./GameD2BConverter";
-import Board from "domain/Board";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
+import { BoardD2BConverter } from "./BoardD2BConverter";
+import { ShipD2BConverter } from "./ShipD2BConverter";
 
 describe("Domain model conversion to boundary model", () => {
-  let converter: GameD2BConverter;
+  let gameConverter: GameD2BConverter;
+  let boardConverter: BoardD2BConverter;
+  let board: Board;
 
   beforeEach(() => {
-    converter = new GameD2BConverter();
+    boardConverter = new BoardD2BConverter(new ShipD2BConverter());
+    gameConverter = new GameD2BConverter(boardConverter);
+    board = new Board([], []);
   });
 
-  it("Convert Game model to BoundaryGame model", () => {
-    const beforeConversionGame: Game = new Game("123", true, new Board([], []));
-    const afterConversionGame: BoundaryGame = new BoundaryGame("123", true);
-
-    expect(converter.convert(beforeConversionGame)).toStrictEqual(
-      afterConversionGame
+  it("Converts Game model to BoundaryGame model", () => {
+    const inputGame: Game = new Game("123", true, board);
+    const expectedGame: BoundaryGame = new BoundaryGame(
+      "123",
+      true,
+      boardConverter.convert(board)
     );
-  });
 
-  it("Convert Board model to BoundaryBoard model", () => {
-    const beforeConversionBoard: Board = new Board([], []);
-    const afterConversionBoard: BoundaryBoard = new BoundaryBoard([], []);
-
-    expect(converter.convertBoard(beforeConversionBoard)).toStrictEqual(
-      afterConversionBoard
-    );
+    expect(gameConverter.convert(inputGame)).toStrictEqual(expectedGame);
   });
 });

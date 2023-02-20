@@ -1,4 +1,5 @@
 import BoundaryGame from "boundary/model/BoundaryGame";
+import BoundaryBoard from "boundary/model/BoundaryBoard";
 import { ViewGame } from "controllers/model/ViewGame";
 import { GameB2VConverter } from "./GameB2VConverter";
 
@@ -9,12 +10,14 @@ describe("Boundary game model conversion to view model", () => {
     converter = new GameB2VConverter();
   });
 
-  it("Convert BoundaryGame model to ViewGame model", () => {
-    const beforeConversionGame: BoundaryGame = new BoundaryGame("123", true);
-    const afterConversionGame: ViewGame = new ViewGame("123", true);
-
-    expect(converter.convert(beforeConversionGame)).toStrictEqual(
-      afterConversionGame
+  it("Converts BoundaryGame model to ViewGame model", () => {
+    const inputGame: BoundaryGame = new BoundaryGame(
+      "123",
+      true,
+      new BoundaryBoard([], [])
     );
+    const expectedGame: ViewGame = new ViewGame("123", true);
+
+    expect(converter.convert(inputGame)).toStrictEqual(expectedGame);
   });
 });

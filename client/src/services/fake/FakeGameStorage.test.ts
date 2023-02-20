@@ -38,21 +38,21 @@ describe("Fake game storage getGame", () => {
   it("created game is active", () => {
     expect(game.isActive).toBe(true);
   });
-});
 
-describe("Fake game storage getBoard", () => {
-  let fakeGameStorage: FakeGameStorage;
-  let game: Game;
-  let gameId: string = "123";
+  describe("Fake game storage getBoard", () => {
+    let fakeGameStorage: FakeGameStorage;
+    let game: Game;
+    let gameId: string = "123";
 
-  beforeEach(() => {
-    fakeGameStorage = new FakeGameStorage();
-    game = fakeGameStorage.getGame(gameId);
-  });
+    beforeEach(() => {
+      fakeGameStorage = new FakeGameStorage();
+      game = fakeGameStorage.getGame(gameId);
+    });
 
-  it("returns game board", () => {
-    const board = fakeGameStorage.getBoard(gameId);
+    it("returns game board", () => {
+      const board = fakeGameStorage.getBoard(gameId);
 
-    expect(board).toStrictEqual(game.board);
+      expect(board).toStrictEqual(game.board);
+    });
   });
 });

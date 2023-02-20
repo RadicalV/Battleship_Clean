@@ -2,7 +2,7 @@ export default class Ship {
   readonly length: number;
   readonly coordinates: { x: number; y: number }[];
   readonly hits: number;
-  readonly isDestroyed: boolean;
+  readonly destroyed: boolean;
 
   constructor(
     length: number,
@@ -12,6 +12,6 @@ export default class Ship {
     this.length = length;
     this.coordinates = coordinates;
     this.hits = hits;
-    this.isDestroyed = false;
+    this.destroyed = false;
   }
 }

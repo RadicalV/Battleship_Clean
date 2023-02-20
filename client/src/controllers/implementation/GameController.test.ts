@@ -4,11 +4,13 @@ import { GameController } from "./GameController";
 import { GameB2VConverter } from "./GameB2VConverter";
 import { ViewGame } from "controllers/model/ViewGame";
 import BoundaryGame from "boundary/model/BoundaryGame";
+import BoundaryBoard from "../../boundary/model/BoundaryBoard";
 
 describe("Game Controller", () => {
   let getGameUC: MockProxy<GetGameUC>;
   let gameConverter: MockProxy<GameB2VConverter>;
   let gameController: GameController;
+  const inputId = "123";
 
   beforeEach(() => {
     getGameUC = mock<GetGameUC>();
@@ -16,14 +18,20 @@ describe("Game Controller", () => {
     gameController = new GameController(getGameUC, gameConverter);
   });
 
-  it("Game is found and returned", () => {
-    const expectedBoundaryGame = new BoundaryGame("123", true);
-    const expectedViewGame = new ViewGame("123", true);
+  it("finds game and returns it", () => {
+    const expectedBoundaryGame = new BoundaryGame(
+      inputId,
+      true,
+      new BoundaryBoard([], [])
+    );
+    const expectedViewGame = new ViewGame(inputId, true);
 
-    getGameUC.getGame.mockReturnValue(expectedBoundaryGame);
-    gameConverter.convert.mockReturnValue(expectedViewGame);
+    getGameUC.getGame.calledWith(inputId).mockReturnValue(expectedBoundaryGame);
+    gameConverter.convert
+      .calledWith(expectedBoundaryGame)
+      .mockReturnValue(expectedViewGame);
 
-    const game = gameController.getGame("123");
+    const game = gameController.getGame(inputId);
 
     expect(game).toStrictEqual(expectedViewGame);
   });

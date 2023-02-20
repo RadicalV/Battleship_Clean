@@ -16,15 +16,7 @@ export class FakeGameStorage implements GameStorage {
   }
 
   private createGrid(): number[][] {
-    const grid: number[][] = [];
-
-    for (let i = 0; i < 10; i++) {
-      grid[i] = [10];
-      for (let j = 0; j < 10; j++) {
-        grid[i][j] = 0;
-      }
-    }
-    return grid;
+    return Array(10).fill(Array(10).fill(0));
   }
 
   getBoard(gameId: string): Board {
