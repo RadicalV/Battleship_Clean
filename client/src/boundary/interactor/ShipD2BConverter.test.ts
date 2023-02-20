@@ -2,7 +2,7 @@ import Ship from "domain/Ship";
 import BoundaryShip from "boundary/model/BoundaryShip";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
-describe("Domain model conversion to boundary model", () => {
+describe(ShipD2BConverter, () => {
   let converter: ShipD2BConverter;
 
   beforeEach(() => {

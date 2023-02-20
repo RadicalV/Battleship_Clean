@@ -1,7 +1,6 @@
 import Board from "domain/Board";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
 import BoundaryShip from "boundary/model/BoundaryShip";
-import Ship from "domain/Ship";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
 export class BoardD2BConverter {
@@ -12,10 +11,8 @@ export class BoardD2BConverter {
   }
 
   convert(board: Board): BoundaryBoard {
-    const ships: BoundaryShip[] = [];
-
-    board.ships.forEach((ship: Ship) => {
-      ships.push(this.shipD2BConverter.convert(ship));
+    const ships: BoundaryShip[] = board.ships.map((ship) => {
+      return this.shipD2BConverter.convert(ship);
     });
 
     return new BoundaryBoard(board.grid, ships);

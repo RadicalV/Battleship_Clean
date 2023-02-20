@@ -5,7 +5,7 @@ import { GameD2BConverter } from "./GameD2BConverter";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
-describe("Domain model conversion to boundary model", () => {
+describe(GameD2BConverter, () => {
   let gameConverter: GameD2BConverter;
   let boardConverter: BoardD2BConverter;
   let board: Board;

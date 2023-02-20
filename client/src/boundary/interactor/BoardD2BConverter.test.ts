@@ -3,7 +3,7 @@ import BoundaryBoard from "boundary/model/BoundaryBoard";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
-describe("Domain model conversion to boundary model", () => {
+describe(BoardD2BConverter, () => {
   let converter: BoardD2BConverter;
 
   beforeEach(() => {
