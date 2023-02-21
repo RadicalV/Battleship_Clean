@@ -9,6 +9,10 @@ export class FakeGameStorage implements GameStorage {
     return new Game(id, true, board);
   }
 
+  startGame(): Game {
+    return new Game("123", true, this.makeBoard());
+  }
+
   private makeBoard(): Board {
     const grid: number[][] = this.createGrid();
     const ships: Ship[] = [];
@@ -17,9 +21,5 @@ export class FakeGameStorage implements GameStorage {
 
   private createGrid(): number[][] {
     return Array(10).fill(Array(10).fill(0));
-  }
-
-  getBoard(gameId: string): Board {
-    return this.getGame(gameId).board;
   }
 }

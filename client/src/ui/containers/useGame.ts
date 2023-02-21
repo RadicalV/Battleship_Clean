@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ViewGame } from "controllers/model/ViewGame";
+import ViewGame from "controllers/model/ViewGame";
 import { gameController } from "config";
 
 export function useGame() {
