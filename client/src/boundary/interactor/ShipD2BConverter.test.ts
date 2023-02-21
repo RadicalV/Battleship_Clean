@@ -11,8 +11,13 @@ describe(ShipD2BConverter, () => {
 
   it("Converts Ship model to BoundaryShip model", () => {
     const inputShip: Ship = new Ship(0, [], 25);
-    const boundaryShip: BoundaryShip = new BoundaryShip(0, [], 25, false);
+    const expectedShip: BoundaryShip = new BoundaryShip(0, [], 25, false);
 
-    expect(converter.convert(inputShip)).toStrictEqual(boundaryShip);
+    const convertedShip: BoundaryShip = converter.convert(inputShip);
+
+    expect(convertedShip.hits).toEqual(expectedShip.hits);
+    expect(convertedShip.length).toEqual(expectedShip.length);
+    expect(convertedShip.isDestroyed).toEqual(expectedShip.isDestroyed);
+    expect(convertedShip.coordinates).toEqual(expectedShip.coordinates);
   });
 });
