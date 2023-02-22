@@ -30,7 +30,7 @@ describe(GameB2VConverter, () => {
     const convertedGame = gameConverter.convert(inputGame);
 
     expect(convertedGame.id).toEqual(expectedGame.id);
-    expect(convertedGame.isActive).toEqual(expectedGame.isActive);
+    expect(convertedGame.active).toEqual(expectedGame.active);
     expect(convertedGame.board).toEqual(expectedGame.board);
   });
 });

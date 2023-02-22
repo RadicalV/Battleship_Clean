@@ -2,15 +2,16 @@ import GameStorage from "services/api/GameStorage";
 import Game from "domain/Game";
 import Board from "domain/Board";
 import Ship from "domain/Ship";
+import { Observable, of } from "rxjs";
 
 export class FakeGameStorage implements GameStorage {
-  getGame(id: string): Game {
+  getGame(id: string): Observable<Game> {
     const board = this.makeBoard();
-    return new Game(id, true, board);
+    return of(new Game(id, true, board));
   }
 
-  startGame(): Game {
-    return new Game("123", true, this.makeBoard());
+  startGame(): Observable<Game> {
+    return of(new Game("123", true, this.makeBoard()));
   }
 
   private makeBoard(): Board {

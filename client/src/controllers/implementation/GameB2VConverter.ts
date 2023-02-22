@@ -14,7 +14,7 @@ export class GameB2VConverter extends Converter<BoundaryGame, ViewGame> {
   convert(game: BoundaryGame): ViewGame {
     return new ViewGame(
       game.id,
-      game.isActive,
+      game.active,
       this.boardConverter.convert(game.board)
     );
   }

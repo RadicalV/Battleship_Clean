@@ -6,6 +6,7 @@ import BoundaryGame from "boundary/model/BoundaryGame";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
 import { mock, MockProxy } from "jest-mock-extended";
 import { StartGameInteractor } from "./StartGameInteractor";
+import { of } from "rxjs";
 
 describe("Start Game Interactor", () => {
   let gameStorage: MockProxy<GameStorage>;
@@ -22,7 +23,7 @@ describe("Start Game Interactor", () => {
     );
   });
 
-  it("creates a game and returns it", () => {
+  it("creates a game and returns it", (done) => {
     const expectedGame: Game = new Game(gameId, true, new Board([], []));
     const expectedBoundaryGame: BoundaryGame = new BoundaryGame(
       gameId,
@@ -30,13 +31,19 @@ describe("Start Game Interactor", () => {
       new BoundaryBoard([], [])
     );
 
-    gameStorage.startGame.calledWith().mockReturnValue(expectedGame);
+    gameStorage.startGame.calledWith().mockReturnValue(of(expectedGame));
     gameD2BConverter.convert
       .calledWith(expectedGame)
       .mockReturnValue(expectedBoundaryGame);
 
-    const game = startGameInteractor.startGame();
-
-    expect(game).toStrictEqual(expectedBoundaryGame);
+    startGameInteractor.startGame().subscribe({
+      next: (game) => {
+        expect(game).toStrictEqual(expectedBoundaryGame);
+        done();
+      },
+      error: (error) => {
+        done(error);
+      },
+    });
   });
 });

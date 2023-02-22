@@ -1,5 +1,6 @@
 import BoundaryGame from "boundary/model/BoundaryGame";
+import { Observable } from "rxjs";
 
 export interface StartGameUC {
-  startGame(): BoundaryGame;
+  startGame(): Observable<BoundaryGame>;
 }

@@ -8,7 +8,9 @@ describe("Fake game storage getGame", () => {
 
   beforeEach(() => {
     fakeGameStorage = new FakeGameStorage();
-    game = fakeGameStorage.getGame(gameId);
+    fakeGameStorage.getGame(gameId).subscribe((data) => {
+      game = data;
+    });
   });
 
   it("creates a 10x10 grid filled with 0", () => {
@@ -36,6 +38,6 @@ describe("Fake game storage getGame", () => {
   });
 
   it("created game is active", () => {
-    expect(game.isActive).toBe(true);
+    expect(game.active).toBe(true);
   });
 });

@@ -2,33 +2,40 @@ import GameStorage from "services/api/GameStorage";
 import Game from "domain/Game";
 import Board from "domain/Board";
 import Ship from "domain/Ship";
-import { BehaviorSubject, map, take } from "rxjs";
+import {
+  BehaviorSubject,
+  first,
+  map,
+  Observable,
+  switchMap,
+  throwError,
+  of,
+} from "rxjs";
 
 export class InMemoryGameStorage implements GameStorage {
-  private gameSubject$ = new BehaviorSubject<Game[]>([]);
+  private gameSubject$: BehaviorSubject<Game[]>;
 
-  getGame(id: string): Game {
-    let game: Game | undefined;
-
-    this.gameSubject$
-      .pipe(
-        take(1),
-        map((games) => games.find((g) => g.id === id))
-      )
-      .subscribe((foundGame) => {
-        game = foundGame;
-      });
-
-    return game ? game : this.startGame();
+  constructor(gameSubject$: BehaviorSubject<Game[]>) {
+    this.gameSubject$ = gameSubject$;
   }
 
-  startGame(): Game {
+  getGame(id: string): Observable<Game> {
+    return this.gameSubject$.pipe(
+      first(),
+      map((games) => games.find((g) => g.id === id)),
+      switchMap((game) =>
+        game ? of(game) : throwError(() => new Error("Game not found"))
+      )
+    );
+  }
+
+  startGame(): Observable<Game> {
     const board = this.makeBoard();
     const gameId = this.generateRandomId();
     const game = new Game(gameId, true, board);
     this.addGame(game);
 
-    return game;
+    return of(game);
   }
 
   private makeBoard(): Board {
@@ -48,7 +55,7 @@ export class InMemoryGameStorage implements GameStorage {
   private addGame(game: Game): void {
     this.gameSubject$
       .pipe(
-        take(1),
+        first(),
         map((games) => {
           const updatedGames = [...games];
           updatedGames.push(game);

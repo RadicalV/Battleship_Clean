@@ -17,7 +17,7 @@ describe(ShipD2BConverter, () => {
 
     expect(convertedShip.hits).toEqual(expectedShip.hits);
     expect(convertedShip.length).toEqual(expectedShip.length);
-    expect(convertedShip.isDestroyed).toEqual(expectedShip.isDestroyed);
+    expect(convertedShip.destroyed).toEqual(expectedShip.destroyed);
     expect(convertedShip.coordinates).toEqual(expectedShip.coordinates);
   });
 });

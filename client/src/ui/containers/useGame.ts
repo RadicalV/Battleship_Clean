@@ -8,8 +8,7 @@ export function useGame() {
 
   const handleClick = () => {
     if (!id) return;
-    const result = gameController.getGame(id);
-    setGame(result);
+    gameController.getGame(id).subscribe(setGame);
   };
 
   return { game, setId, handleClick };

@@ -2,6 +2,7 @@ import { StartGameUC } from "boundary/api/StartGameUC";
 import { GameD2BConverter } from "./GameD2BConverter";
 import GameStorage from "services/api/GameStorage";
 import BoundaryGame from "boundary/model/BoundaryGame";
+import { map, Observable } from "rxjs";
 
 export class StartGameInteractor implements StartGameUC {
   private gameStorage: GameStorage;
@@ -12,7 +13,9 @@ export class StartGameInteractor implements StartGameUC {
     this.gameConverter = gameConverter;
   }
 
-  startGame(): BoundaryGame {
-    return this.gameConverter.convert(this.gameStorage.startGame());
+  startGame(): Observable<BoundaryGame> {
+    return this.gameStorage
+      .startGame()
+      .pipe(map((game) => this.gameConverter.convert(game)));
   }
 }

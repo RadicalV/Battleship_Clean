@@ -1,6 +1,8 @@
 import { GameB2VConverter } from "./GameB2VConverter";
 import { GetGameUC } from "boundary/api/GetGameUC";
 import { StartGameUC } from "boundary/api/StartGameUC";
+import { map, Observable } from "rxjs";
+import ViewGame from "../model/ViewGame";
 
 export class GameController {
   private getGameInteractor: GetGameUC;
@@ -17,11 +19,15 @@ export class GameController {
     this.gameConverter = gameConverter;
   }
 
-  getGame(id: string) {
-    return this.gameConverter.convert(this.getGameInteractor.getGame(id));
+  getGame(id: string): Observable<ViewGame> {
+    return this.getGameInteractor
+      .getGame(id)
+      .pipe(map((game) => this.gameConverter.convert(game)));
   }
 
-  startGame() {
-    return this.gameConverter.convert(this.startGameInteractor.startGame());
+  startGame(): Observable<ViewGame> {
+    return this.startGameInteractor
+      .startGame()
+      .pipe(map((game) => this.gameConverter.convert(game)));
   }
 }

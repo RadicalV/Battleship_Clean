@@ -8,6 +8,7 @@ import BoundaryGame from "boundary/model/BoundaryGame";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
 import ViewGame from "controllers/model/ViewGame";
 import ViewBoard from "controllers/model/ViewBoard";
+import { of } from "rxjs";
 
 describe("Game Controller", () => {
   let getGameUC: MockProxy<GetGameUC>;
@@ -15,7 +16,12 @@ describe("Game Controller", () => {
   let gameConverter: MockProxy<GameB2VConverter>;
   let boardConverter: MockProxy<BoardB2VConverter>;
   let gameController: GameController;
+
   const inputId = "123";
+  const boundaryBoard = new BoundaryBoard([], []);
+  const viewBoard = new ViewBoard([]);
+  const expectedBoundaryGame = new BoundaryGame(inputId, true, boundaryBoard);
+  const expectedViewGame = new ViewGame(inputId, true, viewBoard);
 
   beforeEach(() => {
     getGameUC = mock<GetGameUC>();
@@ -23,24 +29,43 @@ describe("Game Controller", () => {
     gameConverter = mock<GameB2VConverter>();
     boardConverter = mock<BoardB2VConverter>();
     gameController = new GameController(getGameUC, startGameUC, gameConverter);
-  });
 
-  it("finds game and returns it", () => {
-    const boundaryBoard = new BoundaryBoard([], []);
-    const viewBoard = new ViewBoard([]);
-    const expectedBoundaryGame = new BoundaryGame(inputId, true, boundaryBoard);
-    const expectedViewGame = new ViewGame(inputId, true, viewBoard);
-
-    getGameUC.getGame.calledWith(inputId).mockReturnValue(expectedBoundaryGame);
     boardConverter.convert.calledWith(boundaryBoard).mockReturnValue(viewBoard);
     gameConverter.convert
       .calledWith(expectedBoundaryGame)
       .mockReturnValue(expectedViewGame);
+  });
 
-    const game = gameController.getGame(inputId);
+  it("finds game and returns it", (done) => {
+    getGameUC.getGame
+      .calledWith(inputId)
+      .mockReturnValue(of(expectedBoundaryGame));
 
-    expect(game.id).toEqual(expectedViewGame.id);
-    expect(game.isActive).toEqual(expectedViewGame.isActive);
-    expect(game.board).toEqual(expectedViewGame.board);
+    gameController.getGame(inputId).subscribe({
+      next: (game) => {
+        expect(game.id).toEqual(expectedViewGame.id);
+        expect(game.active).toEqual(expectedViewGame.active);
+        expect(game.board).toEqual(expectedViewGame.board);
+        done();
+      },
+      error: (error) => {
+        done(error);
+      },
+    });
+  });
+
+  it("creates a game and returns it", (done) => {
+    startGameUC.startGame
+      .calledWith()
+      .mockReturnValue(of(expectedBoundaryGame));
+
+    gameController.startGame().subscribe({
+      next: (game) => {
+        expect(game.id).toEqual(expectedViewGame.id);
+        expect(game.active).toEqual(expectedViewGame.active);
+        expect(game.board).toEqual(expectedViewGame.board);
+        done();
+      },
+    });
   });
 });

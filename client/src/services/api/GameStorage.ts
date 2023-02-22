@@ -1,6 +1,7 @@
 import Game from "domain/Game";
+import { Observable } from "rxjs";
 
 export default interface GameStorage {
-  getGame(id: string): Game;
-  startGame(): Game;
+  getGame(id: string): Observable<Game>;
+  startGame(): Observable<Game>;
 }
