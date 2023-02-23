@@ -22,9 +22,7 @@ export class InMemoryGameStorage implements GameStorage {
       first(),
       map((games) => games.find((g) => g.id === id)),
       switchMap((game) =>
-        game !== undefined
-          ? of(game)
-          : throwError(() => new Error("Game not found"))
+        game ? of(game) : throwError(() => new Error("Game not found"))
       )
     );
   }
