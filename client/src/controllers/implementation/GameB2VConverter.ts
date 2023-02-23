@@ -1,5 +1,5 @@
-import BoundaryGame from "boundary/model/BoundaryGame";
-import ViewGame from "controllers/model/ViewGame";
+import { BoundaryGame } from "boundary/model/index";
+import { ViewGame } from "controllers/model/index";
 import { Converter } from "utils/Converter";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 

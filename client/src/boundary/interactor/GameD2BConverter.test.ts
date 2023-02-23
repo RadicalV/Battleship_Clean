@@ -1,8 +1,5 @@
-import Game from "domain/Game";
-import Board from "domain/Board";
-import Ship from "domain/Ship";
-import BoundaryGame from "boundary/model/BoundaryGame";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
+import { Game, Board, Ship } from "domain/index";
+import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
 import { GameD2BConverter } from "./GameD2BConverter";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 import { ShipD2BConverter } from "./ShipD2BConverter";
@@ -20,9 +17,9 @@ describe(GameD2BConverter, () => {
   });
 
   it("Converts Game model to BoundaryGame model", () => {
-    const ships: Ship[] = [new Ship(1, [{ x: 5, y: 4 }], 0)];
-    const board = new Board([[0, 0, 0, 0, 0]], ships);
-    const expectedBoard = new BoundaryBoard([[0, 0, 0, 0, 0]], ships);
+    const ships: Ship[] = [mock<Ship>()];
+    const board = mock<Board>();
+    const expectedBoard = mock<BoundaryBoard>();
     const inputGame: Game = new Game("123", true, board);
 
     shipConverter.convertAll.calledWith(ships).mockReturnValue([]);

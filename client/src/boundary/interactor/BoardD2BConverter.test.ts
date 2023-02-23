@@ -1,7 +1,5 @@
-import Board from "domain/Board";
-import Ship from "domain/Ship";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
-import BoundaryShip from "boundary/model/BoundaryShip";
+import { Board, Ship } from "domain/index";
+import { BoundaryBoard, BoundaryShip } from "boundary/model/";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 import { mock, MockProxy } from "jest-mock-extended";
@@ -16,14 +14,12 @@ describe(BoardD2BConverter, () => {
   });
 
   it("Converts Board model to BoundaryBoard model", () => {
-    const ships: Ship[] = [new Ship(1, [{ x: 5, y: 5 }], 0)];
+    const ships: Ship[] = [mock<Ship>()];
+    const expectedShips: BoundaryShip[] = [mock<BoundaryShip>()];
     const inputBoard: Board = new Board([[0, 0, 0, 0]], ships);
-    const expectedShips: BoundaryShip[] = [
-      new BoundaryShip(1, [{ x: 5, y: 5 }], 0, false),
-    ];
     const expectedBoard: BoundaryBoard = new BoundaryBoard(
       [[0, 0, 0, 0]],
-      ships
+      expectedShips
     );
 
     shipD2BConverter.convertAll

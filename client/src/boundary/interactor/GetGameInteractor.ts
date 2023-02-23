@@ -1,6 +1,6 @@
 import { GetGameUC } from "boundary/api/GetGameUC";
 import GameStorage from "services/api/GameStorage";
-import BoundaryGame from "boundary/model/BoundaryGame";
+import { BoundaryGame } from "boundary/model/index";
 import { GameD2BConverter } from "./GameD2BConverter";
 import { map, Observable } from "rxjs";
 

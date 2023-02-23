@@ -1,5 +1,5 @@
-import Game from "domain/Game";
-import BoundaryGame from "boundary/model/BoundaryGame";
+import { Game } from "domain/index";
+import { BoundaryGame } from "boundary/model/index";
 import { Converter } from "utils/Converter";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 

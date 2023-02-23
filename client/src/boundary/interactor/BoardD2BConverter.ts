@@ -1,5 +1,5 @@
-import Board from "domain/Board";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
+import { Board } from "domain/index";
+import { BoundaryBoard } from "boundary/model/index";
 import { Converter } from "utils/Converter";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
