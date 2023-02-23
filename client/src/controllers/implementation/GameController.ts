@@ -2,7 +2,7 @@ import { GameB2VConverter } from "./GameB2VConverter";
 import { GetGameUC } from "boundary/api/GetGameUC";
 import { StartGameUC } from "boundary/api/StartGameUC";
 import { map, Observable } from "rxjs";
-import ViewGame from "../model/ViewGame";
+import { ViewGame } from "controllers/model/index";
 
 export class GameController {
   private getGameInteractor: GetGameUC;

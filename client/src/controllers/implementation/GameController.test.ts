@@ -4,11 +4,8 @@ import { StartGameUC } from "boundary/api/StartGameUC";
 import { GameController } from "./GameController";
 import { GameB2VConverter } from "./GameB2VConverter";
 import { BoardB2VConverter } from "./BoardB2VConverter";
-import BoundaryGame from "boundary/model/BoundaryGame";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
-import BoundaryShip from "boundary/model/BoundaryShip";
-import ViewGame from "controllers/model/ViewGame";
-import ViewBoard from "controllers/model/ViewBoard";
+import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
+import { ViewGame, ViewBoard } from "controllers/model/index";
 import { of } from "rxjs";
 
 describe("Game Controller", () => {
@@ -19,13 +16,12 @@ describe("Game Controller", () => {
   let gameController: GameController;
 
   const inputId = "123";
-  const boundaryBoard = new BoundaryBoard(
-    [[0, 0, 0, 0]],
-    [new BoundaryShip(1, [{ x: 2, y: 2 }], 0, false)]
+  const expectedBoundaryGame = new BoundaryGame(
+    inputId,
+    true,
+    mock<BoundaryBoard>()
   );
-  const viewBoard = new ViewBoard([[0, 0, 0, 0]]);
-  const expectedBoundaryGame = new BoundaryGame(inputId, true, boundaryBoard);
-  const expectedViewGame = new ViewGame(inputId, true, viewBoard);
+  const expectedViewGame = new ViewGame(inputId, true, mock<ViewBoard>());
 
   beforeEach(() => {
     getGameUC = mock<GetGameUC>();
@@ -34,7 +30,6 @@ describe("Game Controller", () => {
     boardConverter = mock<BoardB2VConverter>();
     gameController = new GameController(getGameUC, startGameUC, gameConverter);
 
-    boardConverter.convert.calledWith(boundaryBoard).mockReturnValue(viewBoard);
     gameConverter.convert
       .calledWith(expectedBoundaryGame)
       .mockReturnValue(expectedViewGame);

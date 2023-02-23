@@ -1,13 +1,24 @@
-import Game from "domain/Game";
+import { Game, Board } from "domain/index";
 import { InMemoryGameStorage } from "./InMemoryGameStorage";
-import { BehaviorSubject, mergeMap, switchMap, tap } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
+import { mock } from "jest-mock-extended";
 
 describe("In memory game storage", () => {
   let inMemoryGameStorage: InMemoryGameStorage;
+  let gameSubject$: Subject<Game[]>;
 
   beforeEach(() => {
-    const gameSubject$ = new BehaviorSubject<Game[]>([]);
+    gameSubject$ = new BehaviorSubject<Game[]>([]);
     inMemoryGameStorage = new InMemoryGameStorage(gameSubject$);
+  });
+
+  it("creates a game and adds it pushes it to subject", (done) => {
+    const subjectSpy = jest.spyOn(gameSubject$, "next");
+
+    inMemoryGameStorage.startGame().subscribe((game) => {
+      expect(subjectSpy).toBeCalledWith([game]);
+      done();
+    });
   });
 
   it("creates game board that has a 10x10 grid filled with 0", (done) => {
@@ -37,26 +48,31 @@ describe("In memory game storage", () => {
   });
 
   it("finds and returns a game based on it's id", (done) => {
-    let game: Game;
+    const id = "test";
+    const game: Game = new Game(id, true, mock<Board>());
 
-    inMemoryGameStorage
-      .startGame()
-      .pipe(
-        switchMap((data) => {
-          game = data;
-          return inMemoryGameStorage.getGame(game.id);
-        })
-      )
-      .subscribe({
-        next: (returnedGame) => {
-          expect(returnedGame.id).toEqual(game.id);
-          expect(returnedGame.active).toEqual(game.active);
-          expect(returnedGame.board).toEqual(game.board);
-          done();
-        },
-        error: (error) => {
-          done(error);
-        },
-      });
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.getGame(id).subscribe({
+      next: (returnedGame) => {
+        expect(returnedGame.id).toEqual(game.id);
+        expect(returnedGame.active).toEqual(game.active);
+        expect(returnedGame.board).toEqual(game.board);
+        done();
+      },
+      error: (error) => {
+        done(error);
+      },
+    });
+  });
+
+  it("doesn't find a game and returns an error", (done) => {
+    let id = "123";
+    inMemoryGameStorage.getGame(id).subscribe({
+      error: (err) => {
+        expect(err).toBeInstanceOf(Error);
+        done();
+      },
+    });
   });
 });

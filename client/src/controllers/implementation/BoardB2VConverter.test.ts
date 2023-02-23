@@ -1,6 +1,5 @@
-import BoundaryBoard from "boundary/model/BoundaryBoard";
-import BoundaryShip from "boundary/model/BoundaryShip";
-import ViewBoard from "controllers/model/ViewBoard";
+import { BoundaryBoard, BoundaryShip } from "boundary/model/index";
+import { ViewBoard } from "controllers/model/index";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 
 describe(BoardB2VConverter, () => {

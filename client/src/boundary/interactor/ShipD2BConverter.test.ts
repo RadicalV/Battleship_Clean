@@ -1,5 +1,5 @@
-import Ship from "domain/Ship";
-import BoundaryShip from "boundary/model/BoundaryShip";
+import { Ship } from "domain/index";
+import { BoundaryShip } from "boundary/model/index";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 
 describe(ShipD2BConverter, () => {

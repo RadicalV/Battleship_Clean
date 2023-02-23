@@ -1,7 +1,7 @@
 import { StartGameUC } from "boundary/api/StartGameUC";
 import { GameD2BConverter } from "./GameD2BConverter";
 import GameStorage from "services/api/GameStorage";
-import BoundaryGame from "boundary/model/BoundaryGame";
+import { BoundaryGame } from "boundary/model/index";
 import { map, Observable } from "rxjs";
 
 export class StartGameInteractor implements StartGameUC {

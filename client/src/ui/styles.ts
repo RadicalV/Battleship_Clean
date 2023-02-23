@@ -9,4 +9,12 @@ export const useStyles = makeStyles()(() => ({
     flexDirection: "column",
     gap: 40,
   },
+  title: {
+    fontWeight: "600",
+    fontFamily: "Bangers",
+  },
+  startGameBtn: {
+    fontSize: "3rem",
+    fontWeight: "500",
+  },
 }));

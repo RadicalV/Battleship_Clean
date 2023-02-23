@@ -1,21 +1,19 @@
 import GameStorage from "services/api/GameStorage";
-import Game from "domain/Game";
-import Board from "domain/Board";
-import Ship from "domain/Ship";
+import { Game, Board, Ship } from "domain/index";
 import {
-  BehaviorSubject,
   first,
   map,
   Observable,
   switchMap,
   throwError,
   of,
+  Subject,
 } from "rxjs";
 
 export class InMemoryGameStorage implements GameStorage {
-  private gameSubject$: BehaviorSubject<Game[]>;
+  private gameSubject$: Subject<Game[]>;
 
-  constructor(gameSubject$: BehaviorSubject<Game[]>) {
+  constructor(gameSubject$: Subject<Game[]>) {
     this.gameSubject$ = gameSubject$;
   }
 

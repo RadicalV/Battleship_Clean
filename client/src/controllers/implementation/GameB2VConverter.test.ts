@@ -1,8 +1,5 @@
-import BoundaryGame from "boundary/model/BoundaryGame";
-import BoundaryBoard from "boundary/model/BoundaryBoard";
-import BoundaryShip from "boundary/model/BoundaryShip";
-import ViewGame from "controllers/model/ViewGame";
-import ViewBoard from "controllers/model/ViewBoard";
+import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
+import { ViewGame, ViewBoard } from "controllers/model/index";
 import { GameB2VConverter } from "./GameB2VConverter";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 import { mock, MockProxy } from "jest-mock-extended";
@@ -17,11 +14,8 @@ describe(GameB2VConverter, () => {
   });
 
   it("Converts BoundaryGame model to ViewGame model", () => {
-    const boundaryBoard = new BoundaryBoard(
-      [[0, 0, 0, 0, 0]],
-      [new BoundaryShip(1, [{ x: 5, y: 5 }], 0, false)]
-    );
-    const viewBoard = new ViewBoard([[0, 0, 0, 0, 0]]);
+    const boundaryBoard = mock<BoundaryBoard>();
+    const viewBoard = mock<ViewBoard>();
     const inputGame: BoundaryGame = new BoundaryGame(
       "123",
       true,

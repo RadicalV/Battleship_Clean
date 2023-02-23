@@ -1,4 +1,4 @@
-import Game from "domain/Game";
+import { Game } from "domain/index";
 import { Observable } from "rxjs";
 
 export default interface GameStorage {
