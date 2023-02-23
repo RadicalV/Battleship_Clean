@@ -3,8 +3,10 @@ import { GameD2BConverter } from "./GameD2BConverter";
 import { GetGameInteractor } from "./GetGameInteractor";
 import Game from "domain/Game";
 import Board from "domain/Board";
+import Ship from "domain/Ship";
 import BoundaryGame from "boundary/model/BoundaryGame";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
+import BoundaryShip from "boundary/model/BoundaryShip";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
 
@@ -21,11 +23,18 @@ describe("Get Game Interactor", () => {
   });
 
   it("finds game and returns it", (done) => {
-    const expectedGame: Game = new Game("123", true, new Board([], []));
+    const expectedGame: Game = new Game(
+      "123",
+      true,
+      new Board([[0, 0, 0, 0]], [new Ship(1, [{ x: 1, y: 1 }], 0)])
+    );
     const expectedBoundaryGame: BoundaryGame = new BoundaryGame(
       "123",
       true,
-      new BoundaryBoard([], [])
+      new BoundaryBoard(
+        [[0, 0, 0, 0]],
+        [new BoundaryShip(1, [{ x: 1, y: 1 }], 0, false)]
+      )
     );
 
     gameStorage.getGame.calledWith(inputId).mockReturnValue(of(expectedGame));
@@ -38,9 +47,7 @@ describe("Get Game Interactor", () => {
         expect(game).toStrictEqual(expectedBoundaryGame);
         done();
       },
-      error: (error) => {
-        done(error);
-      },
+      error: (error) => done(error),
     });
   });
 });

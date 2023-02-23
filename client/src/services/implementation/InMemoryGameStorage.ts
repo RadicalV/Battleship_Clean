@@ -33,9 +33,8 @@ export class InMemoryGameStorage implements GameStorage {
     const board = this.makeBoard();
     const gameId = this.generateRandomId();
     const game = new Game(gameId, true, board);
-    this.addGame(game);
 
-    return of(game);
+    return this.addGame(game);
   }
 
   private makeBoard(): Board {
@@ -52,18 +51,15 @@ export class InMemoryGameStorage implements GameStorage {
     return Math.random().toString(36).substring(2);
   }
 
-  private addGame(game: Game): void {
-    this.gameSubject$
-      .pipe(
-        first(),
-        map((games) => {
-          const updatedGames = [...games];
-          updatedGames.push(game);
-          return updatedGames;
-        })
-      )
-      .subscribe((updatedGames) => {
+  private addGame(game: Game): Observable<Game> {
+    return this.gameSubject$.pipe(
+      first(),
+      map((games) => {
+        const updatedGames = [...games];
+        updatedGames.push(game);
         this.gameSubject$.next(updatedGames);
-      });
+        return game;
+      })
+    );
   }
 }

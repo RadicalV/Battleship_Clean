@@ -10,8 +10,13 @@ describe(ShipD2BConverter, () => {
   });
 
   it("Converts Ship model to BoundaryShip model", () => {
-    const inputShip: Ship = new Ship(0, [], 25);
-    const expectedShip: BoundaryShip = new BoundaryShip(0, [], 25, false);
+    const inputShip: Ship = new Ship(0, [{ x: 1, y: 1 }], 25);
+    const expectedShip: BoundaryShip = new BoundaryShip(
+      0,
+      [{ x: 1, y: 1 }],
+      25,
+      false
+    );
 
     const convertedShip: BoundaryShip = converter.convert(inputShip);
 

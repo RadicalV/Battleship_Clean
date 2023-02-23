@@ -1,22 +1,16 @@
 import Game from "domain/Game";
 import { InMemoryGameStorage } from "./InMemoryGameStorage";
-import { BehaviorSubject } from "rxjs";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
+import { BehaviorSubject, mergeMap, switchMap, tap } from "rxjs";
 
 describe("In memory game storage", () => {
   let inMemoryGameStorage: InMemoryGameStorage;
-  let game: Game;
 
   beforeEach(() => {
     const gameSubject$ = new BehaviorSubject<Game[]>([]);
     inMemoryGameStorage = new InMemoryGameStorage(gameSubject$);
-    inMemoryGameStorage.startGame().subscribe((data) => {
-      game = data;
-    });
   });
 
-  it("creates game board that has a 10x10 grid filled with 0", () => {
+  it("creates game board that has a 10x10 grid filled with 0", (done) => {
     const expectedGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -29,26 +23,40 @@ describe("In memory game storage", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    const createdGrid = game.board.grid;
-
-    expect(createdGrid).toEqual(expectedGrid);
+    inMemoryGameStorage.startGame().subscribe((game) => {
+      expect(game.board.grid).toEqual(expectedGrid);
+      done();
+    });
   });
 
-  it("creates a game that is active", () => {
-    expect(game.active).toBe(true);
+  it("creates a game that is active", (done) => {
+    inMemoryGameStorage.startGame().subscribe((game) => {
+      expect(game.active).toBe(true);
+      done();
+    });
   });
 
   it("finds and returns a game based on it's id", (done) => {
-    inMemoryGameStorage.getGame(game.id).subscribe({
-      next: (returnedGame) => {
-        expect(returnedGame.id).toEqual(game.id);
-        expect(returnedGame.active).toEqual(game.active);
-        expect(returnedGame.board).toEqual(game.board);
-        done();
-      },
-      error: (error) => {
-        done(error);
-      },
-    });
+    let game: Game;
+
+    inMemoryGameStorage
+      .startGame()
+      .pipe(
+        switchMap((data) => {
+          game = data;
+          return inMemoryGameStorage.getGame(game.id);
+        })
+      )
+      .subscribe({
+        next: (returnedGame) => {
+          expect(returnedGame.id).toEqual(game.id);
+          expect(returnedGame.active).toEqual(game.active);
+          expect(returnedGame.board).toEqual(game.board);
+          done();
+        },
+        error: (error) => {
+          done(error);
+        },
+      });
   });
 });

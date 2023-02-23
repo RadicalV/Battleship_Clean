@@ -11,8 +11,6 @@ import { InMemoryGameStorage } from "./services/implementation/InMemoryGameStora
 import { BehaviorSubject } from "rxjs";
 import Game from "./domain/Game";
 
-const fakeGameStorage = new FakeGameStorage();
-
 const gameSubject$ = new BehaviorSubject<Game[]>([]);
 const inMemoryGameStorage = new InMemoryGameStorage(gameSubject$);
 

@@ -1,4 +1,5 @@
 import BoundaryBoard from "boundary/model/BoundaryBoard";
+import BoundaryShip from "boundary/model/BoundaryShip";
 import ViewBoard from "controllers/model/ViewBoard";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 
@@ -10,8 +11,11 @@ describe(BoardB2VConverter, () => {
   });
 
   it("Converts BoundaryGame model to ViewGame model", () => {
-    const inputBoard = new BoundaryBoard([], []);
-    const expectedBoard = new ViewBoard([]);
+    const inputBoard = new BoundaryBoard(
+      [[0, 0, 0, 0, 0]],
+      [new BoundaryShip(1, [{ x: 5, y: 5 }], 0, false)]
+    );
+    const expectedBoard = new ViewBoard([[0, 0, 0, 0, 0]]);
 
     const convertedBoard = boardConverter.convert(inputBoard);
 

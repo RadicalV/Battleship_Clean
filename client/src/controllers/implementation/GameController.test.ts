@@ -6,6 +6,7 @@ import { GameB2VConverter } from "./GameB2VConverter";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 import BoundaryGame from "boundary/model/BoundaryGame";
 import BoundaryBoard from "boundary/model/BoundaryBoard";
+import BoundaryShip from "boundary/model/BoundaryShip";
 import ViewGame from "controllers/model/ViewGame";
 import ViewBoard from "controllers/model/ViewBoard";
 import { of } from "rxjs";
@@ -18,8 +19,11 @@ describe("Game Controller", () => {
   let gameController: GameController;
 
   const inputId = "123";
-  const boundaryBoard = new BoundaryBoard([], []);
-  const viewBoard = new ViewBoard([]);
+  const boundaryBoard = new BoundaryBoard(
+    [[0, 0, 0, 0]],
+    [new BoundaryShip(1, [{ x: 2, y: 2 }], 0, false)]
+  );
+  const viewBoard = new ViewBoard([[0, 0, 0, 0]]);
   const expectedBoundaryGame = new BoundaryGame(inputId, true, boundaryBoard);
   const expectedViewGame = new ViewGame(inputId, true, viewBoard);
 
@@ -48,9 +52,7 @@ describe("Game Controller", () => {
         expect(game.board).toEqual(expectedViewGame.board);
         done();
       },
-      error: (error) => {
-        done(error);
-      },
+      error: (error) => done(error),
     });
   });
 
