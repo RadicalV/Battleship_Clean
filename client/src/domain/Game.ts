@@ -2,12 +2,12 @@ import Board from "./Board";
 
 export default class Game {
   readonly id: string;
-  readonly isActive: boolean;
+  readonly active: boolean;
   readonly board: Board;
 
-  constructor(id: string, isActive: boolean, board: Board) {
+  constructor(id: string, active: boolean, board: Board) {
     this.id = id;
-    this.isActive = isActive;
+    this.active = active;
     this.board = board;
   }
 }

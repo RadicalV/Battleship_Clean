@@ -20,9 +20,9 @@ describe(GameD2BConverter, () => {
   });
 
   it("Converts Game model to BoundaryGame model", () => {
-    const ships: Ship[] = [];
-    const board = new Board([], ships);
-    const expectedBoard = new BoundaryBoard([], []);
+    const ships: Ship[] = [new Ship(1, [{ x: 5, y: 4 }], 0)];
+    const board = new Board([[0, 0, 0, 0, 0]], ships);
+    const expectedBoard = new BoundaryBoard([[0, 0, 0, 0, 0]], ships);
     const inputGame: Game = new Game("123", true, board);
 
     shipConverter.convertAll.calledWith(ships).mockReturnValue([]);
@@ -37,7 +37,7 @@ describe(GameD2BConverter, () => {
     const convertedGame = gameConverter.convert(inputGame);
 
     expect(convertedGame.id).toEqual(expectedGame.id);
-    expect(convertedGame.isActive).toEqual(expectedGame.isActive);
+    expect(convertedGame.active).toEqual(expectedGame.active);
     expect(convertedGame.board).toEqual(expectedGame.board);
   });
 });

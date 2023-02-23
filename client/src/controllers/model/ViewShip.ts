@@ -1,9 +1,9 @@
 export default class ViewShip {
   readonly coordinates: { x: number; y: number }[];
-  readonly isDestroyed: boolean;
+  readonly destroyed: boolean;
 
-  constructor(coordinates: { x: number; y: number }[], isDestroyed: boolean) {
+  constructor(coordinates: { x: number; y: number }[], destroyed: boolean) {
     this.coordinates = coordinates;
-    this.isDestroyed = isDestroyed;
+    this.destroyed = destroyed;
   }
 }

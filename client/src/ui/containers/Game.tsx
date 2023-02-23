@@ -29,7 +29,7 @@ const Game = () => {
       </Button>
       {game && (
         <Typography>
-          {game.id} {game.isActive.toString()}
+          {game.id} {game.active.toString()}
         </Typography>
       )}
     </Box>

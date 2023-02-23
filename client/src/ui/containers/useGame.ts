@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ViewGame } from "controllers/model/ViewGame";
+import ViewGame from "controllers/model/ViewGame";
 import { gameController } from "config";
 
 export function useGame() {
@@ -8,8 +8,7 @@ export function useGame() {
 
   const handleClick = () => {
     if (!id) return;
-    const result = gameController.getGame(id);
-    setGame(result);
+    gameController.getGame(id).subscribe(setGame);
   };
 
   return { game, setId, handleClick };
