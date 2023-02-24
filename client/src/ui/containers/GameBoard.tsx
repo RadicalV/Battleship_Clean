@@ -7,15 +7,12 @@ interface Props {
   grid: number[][];
 }
 
-const renderCell = (x: number, y: number, cellValue: number) => {
-  return (
-    <Cell key={`y${y}x${x}`} coordinates={{ x, y }} gridValue={cellValue} />
-  );
-};
+const renderCell = (x: number, y: number, cellValue: number) => (
+  <Cell key={`y${y}x${x}`} x={x} y={y} gridValue={cellValue} />
+);
 
-const mapThroughGrid = (grid: number[][]) => {
-  return grid.map((row, x) => row.map((col, y) => renderCell(x, y, col)));
-};
+const mapThroughGrid = (grid: number[][]) =>
+  grid.map((row, x) => row.map((col, y) => renderCell(x, y, col)));
 
 const GameBoard = (props: Props) => {
   const { grid } = props;

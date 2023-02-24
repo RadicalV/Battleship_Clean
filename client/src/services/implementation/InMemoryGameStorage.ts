@@ -36,11 +36,7 @@ export class InMemoryGameStorage implements GameStorage {
   }
 
   shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
-    return this.gameSubject$.pipe(
-      first(),
-      map((games) => games[games.length - 1]),
-      map((game) => this.checkShot(game, x, y))
-    );
+    return this.getGame(gameId).pipe(map((game) => this.checkShot(game, x, y)));
   }
 
   private makeBoard(): Board {

@@ -3,7 +3,8 @@ import React from "react";
 import { useStyles } from "ui/styles";
 
 interface Props {
-  coordinates: { x: number; y: number };
+  x: number;
+  y: number;
   gridValue: number;
 }
 
@@ -14,7 +15,7 @@ const pickColor = (gridValue: number): string => {
 };
 
 const Cell = (props: Props) => {
-  const { coordinates, gridValue } = props;
+  const { x, y, gridValue } = props;
   const { classes, cx, css } = useStyles();
 
   return (
