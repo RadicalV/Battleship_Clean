@@ -7,9 +7,20 @@ interface Props {
   grid: number[][];
 }
 
+const renderCell = (x: number, y: number, cellValue: number) => {
+  return (
+    <Cell key={`y${y}x${x}`} coordinates={{ x, y }} gridValue={cellValue} />
+  );
+};
+
+const mapThroughGrid = (grid: number[][]) => {
+  return grid.map((row, x) => row.map((col, y) => renderCell(x, y, col)));
+};
+
 const GameBoard = (props: Props) => {
   const { grid } = props;
   const { classes } = useStyles();
+
   return (
     <Box className={classes.boardWrapper}>
       <Typography className={classes.gameTitle} variant="h2" component="h2">
@@ -17,17 +28,7 @@ const GameBoard = (props: Props) => {
       </Typography>
       <Box className={classes.gridWrapper}>
         <Grid container spacing={0} className={classes.grid}>
-          {grid.map((row, x) => {
-            return row.map((col, y) => {
-              return (
-                <Cell
-                  key={`y${y}x${x}`}
-                  coordinates={{ x, y }}
-                  gridValue={col}
-                />
-              );
-            });
-          })}
+          {mapThroughGrid(grid)}
         </Grid>
       </Box>
     </Box>

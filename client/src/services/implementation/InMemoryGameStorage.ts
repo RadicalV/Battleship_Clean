@@ -35,11 +35,11 @@ export class InMemoryGameStorage implements GameStorage {
     return this.addGame(game);
   }
 
-  shoot(coordinates: { x: number; y: number }): Observable<ShotResult> {
+  shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
     return this.gameSubject$.pipe(
       first(),
       map((games) => games[games.length - 1]),
-      map((game) => this.checkShot(game, coordinates))
+      map((game) => this.checkShot(game, x, y))
     );
   }
 
@@ -99,10 +99,7 @@ export class InMemoryGameStorage implements GameStorage {
     );
   }
 
-  private checkShot(
-    game: Game,
-    coordinates: { x: number; y: number }
-  ): ShotResult {
+  private checkShot(game: Game, x: number, y: number): ShotResult {
     // const foundShip = game.board.ships.find((ship) => {
     //   const cords = ship.coordinates.find(
     //     (c) => c.x === coordinates.x && c.y === coordinates.y

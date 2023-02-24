@@ -24,16 +24,18 @@ describe("Shoot Interactor", () => {
     );
     const expectedBoundaryShotResult: BoundaryShotResult =
       new BoundaryShotResult([[0, 1, 0, 0]], mock<BoundaryShip>());
-    const coordinates = { x: 0, y: 1 };
+    const coordinateX = 0;
+    const coordinateY = 1;
+    const gameId = "123";
 
     gameStorage.shoot
-      .calledWith(coordinates)
+      .calledWith(gameId, coordinateX, coordinateY)
       .mockReturnValue(of(expectedShotResult));
     shotResultD2BConverter.convert
       .calledWith(expectedShotResult)
       .mockReturnValue(expectedBoundaryShotResult);
 
-    shootInteractor.shoot(coordinates).subscribe({
+    shootInteractor.shoot(gameId, coordinateX, coordinateY).subscribe({
       next: (shotResult) => {
         expect(shotResult).toStrictEqual(expectedBoundaryShotResult);
         done();

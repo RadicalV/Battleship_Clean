@@ -16,9 +16,9 @@ export class ShootInteractor implements ShootUC {
     this.shotResultConverter = shotResultConverter;
   }
 
-  shoot(coordinates: { x: number; y: number }): Observable<BoundaryShotResult> {
+  shoot(gameId: string, x: number, y: number): Observable<BoundaryShotResult> {
     return this.gameStorage
-      .shoot(coordinates)
+      .shoot(gameId, x, y)
       .pipe(map((shotResult) => this.shotResultConverter.convert(shotResult)));
   }
 }

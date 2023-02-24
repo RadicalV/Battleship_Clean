@@ -7,22 +7,20 @@ interface Props {
   gridValue: number;
 }
 
+const colors = ["black", "red"];
+
+const pickColor = (gridValue: number): string => {
+  return colors[gridValue - 1] || "transparent";
+};
+
 const Cell = (props: Props) => {
   const { coordinates, gridValue } = props;
   const { classes, cx, css } = useStyles();
+
   return (
     <Grid item md={1.2}>
       <Box
-        className={cx(
-          css(
-            gridValue === 1
-              ? { color: "black" }
-              : gridValue === 2
-              ? { color: "red" }
-              : { color: "transparent" }
-          ),
-          classes.cell
-        )}
+        className={cx(css({ color: pickColor(gridValue) }), classes.cell)}
         onClick={() => {}}
       >
         X
