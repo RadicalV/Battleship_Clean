@@ -7,11 +7,12 @@ export default class Ship {
   constructor(
     length: number,
     coordinates: { x: number; y: number }[],
-    hits: number
+    hits: number,
+    destroyed = false
   ) {
     this.length = length;
     this.coordinates = coordinates;
     this.hits = hits;
-    this.destroyed = false;
+    this.destroyed = destroyed;
   }
 }

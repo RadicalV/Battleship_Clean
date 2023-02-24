@@ -1,19 +1,35 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useStyles } from "ui/styles";
-import { ViewBoard } from "controllers/model";
+import Cell from "ui/components/Cell";
 
 interface Props {
-  board: ViewBoard;
+  grid: number[][];
 }
 
 const GameBoard = (props: Props) => {
-  const { board } = props;
+  const { grid } = props;
   const { classes } = useStyles();
-
   return (
-    <Box className={classes.mainWrapper}>
-      Game board goes here {board.grid.length}
+    <Box className={classes.boardWrapper}>
+      <Typography className={classes.gameTitle} variant="h2" component="h2">
+        BattleShips
+      </Typography>
+      <Box className={classes.gridWrapper}>
+        <Grid container spacing={0} className={classes.grid}>
+          {grid.map((row, x) => {
+            return row.map((col, y) => {
+              return (
+                <Cell
+                  key={`y${y}x${x}`}
+                  coordinates={{ x, y }}
+                  gridValue={col}
+                />
+              );
+            });
+          })}
+        </Grid>
+      </Box>
     </Box>
   );
 };

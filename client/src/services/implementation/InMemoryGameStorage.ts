@@ -1,5 +1,5 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship } from "domain/index";
+import { Game, Board, Ship, ShotResult } from "domain/index";
 import {
   first,
   map,
@@ -35,14 +35,52 @@ export class InMemoryGameStorage implements GameStorage {
     return this.addGame(game);
   }
 
+  shoot(coordinates: { x: number; y: number }): Observable<ShotResult> {
+    return this.gameSubject$.pipe(
+      first(),
+      map((games) => games[games.length - 1]),
+      map((game) => this.checkShot(game, coordinates))
+    );
+  }
+
   private makeBoard(): Board {
     const grid: number[][] = this.createGrid();
-    const ships: Ship[] = [];
+    const ships: Ship[] = this.createShips();
     return new Board(grid, ships);
   }
 
   private createGrid(): number[][] {
     return Array(10).fill(Array(10).fill(0));
+  }
+
+  private createShips(): Ship[] {
+    const ships: Ship[] = [];
+    ships.push(new Ship(1, [{ x: 0, y: 0 }], 0));
+    ships.push(new Ship(1, [{ x: 0, y: 3 }], 0));
+    ships.push(
+      new Ship(
+        2,
+        [
+          { x: 0, y: 5 },
+          { x: 0, y: 6 },
+        ],
+        0
+      )
+    );
+    ships.push(
+      new Ship(
+        4,
+        [
+          { x: 9, y: 6 },
+          { x: 9, y: 7 },
+          { x: 9, y: 8 },
+          { x: 9, y: 9 },
+        ],
+        0
+      )
+    );
+
+    return ships;
   }
 
   private generateRandomId(): string {
@@ -60,4 +98,48 @@ export class InMemoryGameStorage implements GameStorage {
       })
     );
   }
+
+  private checkShot(
+    game: Game,
+    coordinates: { x: number; y: number }
+  ): ShotResult {
+    // const foundShip = game.board.ships.find((ship) => {
+    //   const cords = ship.coordinates.find(
+    //     (c) => c.x === coordinates.x && c.y === coordinates.y
+    //   );
+    //   return cords ? ship : undefined;
+    // });
+    //
+    // let newShip;
+    //
+    // if (foundShip)
+    //   newShip = new Ship(
+    //     foundShip.length,
+    //     foundShip.coordinates,
+    //     foundShip.hits + 1,
+    //     foundShip.length >= foundShip.hits + 1 ? true : foundShip.destroyed
+    //   );
+    //
+    // const updatedGame = this.updateGame(newShip, game, coordinates);
+    // const o$ = this.addGame(updatedGame);
+    //
+    // return new ShotResult(updatedGame.board.grid, newShip);
+    return new ShotResult(game.board.grid, new Ship(1, [], 0));
+  }
+
+  // private updateGame(
+  //   foundShip: Ship | undefined,
+  //   game: Game,
+  //   coordinates: { x: number; y: number }
+  // ): Game {
+  //   const ships = game.board.ships;
+  //   const grid = game.board.grid;
+  //   if (foundShip) {
+  //     const index = game.board.ships.indexOf(foundShip);
+  //     ships[index] = foundShip;
+  //     grid[coordinates.x][coordinates.y] = 2;
+  //   } else grid[coordinates.x][coordinates.y] = 1;
+  //
+  //   return new Game(game.id, game.active, new Board(grid, ships));
+  // }
 }
