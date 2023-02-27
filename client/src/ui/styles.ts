@@ -1,5 +1,6 @@
 import { makeStyles } from "tss-react/mui";
-import Image from "./water.jpg";
+import Water from "./water.jpg";
+import Sand from "./sand.jpg";
 
 export const useStyles = makeStyles()(() => ({
   mainWrapper: {
@@ -9,6 +10,18 @@ export const useStyles = makeStyles()(() => ({
     height: "80vh",
     flexDirection: "column",
     gap: 10,
+  },
+  gameWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  gameStatsWrapper: {
+    display: "flex",
+    width: "700px",
+    justifyContent: "space-around",
+    padding: 30,
+    boxSizing: "border-box",
   },
   boardWrapper: {
     display: "flex",
@@ -32,13 +45,17 @@ export const useStyles = makeStyles()(() => ({
     fontSize: "3rem",
   },
   gridWrapper: {
-    padding: 30,
-    border: "5px solid black",
-    borderRadius: "25px",
+    padding: 50,
+    border: "5px solid",
+    borderRadius: "45px",
+    borderColor: "rgb(132,112,88)",
+    backgroundImage: `url(${Sand})`,
+    backgroundPosition: "center",
+    backgroundSize: "700px 700px",
   },
   grid: {
     width: 600,
-    backgroundImage: `url(${Image})`,
+    backgroundImage: `url(${Water})`,
     backgroundPosition: "center",
     backgroundSize: "600px 600px",
   },
@@ -58,5 +75,20 @@ export const useStyles = makeStyles()(() => ({
       backgroundColor: "rgba(172,226,226, 0.5)",
       cursor: "pointer",
     },
+  },
+  statsItem: {
+    border: "3px solid black",
+    borderRadius: "15px",
+    width: "300px",
+    padding: 10,
+    fontSize: "2rem",
+    fontFamily: "Bangers",
+    userSelect: "none",
+    display: "flex",
+    justifyContent: "center",
+    gap: 15,
+  },
+  statsItemHighlight: {
+    color: "rgb(212,40,117)",
   },
 }));

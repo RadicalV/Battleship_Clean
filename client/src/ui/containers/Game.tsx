@@ -7,7 +7,7 @@ const Game = () => {
   const [game, setGame] = useState<ViewGame | undefined>(undefined);
 
   return game ? (
-    <GameWindow board={game.board} />
+    <GameWindow board={game.board} setGame={setGame} gameId={game.id} />
   ) : (
     <StartGameWindow setGame={setGame} />
   );

@@ -20,7 +20,9 @@ export class InMemoryGameStorage implements GameStorage {
   getGame(id: string): Observable<Game> {
     return this.gameSubject$.pipe(
       first(),
-      map((games) => games.find((g) => g.id === id)),
+      map((games) => {
+        return games.find((g) => g.id === id);
+      }),
       switchMap((game) =>
         game ? of(game) : throwError(() => new Error("Game not found"))
       )
@@ -30,7 +32,7 @@ export class InMemoryGameStorage implements GameStorage {
   startGame(): Observable<Game> {
     const board = this.makeBoard();
     const gameId = this.generateRandomId();
-    const game = new Game(gameId, true, board);
+    const game = new Game(gameId, true, board, 25, 0);
 
     return this.addGame(game);
   }
@@ -46,7 +48,9 @@ export class InMemoryGameStorage implements GameStorage {
   }
 
   private createGrid(): number[][] {
-    return Array(10).fill(Array(10).fill(0));
+    const arr = [];
+    for (let i = 0; i < 10; i++) arr.push(Array(10).fill(0));
+    return arr;
   }
 
   private createShips(): Ship[] {
@@ -96,43 +100,58 @@ export class InMemoryGameStorage implements GameStorage {
   }
 
   private checkShot(game: Game, x: number, y: number): ShotResult {
-    // const foundShip = game.board.ships.find((ship) => {
-    //   const cords = ship.coordinates.find(
-    //     (c) => c.x === coordinates.x && c.y === coordinates.y
-    //   );
-    //   return cords ? ship : undefined;
-    // });
-    //
-    // let newShip;
-    //
-    // if (foundShip)
-    //   newShip = new Ship(
-    //     foundShip.length,
-    //     foundShip.coordinates,
-    //     foundShip.hits + 1,
-    //     foundShip.length >= foundShip.hits + 1 ? true : foundShip.destroyed
-    //   );
-    //
-    // const updatedGame = this.updateGame(newShip, game, coordinates);
-    // const o$ = this.addGame(updatedGame);
-    //
-    // return new ShotResult(updatedGame.board.grid, newShip);
-    return new ShotResult(game.board.grid, new Ship(1, [], 0));
+    const foundShip = game.board.ships.find((ship) => {
+      const cords = ship.coordinates.find((c) => c.x === x && c.y === y);
+      return cords ? ship : undefined;
+    });
+
+    let newShip;
+
+    if (foundShip)
+      newShip = new Ship(
+        foundShip.length,
+        foundShip.coordinates,
+        foundShip.hits + 1,
+        foundShip.length <= foundShip.hits + 1 ? true : foundShip.destroyed
+      );
+
+    const updatedGame = this.updateGame(newShip, foundShip, game, x, y);
+    const o$ = this.addGame(updatedGame);
+
+    return new ShotResult(updatedGame.board.grid, newShip);
   }
 
-  // private updateGame(
-  //   foundShip: Ship | undefined,
-  //   game: Game,
-  //   coordinates: { x: number; y: number }
-  // ): Game {
-  //   const ships = game.board.ships;
-  //   const grid = game.board.grid;
-  //   if (foundShip) {
-  //     const index = game.board.ships.indexOf(foundShip);
-  //     ships[index] = foundShip;
-  //     grid[coordinates.x][coordinates.y] = 2;
-  //   } else grid[coordinates.x][coordinates.y] = 1;
-  //
-  //   return new Game(game.id, game.active, new Board(grid, ships));
-  // }
+  private updateGame(
+    newShip: Ship | undefined,
+    foundShip: Ship | undefined,
+    game: Game,
+    x: number,
+    y: number
+  ): Game {
+    const ships = game.board.ships;
+    const grid = game.board.grid;
+    let shipsDestroyed = game.shipsDestroyed;
+    let hitsRemaining = game.hitsRemaining;
+    if (foundShip && newShip) {
+      const index = game.board.ships.indexOf(foundShip);
+      ships[index] = newShip;
+      if (newShip.destroyed) {
+        newShip.coordinates.map(
+          (coordinate) => (grid[coordinate.x][coordinate.y] = 3)
+        );
+        shipsDestroyed += 1;
+      } else grid[x][y] = 2;
+    } else {
+      grid[x][y] = 1;
+      hitsRemaining -= 1;
+    }
+
+    return new Game(
+      game.id,
+      game.active,
+      new Board(grid, ships),
+      hitsRemaining,
+      shipsDestroyed
+    );
+  }
 }

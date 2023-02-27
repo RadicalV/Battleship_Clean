@@ -48,5 +48,7 @@ const shotResultB2VConverter = new ShotResultB2VConverter(shipB2VConverter);
 export const gameController = new GameController(
   gameInteractor,
   startGameInteractor,
-  gameB2VConverter
+  shootInteractor,
+  gameB2VConverter,
+  shotResultB2VConverter
 );
