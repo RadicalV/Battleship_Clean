@@ -1,7 +1,5 @@
 import GameStorage from "services/api/GameStorage";
-import Game from "domain/Game";
-import Board from "domain/Board";
-import Ship from "domain/Ship";
+import { Game, Board, Ship, ShotResult } from "domain/index";
 import { Observable, of } from "rxjs";
 
 export class FakeGameStorage implements GameStorage {
@@ -22,5 +20,9 @@ export class FakeGameStorage implements GameStorage {
 
   private createGrid(): number[][] {
     return Array(10).fill(Array(10).fill(0));
+  }
+
+  shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
+    return of(new ShotResult([]));
   }
 }

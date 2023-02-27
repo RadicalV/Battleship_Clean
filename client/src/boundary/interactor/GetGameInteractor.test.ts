@@ -1,12 +1,8 @@
 import GameStorage from "services/api/GameStorage";
 import { GameD2BConverter } from "./GameD2BConverter";
 import { GetGameInteractor } from "./GetGameInteractor";
-import { Game, Board, Ship } from "domain/index";
-import {
-  BoundaryGame,
-  BoundaryBoard,
-  BoundaryShip,
-} from "boundary/model/index";
+import { Game, Board } from "domain/index";
+import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
 
