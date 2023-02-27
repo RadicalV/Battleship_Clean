@@ -16,7 +16,7 @@ describe(GameD2BConverter, () => {
   it("Converts Game model to BoundaryGame model", () => {
     const board = mock<Board>();
     const expectedBoard = mock<BoundaryBoard>();
-    const inputGame: Game = new Game("123", true, board);
+    const inputGame: Game = new Game("123", true, board, 25, 0);
 
     boardConverter.convert.calledWith(board).mockReturnValue(expectedBoard);
 

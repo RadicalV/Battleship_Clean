@@ -132,6 +132,7 @@ export class InMemoryGameStorage implements GameStorage {
     const grid = game.board.grid;
     let shipsDestroyed = game.shipsDestroyed;
     let hitsRemaining = game.hitsRemaining;
+
     if (foundShip && newShip) {
       const index = game.board.ships.indexOf(foundShip);
       ships[index] = newShip;

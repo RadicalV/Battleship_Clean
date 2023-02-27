@@ -1,6 +1,8 @@
 import { ViewGame, ViewBoard } from "controllers/model/index";
 import { gameController } from "config";
 
+//TODO alert the user when ship is destroyed
+
 export function useShoot(setGame: (game: ViewGame) => void, gameId: string) {
   const handleCellClick = (x: number, y: number) => {
     gameController.shoot(gameId, x, y).subscribe((shotResult) => {

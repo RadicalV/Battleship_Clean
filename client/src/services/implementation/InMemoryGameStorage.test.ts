@@ -49,7 +49,7 @@ describe("In memory game storage", () => {
 
   it("finds and returns a game based on it's id", (done) => {
     const id = "test";
-    const game: Game = new Game(id, true, mock<Board>());
+    const game: Game = new Game(id, true, mock<Board>(), 25, 0);
 
     gameSubject$.next([game]);
 
