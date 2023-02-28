@@ -1,4 +1,4 @@
-import { Game, Board } from "domain/index";
+import { Game, Board, Ship } from "domain/index";
 import { InMemoryGameStorage } from "./InMemoryGameStorage";
 import { BehaviorSubject, Subject } from "rxjs";
 import { mock } from "jest-mock-extended";
@@ -71,6 +71,134 @@ describe("In memory game storage", () => {
     inMemoryGameStorage.getGame(id).subscribe({
       error: (err) => {
         expect(err).toBeInstanceOf(Error);
+        done();
+      },
+    });
+  });
+
+  it("shoots at given coordinates and returns shotResult when miss", (done) => {
+    const id = "123456";
+    const coordinateX = 1;
+    const coordinateY = 1;
+    const game: Game = new Game(
+      id,
+      true,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [
+          new Ship(
+            2,
+            [
+              { x: 0, y: 0 },
+              { x: 0, y: 1 },
+            ],
+            0
+          ),
+        ]
+      ),
+      25,
+      0
+    );
+
+    const expectedGrid = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+    ];
+
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.shoot(id, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedGrid);
+        expect(shotResult.ship).toBe(undefined);
+        done();
+      },
+    });
+  });
+
+  it("shoots at given coordinates and returns shotResult with hit ship", (done) => {
+    const id = "123456";
+    const coordinateX = 0;
+    const coordinateY = 1;
+    const game: Game = new Game(
+      id,
+      true,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [
+          new Ship(
+            2,
+            [
+              { x: 0, y: 0 },
+              { x: 0, y: 1 },
+            ],
+            0
+          ),
+        ]
+      ),
+      25,
+      0
+    );
+
+    const expectedGrid = [
+      [0, 2, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
+
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.shoot(id, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedGrid);
+        expect(shotResult.ship!.hits).toBe(1);
+        expect(shotResult.ship!.destroyed).toBe(false);
+        done();
+      },
+    });
+  });
+
+  it("shoots at given coordinates and returns shotResult with destroyed ship", (done) => {
+    const id = "123456";
+    const coordinateX = 1;
+    const coordinateY = 1;
+    const game: Game = new Game(
+      id,
+      true,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [new Ship(1, [{ x: 1, y: 1 }], 0)]
+      ),
+      25,
+      0
+    );
+
+    const expectedGrid = [
+      [0, 0, 0],
+      [0, 3, 0],
+      [0, 0, 0],
+    ];
+
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.shoot(id, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedGrid);
+        expect(shotResult.ship!.hits).toBe(1);
+        expect(shotResult.ship!.destroyed).toBe(true);
         done();
       },
     });

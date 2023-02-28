@@ -1,11 +1,12 @@
 import { Box, Grid } from "@mui/material";
 import React from "react";
 import { useStyles } from "ui/styles";
-import { GpsFixedSharp, NewReleasesSharp } from "@mui/icons-material";
+import { GpsFixedSharp } from "@mui/icons-material";
 
 interface Props {
   gridValue: number;
   onCellClick: () => void;
+  testId: string;
 }
 
 const colors = ["black", "red", "red"];
@@ -15,20 +16,28 @@ const pickColor = (gridValue: number): string => {
 };
 
 const Cell = (props: Props) => {
-  const { gridValue, onCellClick } = props;
+  const { gridValue, onCellClick, testId } = props;
   const { classes, cx, css } = useStyles();
 
   return (
-    <Grid item md={1.2}>
+    <Grid item md={1.2} data-testid={`cell-item${testId}`}>
       <Box
         className={cx(css({ color: pickColor(gridValue) }), classes.cell)}
+        data-testid="cell-text"
         onClick={() => {
           gridValue === 0
             ? onCellClick()
             : console.log("Can't shoot at the same place twice");
         }}
       >
-        {gridValue === 3 ? <GpsFixedSharp sx={{ fontSize: "40px" }} /> : "X"}
+        {gridValue === 3 ? (
+          <GpsFixedSharp
+            sx={{ fontSize: "40px" }}
+            data-testid="destroyed-icon"
+          />
+        ) : (
+          "X"
+        )}
       </Box>
     </Grid>
   );

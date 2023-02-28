@@ -8,6 +8,7 @@ import {
   throwError,
   of,
   Subject,
+  take,
 } from "rxjs";
 
 export class InMemoryGameStorage implements GameStorage {
@@ -38,7 +39,9 @@ export class InMemoryGameStorage implements GameStorage {
   }
 
   shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
-    return this.getGame(gameId).pipe(map((game) => this.checkShot(game, x, y)));
+    return this.getGame(gameId).pipe(
+      switchMap((game) => this.checkShot(game, x, y))
+    );
   }
 
   private makeBoard(): Board {
@@ -99,13 +102,10 @@ export class InMemoryGameStorage implements GameStorage {
     );
   }
 
-  private checkShot(game: Game, x: number, y: number): ShotResult {
-    const foundShip = game.board.ships.find((ship) => {
-      const cords = ship.coordinates.find((c) => c.x === x && c.y === y);
-      return cords ? ship : undefined;
-    });
+  private checkShot(game: Game, x: number, y: number): Observable<ShotResult> {
+    const foundShip = this.checkForShip(game, x, y);
 
-    let newShip;
+    let newShip: Ship | undefined;
 
     if (foundShip)
       newShip = new Ship(
@@ -116,9 +116,18 @@ export class InMemoryGameStorage implements GameStorage {
       );
 
     const updatedGame = this.updateGame(newShip, foundShip, game, x, y);
-    const o$ = this.addGame(updatedGame);
 
-    return new ShotResult(updatedGame.board.grid, newShip);
+    return this.addGame(updatedGame).pipe(
+      map((game) => new ShotResult(game.board.grid, newShip)),
+      take(1)
+    );
+  }
+
+  private checkForShip(game: Game, x: number, y: number) {
+    return game.board.ships.find((ship) => {
+      const cords = ship.coordinates.find((c) => c.x === x && c.y === y);
+      return cords ? ship : undefined;
+    });
   }
 
   private updateGame(

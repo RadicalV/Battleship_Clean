@@ -5,12 +5,14 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
+import * as config from "config";
 
 describe("Use Start Game Hook", () => {
   let gameController: MockProxy<GameController>;
 
   beforeEach(() => {
     gameController = mock<GameController>();
+    jest.spyOn(config, "gameController").mockReturnValue(gameController);
   });
 
   it("creates a game and sets it to state", () => {

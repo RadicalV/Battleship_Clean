@@ -19,6 +19,7 @@ const renderCell = (
 ) => (
   <Cell
     key={`y${y}x${x}`}
+    testId={`${x}${y}`}
     gridValue={cellValue}
     onCellClick={() => {
       handleCellClick(x, y);
@@ -46,7 +47,7 @@ const GameBoard = (props: Props) => {
         BattleShips
       </Typography>
       <Box className={classes.gridWrapper}>
-        <Grid container spacing={0} className={classes.grid}>
+        <Grid container spacing={0} className={classes.grid} data-testid="grid">
           {mapThroughGrid(grid, handleCellClick)}
         </Grid>
       </Box>
