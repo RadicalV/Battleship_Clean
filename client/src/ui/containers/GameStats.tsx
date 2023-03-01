@@ -17,13 +17,13 @@ const GameStats = (props: Props) => {
   return (
     <Box className={classes.gameStatsWrapper}>
       <Box className={classes.statsItem} data-testid="hits-stat">
-        Hits Remaining:{" "}
+        Hits Remaining:&nbsp;
         <Box className={classes.statsItemHighlight}>
           {gameStats.hitsRemaining}
         </Box>
       </Box>
       <Box className={classes.statsItem} data-testid="ships-stat">
-        Ships Destroyed:{" "}
+        Ships Destroyed:&nbsp;
         <Box className={classes.statsItemHighlight}>
           {gameStats.shipsDestroyed}
         </Box>
