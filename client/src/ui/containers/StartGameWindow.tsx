@@ -20,6 +20,7 @@ const StartGameWindow = ({ setGame }: Props) => {
       <Button
         className={classes.startGameBtn}
         variant="outlined"
+        data-testid="start-btn"
         onClick={handleClick}
       >
         Start Game

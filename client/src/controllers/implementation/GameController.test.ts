@@ -1,18 +1,34 @@
 import { mock, MockProxy } from "jest-mock-extended";
 import { GetGameUC } from "boundary/api/GetGameUC";
 import { StartGameUC } from "boundary/api/StartGameUC";
-import { GameController } from "./GameController";
-import { GameB2VConverter } from "./GameB2VConverter";
-import { BoardB2VConverter } from "./BoardB2VConverter";
-import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
-import { ViewGame, ViewBoard } from "controllers/model/index";
+import { ShootUC } from "boundary/api/ShootUC";
+import {
+  GameController,
+  GameB2VConverter,
+  BoardB2VConverter,
+  ShotResultB2VConverter,
+} from "./index";
+import {
+  BoundaryGame,
+  BoundaryBoard,
+  BoundaryShip,
+  BoundaryShotResult,
+} from "boundary/model/index";
+import {
+  ViewGame,
+  ViewBoard,
+  ViewShip,
+  ViewShotResult,
+} from "controllers/model/index";
 import { of } from "rxjs";
 
 describe("Game Controller", () => {
   let getGameUC: MockProxy<GetGameUC>;
   let startGameUC: MockProxy<StartGameUC>;
+  let shootUC: MockProxy<ShootUC>;
   let gameConverter: MockProxy<GameB2VConverter>;
   let boardConverter: MockProxy<BoardB2VConverter>;
+  let shotResultConverter: MockProxy<ShotResultB2VConverter>;
   let gameController: GameController;
 
   const inputId = "123";
@@ -26,9 +42,17 @@ describe("Game Controller", () => {
   beforeEach(() => {
     getGameUC = mock<GetGameUC>();
     startGameUC = mock<StartGameUC>();
+    shootUC = mock<ShootUC>();
     gameConverter = mock<GameB2VConverter>();
     boardConverter = mock<BoardB2VConverter>();
-    gameController = new GameController(getGameUC, startGameUC, gameConverter);
+    shotResultConverter = mock<ShotResultB2VConverter>();
+    gameController = new GameController(
+      getGameUC,
+      startGameUC,
+      shootUC,
+      gameConverter,
+      shotResultConverter
+    );
 
     gameConverter.convert
       .calledWith(expectedBoundaryGame)
@@ -52,15 +76,108 @@ describe("Game Controller", () => {
   });
 
   it("creates a game and returns it", (done) => {
-    startGameUC.startGame
-      .calledWith()
-      .mockReturnValue(of(expectedBoundaryGame));
+    startGameUC.startGame.mockReturnValue(of(expectedBoundaryGame));
 
     gameController.startGame().subscribe({
       next: (game) => {
         expect(game.id).toEqual(expectedViewGame.id);
         expect(game.active).toEqual(expectedViewGame.active);
         expect(game.board).toEqual(expectedViewGame.board);
+        done();
+      },
+    });
+  });
+
+  it("returns a grid with value 1 at shot position and undefined ship", (done) => {
+    const coordinateX = 1;
+    const coordinateY = 1;
+
+    const expectedBoundaryShotResult = new BoundaryShotResult(
+      [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+      ],
+      undefined
+    );
+    const expectedViewShotResult = new ViewShotResult(
+      [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+      ],
+      undefined
+    );
+
+    shootUC.shoot
+      .calledWith(inputId, coordinateX, coordinateY)
+      .mockReturnValue(of(expectedBoundaryShotResult));
+
+    shotResultConverter.convert
+      .calledWith(expectedBoundaryShotResult)
+      .mockReturnValue(expectedViewShotResult);
+
+    gameController.shoot(inputId, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedViewShotResult.grid);
+        expect(shotResult.ship).toEqual(expectedViewShotResult.ship);
+        done();
+      },
+    });
+  });
+
+  it("returns a grid with value 2 at shot position and hit ship", (done) => {
+    const coordinateX = 1;
+    const coordinateY = 1;
+
+    const expectedBoundaryShotResult = new BoundaryShotResult(
+      [
+        [0, 0, 0],
+        [0, 2, 0],
+        [0, 0, 0],
+      ],
+      new BoundaryShip(
+        2,
+        [
+          { x: 0, y: 1 },
+          { x: 1, y: 1 },
+        ],
+        1,
+        false
+      )
+    );
+    const expectedViewShotResult = new ViewShotResult(
+      [
+        [0, 0, 0],
+        [0, 2, 0],
+        [0, 0, 0],
+      ],
+      new ViewShip(
+        [
+          { x: 0, y: 1 },
+          { x: 1, y: 1 },
+        ],
+        false
+      )
+    );
+
+    shootUC.shoot
+      .calledWith(inputId, coordinateX, coordinateY)
+      .mockReturnValue(of(expectedBoundaryShotResult));
+
+    shotResultConverter.convert
+      .calledWith(expectedBoundaryShotResult)
+      .mockReturnValue(expectedViewShotResult);
+
+    gameController.shoot(inputId, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedViewShotResult.grid);
+        expect(shotResult.ship!.coordinates).toEqual(
+          expectedViewShotResult.ship!.coordinates
+        );
+        expect(shotResult.ship!.destroyed).toEqual(
+          expectedViewShotResult.ship!.destroyed
+        );
         done();
       },
     });

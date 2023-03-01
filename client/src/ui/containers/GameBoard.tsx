@@ -1,22 +1,45 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { useStyles } from "ui/styles";
+import { ViewGame } from "controllers/model/index";
 import Cell from "ui/components/Cell";
+import { useShoot } from "./useShoot";
 
 interface Props {
   grid: number[][];
+  setGame: (game: ViewGame) => void;
+  gameId: string;
 }
 
-const renderCell = (x: number, y: number, cellValue: number) => (
-  <Cell key={`y${y}x${x}`} x={x} y={y} gridValue={cellValue} />
+const renderCell = (
+  x: number,
+  y: number,
+  cellValue: number,
+  handleCellClick: (x: number, y: number) => void
+) => (
+  <Cell
+    key={`y${y}x${x}`}
+    testId={`${x}${y}`}
+    gridValue={cellValue}
+    onCellClick={() => {
+      handleCellClick(x, y);
+    }}
+  />
 );
 
-const mapThroughGrid = (grid: number[][]) =>
-  grid.map((row, x) => row.map((col, y) => renderCell(x, y, col)));
+const mapThroughGrid = (
+  grid: number[][],
+  handleCellClick: (x: number, y: number) => void
+) =>
+  grid.map((row, x) =>
+    row.map((col, y) => renderCell(x, y, col, handleCellClick))
+  );
 
 const GameBoard = (props: Props) => {
-  const { grid } = props;
+  const { grid, setGame, gameId } = props;
   const { classes } = useStyles();
+
+  const { handleCellClick } = useShoot(setGame, gameId);
 
   return (
     <Box className={classes.boardWrapper}>
@@ -24,8 +47,8 @@ const GameBoard = (props: Props) => {
         BattleShips
       </Typography>
       <Box className={classes.gridWrapper}>
-        <Grid container spacing={0} className={classes.grid}>
-          {mapThroughGrid(grid)}
+        <Grid container spacing={0} className={classes.grid} data-testid="grid">
+          {mapThroughGrid(grid, handleCellClick)}
         </Grid>
       </Box>
     </Box>

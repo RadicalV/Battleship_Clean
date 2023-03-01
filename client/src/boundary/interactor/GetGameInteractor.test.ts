@@ -19,7 +19,7 @@ describe("Get Game Interactor", () => {
   });
 
   it("finds game and returns it", (done) => {
-    const expectedGame: Game = new Game("123", true, mock<Board>());
+    const expectedGame: Game = new Game("123", true, mock<Board>(), 25, 0);
     const expectedBoundaryGame: BoundaryGame = new BoundaryGame(
       "123",
       true,

@@ -5,11 +5,11 @@ import { Observable, of } from "rxjs";
 export class FakeGameStorage implements GameStorage {
   getGame(id: string): Observable<Game> {
     const board = this.makeBoard();
-    return of(new Game(id, true, board));
+    return of(new Game(id, true, board, 25, 0));
   }
 
   startGame(): Observable<Game> {
-    return of(new Game("123", true, this.makeBoard()));
+    return of(new Game("123", true, this.makeBoard(), 25, 0));
   }
 
   private makeBoard(): Board {

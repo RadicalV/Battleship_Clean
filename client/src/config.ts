@@ -45,8 +45,11 @@ const gameB2VConverter = new GameB2VConverter(boardB2VConverter);
 const shipB2VConverter = new ShipB2VConverter();
 const shotResultB2VConverter = new ShotResultB2VConverter(shipB2VConverter);
 
-export const gameController = new GameController(
-  gameInteractor,
-  startGameInteractor,
-  gameB2VConverter
-);
+export const gameController = () =>
+  new GameController(
+    gameInteractor,
+    startGameInteractor,
+    shootInteractor,
+    gameB2VConverter,
+    shotResultB2VConverter
+  );
