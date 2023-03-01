@@ -1,10 +1,15 @@
 import { gameStatsController } from "config";
-import { ViewGameStats } from "controllers/model";
+import { ViewGameStats, ViewBoard } from "controllers/model/index";
+import { useEffect, useState } from "react";
 
-export function useGameStats(setGameStats: (gameStats: ViewGameStats) => void) {
-  const getGameStats = (gameId: string) => {
+export function useGameStats(gameId: string, board: ViewBoard) {
+  const [gameStats, setGameStats] = useState<ViewGameStats>(
+    new ViewGameStats(25, 0)
+  );
+
+  useEffect(() => {
     gameStatsController().getGameStats(gameId).subscribe(setGameStats);
-  };
+  }, [board, gameId]);
 
-  return { getGameStats };
+  return { gameStats };
 }

@@ -10,16 +10,9 @@ interface Props {
 }
 
 const GameStats = (props: Props) => {
-  const [gameStats, setGameStats] = useState<ViewGameStats>(
-    new ViewGameStats(25, 0)
-  );
   const { classes } = useStyles();
   const { board, gameId } = props;
-  const { getGameStats } = useGameStats(setGameStats);
-
-  useEffect(() => {
-    getGameStats(gameId);
-  }, [board, gameId, getGameStats]);
+  const { gameStats } = useGameStats(gameId, board);
 
   return (
     <Box className={classes.gameStatsWrapper}>
