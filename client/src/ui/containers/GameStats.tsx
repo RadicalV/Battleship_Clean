@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import { useStyles } from "ui/styles";
-import { ViewBoard, ViewGameStats } from "controllers/model";
+import { ViewBoard } from "controllers/model";
 import { useGameStats } from "./useGameStats";
 
 interface Props {
