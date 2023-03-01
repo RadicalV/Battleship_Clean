@@ -1,5 +1,5 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship, ShotResult } from "domain/index";
+import { Game, Board, Ship, ShotResult, GameStats } from "domain/index";
 import {
   first,
   map,
@@ -21,9 +21,8 @@ export class InMemoryGameStorage implements GameStorage {
   getGame(id: string): Observable<Game> {
     return this.gameSubject$.pipe(
       first(),
-      map((games) => {
-        return games.find((g) => g.id === id);
-      }),
+      map((games) => games.filter((g) => g.id === id)),
+      map((matchingGames) => matchingGames[matchingGames.length - 1]),
       switchMap((game) =>
         game ? of(game) : throwError(() => new Error("Game not found"))
       )
@@ -41,6 +40,12 @@ export class InMemoryGameStorage implements GameStorage {
   shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
     return this.getGame(gameId).pipe(
       switchMap((game) => this.checkShot(game, x, y))
+    );
+  }
+
+  getGameStats(gameId: string): Observable<GameStats> {
+    return this.getGame(gameId).pipe(
+      map((game) => new GameStats(game.hitsRemaining, game.shipsDestroyed))
     );
   }
 

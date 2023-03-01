@@ -32,7 +32,7 @@ describe("Cell component", () => {
       screen.getByTestId("destroyed-icon")
     );
   });
-  it("calls cellClick function when clicked", () => {
+  it("calls cellClick function when clicked and gridValue === 0", () => {
     const cellClickMock = jest.fn();
 
     render(<Cell onCellClick={cellClickMock} gridValue={0} testId={""} />);
@@ -40,5 +40,14 @@ describe("Cell component", () => {
     fireEvent.click(screen.getByTestId("cell-text"));
 
     expect(cellClickMock).toHaveBeenCalledTimes(1);
+  });
+  it("doesn't call cellClick function when clicked and gridValue !== 0", () => {
+    const cellClickMock = jest.fn();
+
+    render(<Cell gridValue={1} onCellClick={cellClickMock} testId={""} />);
+
+    fireEvent.click(screen.getByTestId("cell-text"));
+
+    expect(cellClickMock).toHaveBeenCalledTimes(0);
   });
 });

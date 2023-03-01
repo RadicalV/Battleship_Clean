@@ -1,5 +1,5 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship, ShotResult } from "domain/index";
+import { Game, Board, Ship, ShotResult, GameStats } from "domain/index";
 import { Observable, of } from "rxjs";
 
 export class FakeGameStorage implements GameStorage {
@@ -24,5 +24,9 @@ export class FakeGameStorage implements GameStorage {
 
   shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
     return of(new ShotResult([]));
+  }
+
+  getGameStats(gameId: string): Observable<GameStats> {
+    return of(new GameStats(25, 0));
   }
 }

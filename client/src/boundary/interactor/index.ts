@@ -5,6 +5,8 @@ import { ShipD2BConverter } from "./ShipD2BConverter";
 import { ShootInteractor } from "./ShootInteractor";
 import { ShotResultD2BConverter } from "./ShotResultD2BConverter";
 import { StartGameInteractor } from "./StartGameInteractor";
+import { GameStatsD2BConverter } from "./GameStatsD2BConverter";
+import { GetGameStatsInteractor } from "./GetGameStatsInteractor";
 
 export {
   BoardD2BConverter,
@@ -14,4 +16,6 @@ export {
   ShootInteractor,
   ShotResultD2BConverter,
   StartGameInteractor,
+  GameStatsD2BConverter,
+  GetGameStatsInteractor,
 };
