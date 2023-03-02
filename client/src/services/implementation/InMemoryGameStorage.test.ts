@@ -203,4 +203,30 @@ describe("In memory game storage", () => {
       },
     });
   });
+
+  it("returns game stats", (done) => {
+    const game: Game = new Game(
+      "123",
+      true,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [new Ship(1, [{ x: 1, y: 1 }], 0)]
+      ),
+      25,
+      0
+    );
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.getGameStats("123").subscribe({
+      next: (gameStats) => {
+        expect(gameStats.hitsRemaining).toBe(25);
+        expect(gameStats.shipsDestroyed).toBe(0);
+        done();
+      },
+    });
+  });
 });

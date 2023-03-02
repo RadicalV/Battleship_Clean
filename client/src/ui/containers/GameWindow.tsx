@@ -18,7 +18,7 @@ const GameWindow = (props: Props) => {
   return (
     <Box className={classes.gameWrapper}>
       <GameBoard grid={board.grid} setGame={setGame} gameId={gameId} />
-      <GameStats board={board} />
+      <GameStats board={board} gameId={gameId} />
     </Box>
   );
 };
