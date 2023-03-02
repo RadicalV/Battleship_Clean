@@ -3,6 +3,7 @@ import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
 import { GameD2BConverter } from "./GameD2BConverter";
 import { BoardD2BConverter } from "./BoardD2BConverter";
 import { mock, MockProxy } from "jest-mock-extended";
+import { IN_PROGRESS } from "utils/Constants";
 
 describe(GameD2BConverter, () => {
   let gameConverter: GameD2BConverter;
@@ -16,7 +17,7 @@ describe(GameD2BConverter, () => {
   it("Converts Game model to BoundaryGame model", () => {
     const board = mock<Board>();
     const expectedBoard = mock<BoundaryBoard>();
-    const inputGame: Game = new Game("123", true, board, 25, 0);
+    const inputGame: Game = new Game("123", IN_PROGRESS, board, 25, 0);
 
     boardConverter.convert.calledWith(board).mockReturnValue(expectedBoard);
 

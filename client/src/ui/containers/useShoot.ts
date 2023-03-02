@@ -14,7 +14,13 @@ export function useShoot(setGame: (game: ViewGame) => void, gameId: string) {
           );
         }
 
-        setGame(new ViewGame(gameId, true, new ViewBoard(shotResult.grid)));
+        setGame(
+          new ViewGame(
+            gameId,
+            shotResult.gameState,
+            new ViewBoard(shotResult.grid)
+          )
+        );
       });
   };
 

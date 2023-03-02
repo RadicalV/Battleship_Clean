@@ -17,6 +17,7 @@ export class ShotResultB2VConverter extends Converter<
   convert(shotResult: BoundaryShotResult): ViewShotResult {
     return new ViewShotResult(
       shotResult.grid,
+      shotResult.gameState,
       shotResult.ship ? this.shipConverter.convert(shotResult.ship) : undefined
     );
   }

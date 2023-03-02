@@ -12,5 +12,8 @@
     {
       "path": "../../controllers/implementation"
     },
+    {
+      "path": "../../utils"
+    }
   ]
 }

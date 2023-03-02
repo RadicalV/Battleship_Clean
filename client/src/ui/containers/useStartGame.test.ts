@@ -6,6 +6,7 @@ import { of } from "rxjs";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import * as config from "config";
+import { IN_PROGRESS } from "utils/Constants";
 
 describe("Use Start Game Hook", () => {
   let gameController: MockProxy<GameController>;
@@ -16,7 +17,7 @@ describe("Use Start Game Hook", () => {
   });
 
   it("creates a game and sets it to state", () => {
-    const expectedGame = new ViewGame("123", true, mock<ViewBoard>());
+    const expectedGame = new ViewGame("123", IN_PROGRESS, mock<ViewBoard>());
 
     gameController.startGame.mockReturnValue(of(expectedGame));
 

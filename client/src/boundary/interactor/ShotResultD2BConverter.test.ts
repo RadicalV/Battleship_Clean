@@ -3,6 +3,7 @@ import { BoundaryShotResult, BoundaryShip } from "boundary/model/index";
 import { ShipD2BConverter } from "./ShipD2BConverter";
 import { ShotResultD2BConverter } from "./ShotResultD2BConverter";
 import { mock, MockProxy } from "jest-mock-extended";
+import { IN_PROGRESS } from "utils/Constants";
 
 describe(ShotResultD2BConverter, () => {
   let converter: ShotResultD2BConverter;
@@ -14,10 +15,14 @@ describe(ShotResultD2BConverter, () => {
   });
 
   it("Converts ShotResult model to BoundaryShotResult model when ship is undefined", () => {
-    const inputShotResult: ShotResult = new ShotResult([[0, 0, 0, 0]]);
-    const expectedShotResult: BoundaryShotResult = new BoundaryShotResult([
-      [0, 0, 0, 0],
-    ]);
+    const inputShotResult: ShotResult = new ShotResult(
+      [[0, 0, 0, 0]],
+      IN_PROGRESS
+    );
+    const expectedShotResult: BoundaryShotResult = new BoundaryShotResult(
+      [[0, 0, 0, 0]],
+      IN_PROGRESS
+    );
 
     const shotResult: BoundaryShotResult = converter.convert(inputShotResult);
 
@@ -29,9 +34,14 @@ describe(ShotResultD2BConverter, () => {
   it("Converts ShotResult model to BoundaryShotResult model when ship is defined", () => {
     const ship: Ship = mock<Ship>();
     const boundaryShip: BoundaryShip = mock<BoundaryShip>();
-    const inputShotResult: ShotResult = new ShotResult([[0, 0, 0, 0]], ship);
+    const inputShotResult: ShotResult = new ShotResult(
+      [[0, 0, 0, 0]],
+      IN_PROGRESS,
+      ship
+    );
     const expectedShotResult: BoundaryShotResult = new BoundaryShotResult(
       [[0, 0, 0, 0]],
+      IN_PROGRESS,
       boundaryShip
     );
 
