@@ -1,7 +1,8 @@
 import React from "react";
 import GameWindow from "./GameWindow";
 import { render, screen } from "@testing-library/react";
-import { ViewBoard } from "../../controllers/model";
+import { ViewBoard, ViewGame } from "controllers/model/index";
+import { GameState } from "utils/Constants";
 
 describe("Game window container", () => {
   it("renders game board and game stats", () => {
@@ -10,8 +11,9 @@ describe("Game window container", () => {
       [0, 0, 0],
       [0, 0, 0],
     ]);
+    const game = new ViewGame("123", GameState.IN_PROGRESS, board);
 
-    render(<GameWindow board={board} setGame={jest.fn} gameId={"123456"} />);
+    render(<GameWindow game={game} setGame={jest.fn} gameId={"123456"} />);
 
     expect(screen.getByTestId("game-board")).toBeInTheDocument();
     expect(screen.getByTestId("game-stats")).toBeInTheDocument();

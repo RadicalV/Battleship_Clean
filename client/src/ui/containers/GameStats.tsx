@@ -7,12 +7,13 @@ import { useGameStats } from "./useGameStats";
 interface Props {
   board: ViewBoard;
   gameId: string;
+  onStatsUpdate: (destroyedShips: number) => void;
 }
 
 const GameStats = (props: Props) => {
   const { classes } = useStyles();
-  const { board, gameId } = props;
-  const { gameStats } = useGameStats(gameId, board);
+  const { board, gameId, onStatsUpdate } = props;
+  const { gameStats } = useGameStats(gameId, board, onStatsUpdate);
 
   return (
     <Box className={classes.gameStatsWrapper}>

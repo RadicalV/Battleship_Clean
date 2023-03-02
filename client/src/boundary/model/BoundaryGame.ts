@@ -1,13 +1,14 @@
 import BoundaryBoard from "./BoundaryBoard";
+import { GameState } from "utils/Constants";
 
 export default class BoundaryGame {
   readonly id: string;
-  readonly active: boolean;
+  readonly state: GameState;
   readonly board: BoundaryBoard;
 
-  constructor(id: string, active: boolean, board: BoundaryBoard) {
+  constructor(id: string, state: GameState, board: BoundaryBoard) {
     this.id = id;
-    this.active = active;
+    this.state = state;
     this.board = board;
   }
 }

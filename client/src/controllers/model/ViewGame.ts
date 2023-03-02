@@ -1,13 +1,14 @@
 import ViewBoard from "./ViewBoard";
+import { GameState } from "utils/Constants";
 
 export default class ViewGame {
   readonly id: string;
-  readonly active: boolean;
+  readonly state: GameState;
   readonly board: ViewBoard;
 
-  constructor(id: string, active: boolean, board: ViewBoard) {
+  constructor(id: string, state: GameState, board: ViewBoard) {
     this.id = id;
-    this.active = active;
+    this.state = state;
     this.board = board;
   }
 }

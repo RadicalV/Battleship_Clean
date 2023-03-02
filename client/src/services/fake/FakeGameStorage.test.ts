@@ -1,5 +1,6 @@
 import { FakeGameStorage } from "./FakeGameStorage";
 import Game from "domain/Game";
+import { GameState } from "utils/Constants";
 
 describe("Fake game storage getGame", () => {
   let fakeGameStorage: FakeGameStorage;
@@ -38,6 +39,6 @@ describe("Fake game storage getGame", () => {
   });
 
   it("created game is active", () => {
-    expect(game.active).toBe(true);
+    expect(game.state).toBe(GameState.IN_PROGRESS);
   });
 });

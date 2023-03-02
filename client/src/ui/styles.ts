@@ -91,4 +91,26 @@ export const useStyles = makeStyles()(() => ({
   statsItemHighlight: {
     color: "rgb(212,40,117)",
   },
+  modal: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)",
+    width: "400px",
+    backgroundColor: "white",
+    padding: 20,
+    border: "2px solid #000",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  modalDescription: {
+    marginBottom: 20,
+    fontFamily: "Bangers",
+  },
+  modalBtn: {
+    color: "white",
+    fontFamily: "Bangers",
+    fontSize: "1.5rem",
+  },
 }));

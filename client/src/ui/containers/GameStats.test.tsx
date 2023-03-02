@@ -10,7 +10,13 @@ jest.mock("./useGameStats", () => ({
 
 describe("Game stats container", () => {
   it("renders destroyed ships and hits remaining stats", () => {
-    render(<GameStats board={mock<ViewBoard>()} gameId="123" />);
+    render(
+      <GameStats
+        board={mock<ViewBoard>()}
+        gameId="123"
+        onStatsUpdate={jest.fn}
+      />
+    );
 
     expect(screen.getByTestId("hits-stat")).toBeInTheDocument();
     expect(screen.getByTestId("hits-stat")).toHaveTextContent("15");

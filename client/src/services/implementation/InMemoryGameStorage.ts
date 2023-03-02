@@ -1,15 +1,16 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship, ShotResult, GameStats } from "domain/index";
+import { Board, Game, GameStats, Ship, ShotResult } from "domain/index";
 import {
   first,
   map,
   Observable,
-  switchMap,
-  throwError,
   of,
   Subject,
+  switchMap,
   take,
+  throwError,
 } from "rxjs";
+import { GameState } from "utils/Constants";
 
 export class InMemoryGameStorage implements GameStorage {
   private gameSubject$: Subject<Game[]>;
@@ -32,7 +33,7 @@ export class InMemoryGameStorage implements GameStorage {
   startGame(): Observable<Game> {
     const board = this.makeBoard();
     const gameId = this.generateRandomId();
-    const game = new Game(gameId, true, board, 25, 0);
+    const game = new Game(gameId, GameState.IN_PROGRESS, board, 25, 0);
 
     return this.addGame(game);
   }
@@ -123,7 +124,7 @@ export class InMemoryGameStorage implements GameStorage {
     const updatedGame = this.updateGame(newShip, foundShip, game, x, y);
 
     return this.addGame(updatedGame).pipe(
-      map((game) => new ShotResult(game.board.grid, newShip)),
+      map((game) => new ShotResult(game.board.grid, game.state, newShip)),
       take(1)
     );
   }
@@ -146,6 +147,7 @@ export class InMemoryGameStorage implements GameStorage {
     const grid = game.board.grid;
     let shipsDestroyed = game.shipsDestroyed;
     let hitsRemaining = game.hitsRemaining;
+    let gameState = game.state;
 
     if (foundShip && newShip) {
       const index = game.board.ships.indexOf(foundShip);
@@ -161,9 +163,12 @@ export class InMemoryGameStorage implements GameStorage {
       hitsRemaining -= 1;
     }
 
+    if (shipsDestroyed >= ships.length) gameState = GameState.WON;
+    else if (hitsRemaining <= 0) gameState = GameState.LOST;
+
     return new Game(
       game.id,
-      game.active,
+      gameState,
       new Board(grid, ships),
       hitsRemaining,
       shipsDestroyed

@@ -14,7 +14,7 @@ export class GameD2BConverter extends Converter<Game, BoundaryGame> {
   convert(game: Game): BoundaryGame {
     return new BoundaryGame(
       game.id,
-      game.active,
+      game.state,
       this.boardConverter.convert(game.board)
     );
   }

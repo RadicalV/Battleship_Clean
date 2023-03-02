@@ -1,11 +1,12 @@
 import { GameController } from "controllers/implementation/index";
-import { ViewGame, ViewBoard } from "controllers/model/index";
+import { ViewBoard, ViewGame } from "controllers/model/index";
 import { useStartGame } from "./useStartGame";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import * as config from "config";
+import { GameState } from "utils/Constants";
 
 describe("Use Start Game Hook", () => {
   let gameController: MockProxy<GameController>;
@@ -16,7 +17,11 @@ describe("Use Start Game Hook", () => {
   });
 
   it("creates a game and sets it to state", () => {
-    const expectedGame = new ViewGame("123", true, mock<ViewBoard>());
+    const expectedGame = new ViewGame(
+      "123",
+      GameState.IN_PROGRESS,
+      mock<ViewBoard>()
+    );
 
     gameController.startGame.mockReturnValue(of(expectedGame));
 

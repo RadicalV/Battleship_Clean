@@ -1,7 +1,8 @@
-import { Game, Board, Ship } from "domain/index";
+import { Board, Game, Ship } from "domain/index";
 import { InMemoryGameStorage } from "./InMemoryGameStorage";
 import { BehaviorSubject, Subject } from "rxjs";
 import { mock } from "jest-mock-extended";
+import { GameState } from "utils/Constants";
 
 describe("In memory game storage", () => {
   let inMemoryGameStorage: InMemoryGameStorage;
@@ -40,23 +41,29 @@ describe("In memory game storage", () => {
     });
   });
 
-  it("creates a game that is active", (done) => {
+  it("creates a game that is in progress", (done) => {
     inMemoryGameStorage.startGame().subscribe((game) => {
-      expect(game.active).toBe(true);
+      expect(game.state).toBe(GameState.IN_PROGRESS);
       done();
     });
   });
 
   it("finds and returns a game based on it's id", (done) => {
     const id = "test";
-    const game: Game = new Game(id, true, mock<Board>(), 25, 0);
+    const game: Game = new Game(
+      id,
+      GameState.IN_PROGRESS,
+      mock<Board>(),
+      25,
+      0
+    );
 
     gameSubject$.next([game]);
 
     inMemoryGameStorage.getGame(id).subscribe({
       next: (returnedGame) => {
         expect(returnedGame.id).toEqual(game.id);
-        expect(returnedGame.active).toEqual(game.active);
+        expect(returnedGame.state).toEqual(game.state);
         expect(returnedGame.board).toEqual(game.board);
         done();
       },
@@ -82,7 +89,7 @@ describe("In memory game storage", () => {
     const coordinateY = 1;
     const game: Game = new Game(
       id,
-      true,
+      GameState.IN_PROGRESS,
       new Board(
         [
           [0, 0, 0],
@@ -116,6 +123,7 @@ describe("In memory game storage", () => {
       next: (shotResult) => {
         expect(shotResult.grid).toEqual(expectedGrid);
         expect(shotResult.ship).toBe(undefined);
+        expect(shotResult.gameState).toEqual(GameState.IN_PROGRESS);
         done();
       },
     });
@@ -127,7 +135,7 @@ describe("In memory game storage", () => {
     const coordinateY = 1;
     const game: Game = new Game(
       id,
-      true,
+      GameState.IN_PROGRESS,
       new Board(
         [
           [0, 0, 0],
@@ -162,6 +170,7 @@ describe("In memory game storage", () => {
         expect(shotResult.grid).toEqual(expectedGrid);
         expect(shotResult.ship!.hits).toBe(1);
         expect(shotResult.ship!.destroyed).toBe(false);
+        expect(shotResult.gameState).toEqual(GameState.IN_PROGRESS);
         done();
       },
     });
@@ -173,7 +182,45 @@ describe("In memory game storage", () => {
     const coordinateY = 1;
     const game: Game = new Game(
       id,
-      true,
+      GameState.IN_PROGRESS,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [new Ship(1, [{ x: 1, y: 1 }], 0), mock<Ship>()]
+      ),
+      25,
+      0
+    );
+
+    const expectedGrid = [
+      [0, 0, 0],
+      [0, 3, 0],
+      [0, 0, 0],
+    ];
+
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.shoot(id, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedGrid);
+        expect(shotResult.ship!.hits).toBe(1);
+        expect(shotResult.ship!.destroyed).toBe(true);
+        expect(shotResult.gameState).toEqual(GameState.IN_PROGRESS);
+        done();
+      },
+    });
+  });
+
+  it("shoots at given coordinates and returns shotResult with gameState WON", (done) => {
+    const id = "123456";
+    const coordinateX = 1;
+    const coordinateY = 1;
+    const game: Game = new Game(
+      id,
+      GameState.IN_PROGRESS,
       new Board(
         [
           [0, 0, 0],
@@ -199,6 +246,53 @@ describe("In memory game storage", () => {
         expect(shotResult.grid).toEqual(expectedGrid);
         expect(shotResult.ship!.hits).toBe(1);
         expect(shotResult.ship!.destroyed).toBe(true);
+        expect(shotResult.gameState).toEqual(GameState.WON);
+        done();
+      },
+    });
+  });
+
+  it("shoots at given coordinates and returns shotResult with gameState LOST", (done) => {
+    const id = "123456";
+    const coordinateX = 1;
+    const coordinateY = 1;
+    const game: Game = new Game(
+      id,
+      GameState.IN_PROGRESS,
+      new Board(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+        [
+          new Ship(
+            2,
+            [
+              { x: 0, y: 0 },
+              { x: 0, y: 1 },
+            ],
+            0
+          ),
+        ]
+      ),
+      1,
+      0
+    );
+
+    const expectedGrid = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+    ];
+
+    gameSubject$.next([game]);
+
+    inMemoryGameStorage.shoot(id, coordinateX, coordinateY).subscribe({
+      next: (shotResult) => {
+        expect(shotResult.grid).toEqual(expectedGrid);
+        expect(shotResult.ship).toBe(undefined);
+        expect(shotResult.gameState).toEqual(GameState.LOST);
         done();
       },
     });
@@ -207,7 +301,7 @@ describe("In memory game storage", () => {
   it("returns game stats", (done) => {
     const game: Game = new Game(
       "123",
-      true,
+      GameState.IN_PROGRESS,
       new Board(
         [
           [0, 0, 0],

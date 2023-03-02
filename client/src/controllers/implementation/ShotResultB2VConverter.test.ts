@@ -2,6 +2,7 @@ import { BoundaryShotResult, BoundaryShip } from "boundary/model/index";
 import { ViewShotResult, ViewShip } from "controllers/model/index";
 import { ShotResultB2VConverter, ShipB2VConverter } from "./index";
 import { mock, MockProxy } from "jest-mock-extended";
+import { GameState } from "utils/Constants";
 
 describe(ShotResultB2VConverter, () => {
   let converter: ShotResultB2VConverter;
@@ -13,12 +14,14 @@ describe(ShotResultB2VConverter, () => {
   });
 
   it("Converts BoundaryShotResult model to ViewShotResult model when ship is undefined", () => {
-    const inputShotResult: BoundaryShotResult = new BoundaryShotResult([
-      [0, 0, 0, 0],
-    ]);
-    const expectedShotResult: ViewShotResult = new ViewShotResult([
-      [0, 0, 0, 0],
-    ]);
+    const inputShotResult: BoundaryShotResult = new BoundaryShotResult(
+      [[0, 0, 0, 0]],
+      GameState.IN_PROGRESS
+    );
+    const expectedShotResult: ViewShotResult = new ViewShotResult(
+      [[0, 0, 0, 0]],
+      GameState.IN_PROGRESS
+    );
 
     const shotResult: ViewShotResult = converter.convert(inputShotResult);
 
@@ -32,10 +35,12 @@ describe(ShotResultB2VConverter, () => {
     const viewShip: ViewShip = mock<ViewShip>();
     const inputShotResult: BoundaryShotResult = new BoundaryShotResult(
       [[0, 0, 0, 0]],
+      GameState.IN_PROGRESS,
       boundaryShip
     );
     const expectedShotResult: ViewShotResult = new ViewShotResult(
       [[0, 0, 0, 0]],
+      GameState.IN_PROGRESS,
       viewShip
     );
 

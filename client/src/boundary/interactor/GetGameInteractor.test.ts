@@ -1,10 +1,11 @@
 import GameStorage from "services/api/GameStorage";
 import { GameD2BConverter } from "./GameD2BConverter";
 import { GetGameInteractor } from "./GetGameInteractor";
-import { Game, Board } from "domain/index";
-import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
+import { Board, Game } from "domain/index";
+import { BoundaryBoard, BoundaryGame } from "boundary/model/index";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
+import { GameState } from "utils/Constants";
 
 describe("Get Game Interactor", () => {
   let gameStorage: MockProxy<GameStorage>;
@@ -19,10 +20,16 @@ describe("Get Game Interactor", () => {
   });
 
   it("finds game and returns it", (done) => {
-    const expectedGame: Game = new Game("123", true, mock<Board>(), 25, 0);
+    const expectedGame: Game = new Game(
+      "123",
+      GameState.IN_PROGRESS,
+      mock<Board>(),
+      25,
+      0
+    );
     const expectedBoundaryGame: BoundaryGame = new BoundaryGame(
       "123",
-      true,
+      GameState.IN_PROGRESS,
       mock<BoundaryBoard>()
     );
 

@@ -1,8 +1,9 @@
-import { BoundaryGame, BoundaryBoard } from "boundary/model/index";
-import { ViewGame, ViewBoard } from "controllers/model/index";
+import { BoundaryBoard, BoundaryGame } from "boundary/model/index";
+import { ViewBoard, ViewGame } from "controllers/model/index";
 import { GameB2VConverter } from "./GameB2VConverter";
 import { BoardB2VConverter } from "./BoardB2VConverter";
 import { mock, MockProxy } from "jest-mock-extended";
+import { GameState } from "utils/Constants";
 
 describe(GameB2VConverter, () => {
   let gameConverter: GameB2VConverter;
@@ -18,17 +19,21 @@ describe(GameB2VConverter, () => {
     const viewBoard = mock<ViewBoard>();
     const inputGame: BoundaryGame = new BoundaryGame(
       "123",
-      true,
+      GameState.IN_PROGRESS,
       boundaryBoard
     );
-    const expectedGame: ViewGame = new ViewGame("123", true, viewBoard);
+    const expectedGame: ViewGame = new ViewGame(
+      "123",
+      GameState.IN_PROGRESS,
+      viewBoard
+    );
 
     boardConverter.convert.calledWith(boundaryBoard).mockReturnValue(viewBoard);
 
     const convertedGame = gameConverter.convert(inputGame);
 
     expect(convertedGame.id).toEqual(expectedGame.id);
-    expect(convertedGame.active).toEqual(expectedGame.active);
+    expect(convertedGame.state).toEqual(expectedGame.state);
     expect(convertedGame.board).toEqual(expectedGame.board);
   });
 });

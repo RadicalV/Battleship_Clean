@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import { useStyles } from "ui/styles";
-import { ViewBoard, ViewGame } from "controllers/model";
+import { ViewGame } from "controllers/model";
 import GameBoard from "./GameBoard";
 import GameStats from "./GameStats";
+import GameOverModal from "ui/components/GameOverModal";
 
 interface Props {
-  board: ViewBoard;
-  setGame: (game: ViewGame) => void;
+  game: ViewGame;
+  setGame: (game: ViewGame | undefined) => void;
   gameId: string;
 }
 
 const GameWindow = (props: Props) => {
-  const { board, setGame, gameId } = props;
+  const [destroyedShips, setDestroyedShips] = useState(0);
+  const { game, setGame, gameId } = props;
   const { classes } = useStyles();
 
   return (
     <Box className={classes.gameWrapper}>
-      <GameBoard grid={board.grid} setGame={setGame} gameId={gameId} />
-      <GameStats board={board} gameId={gameId} />
+      <GameBoard grid={game.board.grid} setGame={setGame} gameId={gameId} />
+      <GameStats
+        board={game.board}
+        gameId={gameId}
+        onStatsUpdate={setDestroyedShips}
+      />
+      <GameOverModal
+        setGame={setGame}
+        gameState={game.state}
+        destroyedShips={destroyedShips}
+      />
     </Box>
   );
 };

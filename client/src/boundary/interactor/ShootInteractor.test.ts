@@ -5,6 +5,7 @@ import { ShotResultD2BConverter } from "./ShotResultD2BConverter";
 import { ShootInteractor } from "./ShootInteractor";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
+import { GameState } from "utils/Constants";
 
 describe("Shoot Interactor", () => {
   let gameStorage: MockProxy<GameStorage>;
@@ -20,10 +21,15 @@ describe("Shoot Interactor", () => {
   it("returns shotResult", (done) => {
     const expectedShotResult: ShotResult = new ShotResult(
       [[0, 1, 0, 0]],
+      GameState.IN_PROGRESS,
       mock<Ship>()
     );
     const expectedBoundaryShotResult: BoundaryShotResult =
-      new BoundaryShotResult([[0, 1, 0, 0]], mock<BoundaryShip>());
+      new BoundaryShotResult(
+        [[0, 1, 0, 0]],
+        GameState.IN_PROGRESS,
+        mock<BoundaryShip>()
+      );
     const coordinateX = 0;
     const coordinateY = 1;
     const gameId = "123";

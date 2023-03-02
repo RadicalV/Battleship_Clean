@@ -17,6 +17,7 @@ export class ShotResultD2BConverter extends Converter<
   convert(shotResult: ShotResult): BoundaryShotResult {
     return new BoundaryShotResult(
       shotResult.grid,
+      shotResult.gameState,
       shotResult.ship ? this.shipConverter.convert(shotResult.ship) : undefined
     );
   }
