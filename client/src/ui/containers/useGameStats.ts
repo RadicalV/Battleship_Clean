@@ -14,7 +14,6 @@ export function useGameStats(
   useEffect(() => {
     gameStatsController().getGameStats(gameId).subscribe(setGameStats);
     onStatsUpdate(gameStats.shipsDestroyed);
-    console.log("use effect");
   }, [board, gameId, onStatsUpdate, gameStats.shipsDestroyed]);
 
   return { gameStats };

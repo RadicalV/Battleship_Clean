@@ -2,7 +2,7 @@ import React from "react";
 import { ViewGame } from "controllers/model/index";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useStyles } from "ui/styles";
-import { IN_PROGRESS } from "utils/Constants";
+import { GameState } from "utils/Constants";
 
 interface Props {
   setGame: (game: ViewGame | undefined) => void;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const isGameOver = (gameState: string): boolean => {
-  return gameState !== IN_PROGRESS;
+  return gameState !== GameState.IN_PROGRESS;
 };
 
 const GameOverModal = (props: Props) => {

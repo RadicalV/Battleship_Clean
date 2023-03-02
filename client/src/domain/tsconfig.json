@@ -3,5 +3,10 @@
   "compilerOptions": {
     "outDir": "../../output/src/domain",
     "rootDir": "."
-  }
+  },
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
 }

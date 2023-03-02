@@ -1,12 +1,16 @@
 import React from "react";
 import GameOverModal from "./GameOverModal";
-import { IN_PROGRESS, LOST, WON } from "utils/Constants";
+import { GameState } from "utils/Constants";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 describe("Game over modal", () => {
   it("renders game over modal correctly when game state is WON", () => {
     render(
-      <GameOverModal setGame={jest.fn} gameState={WON} destroyedShips={5} />
+      <GameOverModal
+        setGame={jest.fn}
+        gameState={GameState.WON}
+        destroyedShips={5}
+      />
     );
 
     expect(screen.getByTestId("game-over-modal")).toBeInTheDocument();
@@ -17,7 +21,11 @@ describe("Game over modal", () => {
   });
   it("renders game over modal correctly when game state is LOST", () => {
     render(
-      <GameOverModal setGame={jest.fn} gameState={LOST} destroyedShips={1} />
+      <GameOverModal
+        setGame={jest.fn}
+        gameState={GameState.LOST}
+        destroyedShips={1}
+      />
     );
 
     expect(screen.getByTestId("game-over-modal")).toBeInTheDocument();
@@ -31,7 +39,7 @@ describe("Game over modal", () => {
     render(
       <GameOverModal
         setGame={setStateMock}
-        gameState={WON}
+        gameState={GameState.WON}
         destroyedShips={5}
       />
     );
@@ -40,5 +48,16 @@ describe("Game over modal", () => {
 
     expect(screen.getByTestId("game-over-modal")).toBeInTheDocument();
     expect(setStateMock).toHaveBeenCalledTimes(1);
+  });
+  it("game over modal is not rendered when game state is IN_PROGRESS", () => {
+    render(
+      <GameOverModal
+        setGame={jest.fn}
+        gameState={GameState.IN_PROGRESS}
+        destroyedShips={1}
+      />
+    );
+
+    expect(screen.queryByTestId("game-over-modal")).not.toBeInTheDocument();
   });
 });

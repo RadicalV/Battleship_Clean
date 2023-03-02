@@ -1,16 +1,16 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship, ShotResult, GameStats } from "domain/index";
+import { Board, Game, GameStats, Ship, ShotResult } from "domain/index";
 import {
   first,
   map,
   Observable,
-  switchMap,
-  throwError,
   of,
   Subject,
+  switchMap,
   take,
+  throwError,
 } from "rxjs";
-import { IN_PROGRESS, WON, LOST } from "utils/Constants";
+import { GameState } from "utils/Constants";
 
 export class InMemoryGameStorage implements GameStorage {
   private gameSubject$: Subject<Game[]>;
@@ -33,7 +33,7 @@ export class InMemoryGameStorage implements GameStorage {
   startGame(): Observable<Game> {
     const board = this.makeBoard();
     const gameId = this.generateRandomId();
-    const game = new Game(gameId, IN_PROGRESS, board, 25, 0);
+    const game = new Game(gameId, GameState.IN_PROGRESS, board, 25, 0);
 
     return this.addGame(game);
   }
@@ -163,8 +163,8 @@ export class InMemoryGameStorage implements GameStorage {
       hitsRemaining -= 1;
     }
 
-    if (shipsDestroyed >= ships.length) gameState = WON;
-    else if (hitsRemaining <= 0) gameState = LOST;
+    if (shipsDestroyed >= ships.length) gameState = GameState.WON;
+    else if (hitsRemaining <= 0) gameState = GameState.LOST;
 
     return new Game(
       game.id,

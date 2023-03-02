@@ -4,4 +4,9 @@
     "outDir": "../../../output/src/controllers/model",
     "rootDir": "."
   },
+  "references": [
+    {
+      "path": "../../utils"
+    }
+  ]
 }

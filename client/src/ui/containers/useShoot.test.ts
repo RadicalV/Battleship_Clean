@@ -6,7 +6,7 @@ import { of } from "rxjs";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import * as config from "config";
-import { IN_PROGRESS } from "utils/Constants";
+import { GameState } from "utils/Constants";
 
 describe("Use Shoot Hook", () => {
   let gameController: MockProxy<GameController>;
@@ -26,7 +26,7 @@ describe("Use Shoot Hook", () => {
         [0, 0, 0],
         [0, 0, 0],
       ],
-      IN_PROGRESS,
+      GameState.IN_PROGRESS,
       undefined
     );
 

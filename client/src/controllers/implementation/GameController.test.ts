@@ -3,25 +3,25 @@ import { GetGameUC } from "boundary/api/GetGameUC";
 import { StartGameUC } from "boundary/api/StartGameUC";
 import { ShootUC } from "boundary/api/ShootUC";
 import {
-  GameController,
-  GameB2VConverter,
   BoardB2VConverter,
+  GameB2VConverter,
+  GameController,
   ShotResultB2VConverter,
 } from "./index";
 import {
-  BoundaryGame,
   BoundaryBoard,
+  BoundaryGame,
   BoundaryShip,
   BoundaryShotResult,
 } from "boundary/model/index";
 import {
-  ViewGame,
   ViewBoard,
+  ViewGame,
   ViewShip,
   ViewShotResult,
 } from "controllers/model/index";
 import { of } from "rxjs";
-import { IN_PROGRESS } from "utils/Constants";
+import { GameState } from "utils/Constants";
 
 describe("Game Controller", () => {
   let getGameUC: MockProxy<GetGameUC>;
@@ -35,12 +35,12 @@ describe("Game Controller", () => {
   const inputId = "123";
   const expectedBoundaryGame = new BoundaryGame(
     inputId,
-    IN_PROGRESS,
+    GameState.IN_PROGRESS,
     mock<BoundaryBoard>()
   );
   const expectedViewGame = new ViewGame(
     inputId,
-    IN_PROGRESS,
+    GameState.IN_PROGRESS,
     mock<ViewBoard>()
   );
 
@@ -103,7 +103,7 @@ describe("Game Controller", () => {
         [0, 1, 0],
         [0, 0, 0],
       ],
-      IN_PROGRESS,
+      GameState.IN_PROGRESS,
       undefined
     );
     const expectedViewShotResult = new ViewShotResult(
@@ -112,7 +112,7 @@ describe("Game Controller", () => {
         [0, 1, 0],
         [0, 0, 0],
       ],
-      IN_PROGRESS,
+      GameState.IN_PROGRESS,
       undefined
     );
 
@@ -143,7 +143,7 @@ describe("Game Controller", () => {
         [0, 2, 0],
         [0, 0, 0],
       ],
-      IN_PROGRESS,
+      GameState.IN_PROGRESS,
       new BoundaryShip(
         2,
         [
@@ -160,7 +160,7 @@ describe("Game Controller", () => {
         [0, 2, 0],
         [0, 0, 0],
       ],
-      IN_PROGRESS,
+      GameState.IN_PROGRESS,
       new ViewShip(
         [
           { x: 0, y: 1 },

@@ -1,16 +1,16 @@
 import GameStorage from "services/api/GameStorage";
-import { Game, Board, Ship, ShotResult, GameStats } from "domain/index";
+import { Board, Game, GameStats, Ship, ShotResult } from "domain/index";
 import { Observable, of } from "rxjs";
-import { IN_PROGRESS } from "utils/Constants";
+import { GameState } from "utils/Constants";
 
 export class FakeGameStorage implements GameStorage {
   getGame(id: string): Observable<Game> {
     const board = this.makeBoard();
-    return of(new Game(id, IN_PROGRESS, board, 25, 0));
+    return of(new Game(id, GameState.IN_PROGRESS, board, 25, 0));
   }
 
   startGame(): Observable<Game> {
-    return of(new Game("123", IN_PROGRESS, this.makeBoard(), 25, 0));
+    return of(new Game("123", GameState.IN_PROGRESS, this.makeBoard(), 25, 0));
   }
 
   private makeBoard(): Board {
@@ -24,7 +24,7 @@ export class FakeGameStorage implements GameStorage {
   }
 
   shoot(gameId: string, x: number, y: number): Observable<ShotResult> {
-    return of(new ShotResult([]));
+    return of(new ShotResult([], GameState.IN_PROGRESS));
   }
 
   getGameStats(gameId: string): Observable<GameStats> {

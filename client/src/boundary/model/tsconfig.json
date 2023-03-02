@@ -3,5 +3,10 @@
   "compilerOptions": {
     "outDir": "../../../output/src/boundary/model",
     "rootDir": "."
-  }
+  },
+  "references": [
+    {
+      "path": "../../utils"
+    }
+  ]
 }
