@@ -5,7 +5,7 @@ import GameBoard from "./GameBoard";
 const mockShowSnackbar = jest.fn();
 
 jest.mock("./useShowSnackbar", () => ({
-  useShowSnackbar: () => ({ showSnackbar: () => mockShowSnackbar }),
+  useShowSnackbar: () => ({ showSnackbar: mockShowSnackbar }),
 }));
 
 describe("Game board container", () => {
