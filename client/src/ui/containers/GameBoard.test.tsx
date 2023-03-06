@@ -2,13 +2,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import GameBoard from "./GameBoard";
 
-const mockEnqueue = jest.fn();
+const mockShowSnackbar = jest.fn();
 
-jest.mock("notistack", () => ({
-  ...jest.requireActual("notistack"),
-  useSnackbar: () => {
+jest.mock("./useShowSnackbar", () => ({
+  ...jest.requireActual("./useShowSnackbar"),
+  useShowSnackbar: () => {
     return {
-      enqueueSnackbar: mockEnqueue,
+      showSnackbar: () => mockShowSnackbar,
     };
   },
 }));

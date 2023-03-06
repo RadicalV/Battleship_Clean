@@ -7,15 +7,15 @@ import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import * as config from "config";
 import { GameState } from "utils/Constants";
-import { useSnackbar } from "notistack";
+import { useShowSnackbar } from "./useShowSnackbar";
 
-const mockEnqueue = jest.fn();
+const mockShowSnackbar = jest.fn();
 
-jest.mock("notistack", () => ({
-  ...jest.requireActual("notistack"),
-  useSnackbar: () => {
+jest.mock("./useShowSnackbar", () => ({
+  ...jest.requireActual("./useShowSnackbar"),
+  useShowSnackbar: () => {
     return {
-      enqueueSnackbar: mockEnqueue,
+      showSnackbar: mockShowSnackbar,
     };
   },
 }));
@@ -72,10 +72,11 @@ describe("Use Shoot Hook", () => {
       .mockReturnValue(of(expectedShotResult));
 
     const setStateMock = jest.fn();
+    const { showSnackbar } = useShowSnackbar();
     const { result } = renderHook(() => useShoot(setStateMock, gameId));
 
     act(() => result.current.handleCellClick(coordinateX, coordinateY));
 
-    expect(useSnackbar().enqueueSnackbar).toHaveBeenCalledTimes(1);
+    expect(showSnackbar).toHaveBeenCalledTimes(1);
   });
 });

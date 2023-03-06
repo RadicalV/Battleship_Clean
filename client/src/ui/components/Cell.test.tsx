@@ -1,15 +1,15 @@
 import React from "react";
 import Cell from "./Cell";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { useSnackbar } from "notistack";
+import { useShowSnackbar } from "ui/containers/useShowSnackbar";
 
-const mockEnqueue = jest.fn();
+const mockShowSnackbar = jest.fn();
 
-jest.mock("notistack", () => ({
-  ...jest.requireActual("notistack"),
-  useSnackbar: () => {
+jest.mock("../containers/useShowSnackbar", () => ({
+  ...jest.requireActual("../containers/useShowSnackbar"),
+  useShowSnackbar: () => {
     return {
-      enqueueSnackbar: mockEnqueue,
+      showSnackbar: mockShowSnackbar,
     };
   },
 }));
@@ -55,12 +55,13 @@ describe("Cell component", () => {
   });
   it("doesn't call cellClick function when clicked and gridValue !== 0 and renders snackbar", () => {
     const cellClickMock = jest.fn();
+    const { showSnackbar } = useShowSnackbar();
 
     render(<Cell gridValue={1} onCellClick={cellClickMock} testId={""} />);
 
     fireEvent.click(screen.getByTestId("cell-text"));
 
     expect(cellClickMock).toHaveBeenCalledTimes(0);
-    expect(useSnackbar().enqueueSnackbar).toHaveBeenCalledTimes(1);
+    expect(showSnackbar).toHaveBeenCalledTimes(1);
   });
 });
