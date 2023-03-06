@@ -1,0 +1,13 @@
+rootProject.name = 'battleships'
+
+include 'domain',
+        'main',
+        'utils',
+        'use_cases:api',
+        'use_cases:implementation',
+        'gateway:api',
+        'gateway:implementation',
+        'gateway:fake',
+        'rest:api',
+        'rest:implementation'
+

@@ -1,6 +1,18 @@
 import React from "react";
 import Cell from "./Cell";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { useSnackbar } from "notistack";
+
+const mockEnqueue = jest.fn();
+
+jest.mock("notistack", () => ({
+  ...jest.requireActual("notistack"),
+  useSnackbar: () => {
+    return {
+      enqueueSnackbar: mockEnqueue,
+    };
+  },
+}));
 
 describe("Cell component", () => {
   it("renders grid cell with transparent color when grid value is 0 correctly", () => {
@@ -41,7 +53,7 @@ describe("Cell component", () => {
 
     expect(cellClickMock).toHaveBeenCalledTimes(1);
   });
-  it("doesn't call cellClick function when clicked and gridValue !== 0", () => {
+  it("doesn't call cellClick function when clicked and gridValue !== 0 and renders snackbar", () => {
     const cellClickMock = jest.fn();
 
     render(<Cell gridValue={1} onCellClick={cellClickMock} testId={""} />);
@@ -49,5 +61,6 @@ describe("Cell component", () => {
     fireEvent.click(screen.getByTestId("cell-text"));
 
     expect(cellClickMock).toHaveBeenCalledTimes(0);
+    expect(useSnackbar().enqueueSnackbar).toHaveBeenCalledTimes(1);
   });
 });

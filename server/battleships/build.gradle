@@ -1,0 +1,33 @@
+apply from: 'dependencies.gradle'
+
+group 'eu.optas'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 11
+
+    repositories {
+        mavenCentral()
+        maven {
+            name "JBoss Public Maven Repository Group"
+            url "https://repository.jboss.org/nexus/content/repositories/snapshots/"
+        }
+    }
+
+    dependencies {
+        def dep = rootProject.ext.dependencies
+        def testDep = rootProject.ext.testingDependencies
+
+        implementation dep.log4j
+        testImplementation testDep.assertj
+        testImplementation testDep.mockito
+        testImplementation testDep.junit5
+        testRuntimeOnly testDep.junit5_engine
+    }
+
+    test {
+        useJUnitPlatform()
+        failFast = true
+    }
+}
