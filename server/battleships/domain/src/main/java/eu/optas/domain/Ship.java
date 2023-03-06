@@ -1,5 +1,7 @@
 package eu.optas.domain;
 
+import eu.optas.utils.Coordinates;
+
 public class Ship {
     private final int length;
     private final Coordinates[] coordinates;

@@ -1,4 +1,4 @@
-package eu.optas.domain;
+package eu.optas.utils;
 
 public class Coordinates {
     private final int x;
