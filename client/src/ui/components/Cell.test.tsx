@@ -6,12 +6,7 @@ import { useShowSnackbar } from "ui/containers/useShowSnackbar";
 const mockShowSnackbar = jest.fn();
 
 jest.mock("../containers/useShowSnackbar", () => ({
-  ...jest.requireActual("../containers/useShowSnackbar"),
-  useShowSnackbar: () => {
-    return {
-      showSnackbar: mockShowSnackbar,
-    };
-  },
+  useShowSnackbar: () => ({ showSnackbar: mockShowSnackbar }),
 }));
 
 describe("Cell component", () => {

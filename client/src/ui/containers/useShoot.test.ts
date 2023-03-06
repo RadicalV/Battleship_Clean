@@ -12,12 +12,7 @@ import { useShowSnackbar } from "./useShowSnackbar";
 const mockShowSnackbar = jest.fn();
 
 jest.mock("./useShowSnackbar", () => ({
-  ...jest.requireActual("./useShowSnackbar"),
-  useShowSnackbar: () => {
-    return {
-      showSnackbar: mockShowSnackbar,
-    };
-  },
+  useShowSnackbar: () => ({ showSnackbar: mockShowSnackbar }),
 }));
 
 describe("Use Shoot Hook", () => {
