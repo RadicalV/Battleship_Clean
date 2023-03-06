@@ -1,26 +1,19 @@
 import { ViewGame, ViewBoard } from "controllers/model/index";
 import { gameController } from "config";
-import { useSnackbar } from "notistack";
-import { useStyles } from "ui/styles";
+import { useShowSnackbar } from "./useShowSnackbar";
 
 export function useShoot(setGame: (game: ViewGame) => void, gameId: string) {
-  const { enqueueSnackbar } = useSnackbar();
-  const { classes } = useStyles();
+  const { showSnackbar } = useShowSnackbar();
 
   const handleCellClick = (x: number, y: number) => {
     gameController()
       .shoot(gameId, x, y)
       .subscribe((shotResult) => {
         if (shotResult.ship?.destroyed)
-          enqueueSnackbar(
+          showSnackbar(
+            "info",
             "You destroyed a ship of length " +
-              shotResult.ship.coordinates.length,
-            {
-              autoHideDuration: 3000,
-              anchorOrigin: { horizontal: "right", vertical: "bottom" },
-              variant: "info",
-              className: `${classes.snackbar}`,
-            }
+              shotResult.ship.coordinates.length
           );
 
         setGame(

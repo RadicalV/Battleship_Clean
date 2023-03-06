@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import React from "react";
 import { useStyles } from "ui/styles";
 import { GpsFixedSharp } from "@mui/icons-material";
-import { useSnackbar } from "notistack";
+import { useShowSnackbar } from "ui/containers/useShowSnackbar";
 
 interface Props {
   gridValue: number;
@@ -19,7 +19,7 @@ const pickColor = (gridValue: number): string => {
 const Cell = (props: Props) => {
   const { gridValue, onCellClick, testId } = props;
   const { classes, cx, css } = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSnackbar } = useShowSnackbar();
 
   return (
     <Grid item md={1.2} data-testid={`cell-item${testId}`}>
@@ -29,12 +29,7 @@ const Cell = (props: Props) => {
         onClick={() => {
           gridValue === 0
             ? onCellClick()
-            : enqueueSnackbar("You can't shoot at the same place twice!", {
-                autoHideDuration: 3000,
-                anchorOrigin: { horizontal: "right", vertical: "bottom" },
-                variant: "error",
-                className: `${classes.snackbar}`,
-              });
+            : showSnackbar("error", "You can't shoot at the same place twice!");
         }}
       >
         {gridValue === 3 ? (

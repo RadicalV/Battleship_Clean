@@ -1,11 +1,21 @@
 package eu.optas.domain;
 
-public class Board {
-    private final int[][] grid;
-    private final Ship[] ships;
+import java.util.List;
 
-    public Board(int[][] grid, Ship[] ships) {
+public class Board {
+    private final List<List<Integer>> grid;
+    private final List<Ship> ships;
+
+    public Board(List<List<Integer>> grid, List<Ship> ships) {
         this.grid = grid;
         this.ships = ships;
+    }
+
+    public List<List<Integer>> getGrid() {
+        return grid;
+    }
+
+    public List<Ship> getShips() {
+        return ships;
     }
 }

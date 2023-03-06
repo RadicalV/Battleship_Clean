@@ -16,4 +16,24 @@ public class Game {
         this.hitsRemaining = hitsRemaining;
         this.shipsDestroyed = shipsDestroyed;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public int getHitsRemaining() {
+        return hitsRemaining;
+    }
+
+    public int getShipsDestroyed() {
+        return shipsDestroyed;
+    }
 }

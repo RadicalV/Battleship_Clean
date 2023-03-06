@@ -8,4 +8,12 @@ public class GameStats {
         this.hitsRemaining = hitsRemaining;
         this.shipsDestroyed = shipsDestroyed;
     }
+
+    public int getHitsRemaining() {
+        return hitsRemaining;
+    }
+
+    public int getShipsDestroyed() {
+        return shipsDestroyed;
+    }
 }
