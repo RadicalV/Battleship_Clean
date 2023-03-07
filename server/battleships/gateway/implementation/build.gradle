@@ -1,6 +1,5 @@
 dependencies {
-    implementation project(':utils')
-    implementation project(':use_cases:api')
     implementation project(':gateway:api')
     implementation project(':domain')
+    implementation project(':utils')
 }
