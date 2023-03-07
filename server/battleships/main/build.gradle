@@ -1,4 +1,9 @@
 dependencies {
     implementation project(':domain')
     implementation project(':utils')
+    implementation project(':rest')
+    implementation project(':use_cases:api')
+    implementation project(':use_cases:implementation')
+    implementation project(':gateway:api')
+    implementation project(':gateway:implementation')
 }

@@ -8,6 +8,5 @@ include 'domain',
         'gateway:api',
         'gateway:implementation',
         'gateway:fake',
-        'rest:api',
-        'rest:implementation'
+        'rest'
 

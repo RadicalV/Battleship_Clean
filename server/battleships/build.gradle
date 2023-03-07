@@ -20,6 +20,8 @@ allprojects {
         def testDep = rootProject.ext.testingDependencies
 
         implementation dep.log4j
+        implementation dep.javalin
+        implementation dep.jackson
         testImplementation testDep.assertj
         testImplementation testDep.mockito
         testImplementation testDep.junit5
