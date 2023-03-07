@@ -3,3 +3,5 @@ export enum GameState {
   LOST = "lost",
   WON = "won",
 }
+
+// export type State = "in-progress" | "won" | "lost";

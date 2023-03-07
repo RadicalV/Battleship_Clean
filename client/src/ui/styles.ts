@@ -113,4 +113,11 @@ export const useStyles = makeStyles()(() => ({
     fontFamily: "Bangers",
     fontSize: "1.5rem",
   },
+  snackbar: {
+    width: "400px",
+    "&.SnackbarItem-contentRoot": {
+      fontSize: "1rem",
+      fontWeight: "bold",
+    },
+  },
 }));

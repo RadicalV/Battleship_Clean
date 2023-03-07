@@ -1,6 +1,12 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import GameBoard from "./GameBoard";
+
+const mockShowSnackbar = jest.fn();
+
+jest.mock("./useShowSnackbar", () => ({
+  useShowSnackbar: () => ({ showSnackbar: mockShowSnackbar }),
+}));
 
 describe("Game board container", () => {
   it("renders game board correctly", () => {

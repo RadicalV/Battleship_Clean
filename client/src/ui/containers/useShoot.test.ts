@@ -1,5 +1,5 @@
 import { GameController } from "controllers/implementation/index";
-import { ViewShotResult } from "controllers/model/index";
+import { ViewShotResult, ViewShip } from "controllers/model/index";
 import { useShoot } from "./useShoot";
 import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
@@ -7,6 +7,13 @@ import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import * as config from "config";
 import { GameState } from "utils/Constants";
+import { useShowSnackbar } from "./useShowSnackbar";
+
+const mockShowSnackbar = jest.fn();
+
+jest.mock("./useShowSnackbar", () => ({
+  useShowSnackbar: () => ({ showSnackbar: mockShowSnackbar }),
+}));
 
 describe("Use Shoot Hook", () => {
   let gameController: MockProxy<GameController>;
@@ -40,5 +47,31 @@ describe("Use Shoot Hook", () => {
     act(() => result.current.handleCellClick(coordinateX, coordinateY));
 
     expect(setStateMock).toHaveBeenCalledTimes(1);
+  });
+  it("shoots at coordinates, destroys a ship and renders snackbar", () => {
+    const gameId = "123";
+    const coordinateX = 0;
+    const coordinateY = 0;
+    const expectedShotResult = new ViewShotResult(
+      [
+        [3, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ],
+      GameState.IN_PROGRESS,
+      new ViewShip([], true)
+    );
+
+    gameController.shoot
+      .calledWith(gameId, coordinateX, coordinateY)
+      .mockReturnValue(of(expectedShotResult));
+
+    const setStateMock = jest.fn();
+    const { showSnackbar } = useShowSnackbar();
+    const { result } = renderHook(() => useShoot(setStateMock, gameId));
+
+    act(() => result.current.handleCellClick(coordinateX, coordinateY));
+
+    expect(showSnackbar).toHaveBeenCalledTimes(1);
   });
 });
