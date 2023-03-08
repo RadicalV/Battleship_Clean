@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 class Boundary2RestConverterTest {
     private Boundary2RestConverter boundary2RestConverter;
@@ -23,8 +22,10 @@ class Boundary2RestConverterTest {
 
     @Test
     void convertGame() {
-        BoundaryBoard boundaryBoard = mock(BoundaryBoard.class);
-        RestBoard restBoard = mock(RestBoard.class);
+        BoundaryShip boundaryShip = new BoundaryShip(5, List.of(new Coordinates(1, 1)), 0, false);
+        RestShip restShip = new RestShip(5, List.of(new Coordinates(1, 1)), 0, false);
+        BoundaryBoard boundaryBoard = new BoundaryBoard(List.of(List.of(0, 0, 0)), List.of(boundaryShip));
+        RestBoard restBoard = new RestBoard(List.of(List.of(0, 0, 0)), List.of(restShip));
 
         BoundaryGame boundaryGame = new BoundaryGame("test", GameState.IN_PROGRESS, boundaryBoard, 25, 0);
         RestGame restGame = new RestGame("test", GameState.IN_PROGRESS, restBoard, 25, 0);
@@ -32,27 +33,5 @@ class Boundary2RestConverterTest {
         RestGame convertedGame = boundary2RestConverter.convertGame(boundaryGame);
 
         assertThat(convertedGame).usingRecursiveComparison().isEqualTo(restGame);
-    }
-
-    @Test
-    void convertBoard() {
-        BoundaryShip boundaryShip = mock(BoundaryShip.class);
-        RestShip restShip = mock(RestShip.class);
-        BoundaryBoard boundaryBoard = new BoundaryBoard(List.of(List.of(0, 0, 0)), List.of(boundaryShip));
-        RestBoard expectedBoard = new RestBoard(List.of(List.of(0, 0, 0)), List.of(restShip));
-
-        RestBoard convertedBoard = boundary2RestConverter.convertBoard(boundaryBoard);
-
-        assertThat(convertedBoard).usingRecursiveComparison().isEqualTo(expectedBoard);
-    }
-
-    @Test
-    void convertShip() {
-        BoundaryShip boundaryShip = new BoundaryShip(5, List.of(new Coordinates(1, 1)), 0, false);
-        RestShip expectedShip = new RestShip(5, List.of(new Coordinates(1, 1)), 0, false);
-
-        RestShip convertedShip = boundary2RestConverter.convertShip(boundaryShip);
-
-        assertThat(convertedShip).usingRecursiveComparison().isEqualTo(expectedShip);
     }
 }
