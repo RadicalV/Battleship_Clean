@@ -24,9 +24,6 @@ class ShipD2BConverterTest {
 
         BoundaryShip convertedShip = shipD2BConverter.convert(inputShip);
 
-        assertThat(convertedShip.getLength()).isEqualTo(expectedShip.getLength());
-        assertThat(convertedShip.getCoordinates()).isEqualTo(expectedShip.getCoordinates());
-        assertThat(convertedShip.getHits()).isEqualTo(expectedShip.getHits());
-        assertThat(convertedShip.isDestroyed()).isEqualTo(expectedShip.isDestroyed());
+        assertThat(convertedShip).usingRecursiveComparison().isEqualTo(expectedShip);
     }
 }

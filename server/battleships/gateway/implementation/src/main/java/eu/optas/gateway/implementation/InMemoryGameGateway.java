@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class InMemoryGameGateway implements GameGateway {
-    private List<Game> gameList;
+    private final List<Game> gameList;
 
     public InMemoryGameGateway() {
         this.gameList = new ArrayList<>();
@@ -37,9 +37,8 @@ public class InMemoryGameGateway implements GameGateway {
         List<List<Integer>> grid = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             List<Integer> row = new ArrayList<>();
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 10; j++)
                 row.add(0);
-            }
             grid.add(row);
         }
         return grid;

@@ -5,7 +5,7 @@ import eu.optas.use_cases.api.BoundaryGame;
 import eu.optas.utils.Converter;
 
 public class GameD2BConverter extends Converter<Game, BoundaryGame> {
-    private BoardD2BConverter boardD2BConverter;
+    private final BoardD2BConverter boardD2BConverter;
 
     public GameD2BConverter(BoardD2BConverter boardD2BConverter) {
         this.boardD2BConverter = boardD2BConverter;

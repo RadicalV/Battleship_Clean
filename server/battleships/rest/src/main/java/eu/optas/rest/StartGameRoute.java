@@ -7,14 +7,18 @@ import org.jetbrains.annotations.NotNull;
 
 public class StartGameRoute implements Handler {
     private final StartGameUC startGameUC;
+    private final Boundary2RestConverter boundary2RestConverter;
 
-    public StartGameRoute(StartGameUC startGameUC) {
+    public StartGameRoute(StartGameUC startGameUC, Boundary2RestConverter boundary2RestConverter) {
         this.startGameUC = startGameUC;
+        this.boundary2RestConverter = boundary2RestConverter;
     }
 
     @Override
     public void handle(@NotNull Context ctx) {
-        ctx.json(startGameUC.startGame());
+        RestGame game = boundary2RestConverter.convertGame(startGameUC.startGame());
+
+        ctx.json(game);
         ctx.status(201);
     }
 }
