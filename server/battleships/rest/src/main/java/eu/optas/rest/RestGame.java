@@ -1,15 +1,15 @@
-package eu.optas.use_cases.api;
+package eu.optas.rest;
 
 import eu.optas.utils.GameState;
 
-public class BoundaryGame {
+public class RestGame {
     private final String id;
     private final GameState state;
-    private final BoundaryBoard board;
+    private final RestBoard board;
     private final int hitsRemaining;
     private final int shipsDestroyed;
 
-    public BoundaryGame(String id, GameState state, BoundaryBoard board, int hitsRemaining, int shipsDestroyed) {
+    public RestGame(String id, GameState state, RestBoard board, int hitsRemaining, int shipsDestroyed) {
         this.id = id;
         this.state = state;
         this.board = board;
@@ -25,7 +25,7 @@ public class BoundaryGame {
         return state;
     }
 
-    public BoundaryBoard getBoard() {
+    public RestBoard getBoard() {
         return board;
     }
 
