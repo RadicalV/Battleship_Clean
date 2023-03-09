@@ -1,6 +1,5 @@
 package eu.optas.use_cases.implementation;
 
-import eu.optas.domain.Game;
 import eu.optas.gateway.api.GameGateway;
 import eu.optas.use_cases.api.BoundaryGame;
 import eu.optas.use_cases.api.GetGameUC;
@@ -18,7 +17,6 @@ public class GetGameInteractor implements GetGameUC {
 
     @Override
     public Optional<BoundaryGame> getGame(String id) {
-        Game game = gameGateway.getGame(id);
-        return Optional.ofNullable(game).map(gameD2BConverter::convert);
+        return Optional.ofNullable(gameGateway.getGame(id)).map(gameD2BConverter::convert);
     }
 }
