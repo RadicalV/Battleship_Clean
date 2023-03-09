@@ -22,7 +22,7 @@ public class GetGameRoute implements Handler {
     public void handle(@NotNull Context ctx) {
         Optional<BoundaryGame> boundaryGame = getGameUC.getGame(ctx.pathParam("id"));
 
-        boundaryGame.ifPresentOrElse(game -> ctx.json(gameB2RConverter.convertGame(game)),
+        boundaryGame.ifPresentOrElse(game -> ctx.json(gameB2RConverter.convert(game)),
                 () -> {
                     ctx.json(Map.of("message", "Game not found!"));
                     ctx.status(404);

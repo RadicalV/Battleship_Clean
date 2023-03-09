@@ -24,7 +24,7 @@ class StartGameRouteTest {
         RestGame returnedGame = new RestGame("test", GameState.IN_PROGRESS, restBoard, 25, 0);
 
         GameB2RConverter gameB2RConverter = mock(GameB2RConverter.class);
-        when(gameB2RConverter.convertGame(boundaryGame)).thenReturn(returnedGame);
+        when(gameB2RConverter.convert(boundaryGame)).thenReturn(returnedGame);
 
         StartGameRoute startGameRoute = new StartGameRoute(startGameUC, gameB2RConverter);
         Context ctx = mock(Context.class);

@@ -27,7 +27,7 @@ class GameB2RConverterTest {
 
         BoundaryGame boundaryGame = new BoundaryGame("test", GameState.IN_PROGRESS, boundaryBoard, 25, 0);
 
-        RestGame convertedGame = gameB2RConverter.convertGame(boundaryGame);
+        RestGame convertedGame = gameB2RConverter.convert(boundaryGame);
 
         assertThat(convertedGame).usingRecursiveComparison().isEqualTo(boundaryGame);
     }

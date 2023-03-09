@@ -36,7 +36,7 @@ class GetGameRouteTest {
         );
 
         when(GET_GAME_UC.getGame(GAME_ID)).thenReturn(Optional.of(expectedGame));
-        when(GAME_B_2_R_CONVERTER.convertGame(expectedGame)).thenReturn(expectedRestGame);
+        when(GAME_B_2_R_CONVERTER.convert(expectedGame)).thenReturn(expectedRestGame);
 
         Context ctx = mock(Context.class);
         GetGameRoute getGameRoute = new GetGameRoute(GET_GAME_UC, GAME_B_2_R_CONVERTER);

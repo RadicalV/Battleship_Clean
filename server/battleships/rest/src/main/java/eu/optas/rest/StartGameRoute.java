@@ -16,7 +16,7 @@ public class StartGameRoute implements Handler {
 
     @Override
     public void handle(@NotNull Context ctx) {
-        RestGame game = gameB2RConverter.convertGame(startGameUC.startGame());
+        RestGame game = gameB2RConverter.convert(startGameUC.startGame());
 
         ctx.json(game);
         ctx.status(201);

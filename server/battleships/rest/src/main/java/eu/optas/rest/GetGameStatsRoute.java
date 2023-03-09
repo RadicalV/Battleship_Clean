@@ -22,7 +22,7 @@ public class GetGameStatsRoute implements Handler {
     public void handle(@NotNull Context ctx) {
         Optional<BoundaryGameStats> boundaryGameStats = getGameStatsUC.getGameStats(ctx.pathParam("id"));
 
-        boundaryGameStats.ifPresentOrElse(gameStats -> ctx.json(gameStatsB2RConverter.convertGameStats(gameStats)),
+        boundaryGameStats.ifPresentOrElse(gameStats -> ctx.json(gameStatsB2RConverter.convert(gameStats)),
                 () -> {
                     ctx.json(Map.of("message", "Game not found!"));
                     ctx.status(404);

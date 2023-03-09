@@ -22,7 +22,7 @@ class GetGameStatsRouteTest {
         RestGameStats restGameStats = new RestGameStats(25, 5);
 
         when(GET_GAME_STATS_UC.getGameStats(GAME_ID)).thenReturn(Optional.of(boundaryGameStats));
-        when(GAME_STATS_B_2_R_CONVERTER.convertGameStats(boundaryGameStats)).thenReturn(restGameStats);
+        when(GAME_STATS_B_2_R_CONVERTER.convert(boundaryGameStats)).thenReturn(restGameStats);
 
         Context ctx = mock(Context.class);
         when(ctx.pathParam("id")).thenReturn(GAME_ID);

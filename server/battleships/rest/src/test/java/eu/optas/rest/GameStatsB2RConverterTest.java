@@ -12,7 +12,7 @@ class GameStatsB2RConverterTest {
         BoundaryGameStats inputGameStats = new BoundaryGameStats(25, 5);
         GameStatsB2RConverter gameStatsB2RConverter = new GameStatsB2RConverter();
 
-        RestGameStats convertedGameStats = gameStatsB2RConverter.convertGameStats(inputGameStats);
+        RestGameStats convertedGameStats = gameStatsB2RConverter.convert(inputGameStats);
 
         assertThat(convertedGameStats).usingRecursiveComparison().isEqualTo(inputGameStats);
     }
