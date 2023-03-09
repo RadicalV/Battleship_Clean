@@ -1,5 +1,7 @@
 package eu.optas.use_cases.api;
 
+import java.util.Optional;
+
 public interface GetGameStatsUC {
-    public BoundaryGameStats getGameStats(String id);
+    public Optional<BoundaryGameStats> getGameStats(String id);
 }

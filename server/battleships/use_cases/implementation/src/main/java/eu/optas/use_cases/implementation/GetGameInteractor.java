@@ -5,6 +5,8 @@ import eu.optas.gateway.api.GameGateway;
 import eu.optas.use_cases.api.BoundaryGame;
 import eu.optas.use_cases.api.GetGameUC;
 
+import java.util.Optional;
+
 public class GetGameInteractor implements GetGameUC {
     private final GameGateway gameGateway;
     private final GameD2BConverter gameD2BConverter;
@@ -15,8 +17,8 @@ public class GetGameInteractor implements GetGameUC {
     }
 
     @Override
-    public BoundaryGame getGame(String id) {
+    public Optional<BoundaryGame> getGame(String id) {
         Game game = gameGateway.getGame(id);
-        return game != null ? gameD2BConverter.convert(game) : null;
+        return Optional.ofNullable(game).map(gameD2BConverter::convert);
     }
 }

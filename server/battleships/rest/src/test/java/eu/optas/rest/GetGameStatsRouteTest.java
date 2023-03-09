@@ -5,49 +5,47 @@ import eu.optas.use_cases.api.GetGameStatsUC;
 import io.javalin.http.Context;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 class GetGameStatsRouteTest {
 
+    private static final GetGameStatsUC GET_GAME_STATS_UC = mock(GetGameStatsUC.class);
+    private static final GameStatsB2RConverter GAME_STATS_B_2_R_CONVERTER = mock(GameStatsB2RConverter.class);
+    private static final String GAME_ID = "123";
+
     @Test
     void handle() {
-        GetGameStatsUC getGameStatsUC = mock(GetGameStatsUC.class);
-        Boundary2RestConverter boundary2RestConverter = mock(Boundary2RestConverter.class);
-
         BoundaryGameStats boundaryGameStats = new BoundaryGameStats(25, 5);
         RestGameStats restGameStats = new RestGameStats(25, 5);
 
-        String gameId = "123";
-        when(getGameStatsUC.getGameStats(gameId)).thenReturn(boundaryGameStats);
-        when(boundary2RestConverter.convertGameStats(boundaryGameStats)).thenReturn(restGameStats);
+        when(GET_GAME_STATS_UC.getGameStats(GAME_ID)).thenReturn(Optional.of(boundaryGameStats));
+        when(GAME_STATS_B_2_R_CONVERTER.convertGameStats(boundaryGameStats)).thenReturn(restGameStats);
 
         Context ctx = mock(Context.class);
-        when(ctx.pathParam("id")).thenReturn(gameId);
-        GetGameStatsRoute getGameStatsRoute = new GetGameStatsRoute(getGameStatsUC, boundary2RestConverter);
+        when(ctx.pathParam("id")).thenReturn(GAME_ID);
+        GetGameStatsRoute getGameStatsRoute = new GetGameStatsRoute(GET_GAME_STATS_UC, GAME_STATS_B_2_R_CONVERTER);
 
         getGameStatsRoute.handle(ctx);
 
         verify(ctx).json(restGameStats);
-        verify(getGameStatsUC).getGameStats(gameId);
+        verify(GET_GAME_STATS_UC).getGameStats(GAME_ID);
     }
 
     @Test
     void handleWhenGameNotFound() {
-        GetGameStatsUC getGameStatsUC = mock(GetGameStatsUC.class);
-        Boundary2RestConverter boundary2RestConverter = mock(Boundary2RestConverter.class);
-        String gameId = "123";
-
-        when(getGameStatsUC.getGameStats(gameId)).thenReturn(null);
-        when(boundary2RestConverter.convertGameStats(null)).thenReturn(null);
+        when(GET_GAME_STATS_UC.getGameStats(GAME_ID)).thenReturn(Optional.empty());
 
         Context ctx = mock(Context.class);
-        GetGameStatsRoute getGameRoute = new GetGameStatsRoute(getGameStatsUC, boundary2RestConverter);
+        GetGameStatsRoute getGameRoute = new GetGameStatsRoute(GET_GAME_STATS_UC, GAME_STATS_B_2_R_CONVERTER);
 
         when(ctx.pathParam("id")).thenReturn("id");
         getGameRoute.handle(ctx);
 
-        verify(ctx).json("{\n \"message\": \"Game not found!\"\n}");
+        verify(ctx).json(Map.of("message", "Game not found!"));
         verify(ctx).status(404);
-        verify(getGameStatsUC).getGameStats("id");
+        verify(GET_GAME_STATS_UC).getGameStats("id");
     }
 }

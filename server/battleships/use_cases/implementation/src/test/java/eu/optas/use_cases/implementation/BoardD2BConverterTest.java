@@ -25,13 +25,12 @@ class BoardD2BConverterTest {
         List<Ship> ships = new ArrayList<>();
         List<BoundaryShip> boundaryShips = new ArrayList<>();
         Board inputBoard = new Board(grid, ships);
-        BoundaryBoard expectedBoard = new BoundaryBoard(grid, boundaryShips);
 
         when(shipD2BConverterMock.convertAll(ships)).thenReturn(boundaryShips);
 
         BoundaryBoard convertedBoard = boardD2BConverter.convert(inputBoard);
 
-        assertThat(convertedBoard).usingRecursiveComparison().ignoringFields("ships").isEqualTo(expectedBoard);
+        assertThat(convertedBoard).usingRecursiveComparison().ignoringFields("ships").isEqualTo(inputBoard);
         assertThat(convertedBoard.getShips()).isEqualTo(boundaryShips);
     }
 }

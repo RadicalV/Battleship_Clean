@@ -20,10 +20,9 @@ class ShipD2BConverterTest {
         coordinatesList.add(coordinates);
 
         Ship inputShip = new Ship(5, coordinatesList, 0, false);
-        BoundaryShip expectedShip = new BoundaryShip(5, coordinatesList, 0, false);
 
         BoundaryShip convertedShip = shipD2BConverter.convert(inputShip);
 
-        assertThat(convertedShip).usingRecursiveComparison().isEqualTo(expectedShip);
+        assertThat(convertedShip).usingRecursiveComparison().isEqualTo(inputShip);
     }
 }

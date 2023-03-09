@@ -2,7 +2,6 @@ package eu.optas.gateway.implementation;
 
 import eu.optas.domain.Board;
 import eu.optas.domain.Game;
-import eu.optas.domain.GameStats;
 import eu.optas.domain.Ship;
 import eu.optas.gateway.api.GameGateway;
 import eu.optas.utils.Coordinates;
@@ -32,16 +31,7 @@ public class InMemoryGameGateway implements GameGateway {
 
     @Override
     public Game getGame(String id) {
-        for (Game game : gameList)
-            if (game.getId().equals(id))
-                return game;
-        return null;
-    }
-
-    @Override
-    public GameStats getGameStats(String id) {
-        Game game = getGame(id);
-        return game != null ? new GameStats(game.getHitsRemaining(), game.getShipsDestroyed()) : null;
+        return gameList.stream().filter(game -> game.getId().equals(id)).findFirst().orElse(null);
     }
 
     private String generateId() {

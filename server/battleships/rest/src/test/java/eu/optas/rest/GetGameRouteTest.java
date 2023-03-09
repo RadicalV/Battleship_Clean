@@ -7,61 +7,59 @@ import eu.optas.utils.GameState;
 import io.javalin.http.Context;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 class GetGameRouteTest {
 
+    private static final GetGameUC GET_GAME_UC = mock(GetGameUC.class);
+    private static final GameB2RConverter GAME_B_2_R_CONVERTER = mock(GameB2RConverter.class);
+    private static final String GAME_ID = "123";
+
     @Test
     void handle() {
-        GetGameUC getGameUC = mock(GetGameUC.class);
-        Boundary2RestConverter boundary2RestConverter = mock(Boundary2RestConverter.class);
-        String gameId = "123";
-
         BoundaryGame expectedGame = new BoundaryGame(
-                gameId,
+                GAME_ID,
                 GameState.IN_PROGRESS,
                 mock(BoundaryBoard.class),
                 25,
                 0
         );
         RestGame expectedRestGame = new RestGame(
-                gameId,
+                GAME_ID,
                 GameState.IN_PROGRESS,
                 mock(RestBoard.class),
                 25,
                 0
         );
 
-        when(getGameUC.getGame(gameId)).thenReturn(expectedGame);
-        when(boundary2RestConverter.convertGame(expectedGame)).thenReturn(expectedRestGame);
+        when(GET_GAME_UC.getGame(GAME_ID)).thenReturn(Optional.of(expectedGame));
+        when(GAME_B_2_R_CONVERTER.convertGame(expectedGame)).thenReturn(expectedRestGame);
 
         Context ctx = mock(Context.class);
-        GetGameRoute getGameRoute = new GetGameRoute(getGameUC, boundary2RestConverter);
+        GetGameRoute getGameRoute = new GetGameRoute(GET_GAME_UC, GAME_B_2_R_CONVERTER);
 
-        when(ctx.pathParam("id")).thenReturn(gameId);
+        when(ctx.pathParam("id")).thenReturn(GAME_ID);
         getGameRoute.handle(ctx);
 
         verify(ctx).json(expectedRestGame);
-        verify(getGameUC).getGame(gameId);
+        verify(GET_GAME_UC).getGame(GAME_ID);
     }
 
     @Test
     void handleWhenGameNotFound() {
-        GetGameUC getGameUC = mock(GetGameUC.class);
-        Boundary2RestConverter boundary2RestConverter = mock(Boundary2RestConverter.class);
-        String gameId = "123";
-
-        when(getGameUC.getGame(gameId)).thenReturn(null);
-        when(boundary2RestConverter.convertGame(null)).thenReturn(null);
+        when(GET_GAME_UC.getGame(GAME_ID)).thenReturn(Optional.empty());
 
         Context ctx = mock(Context.class);
-        GetGameRoute getGameRoute = new GetGameRoute(getGameUC, boundary2RestConverter);
+        GetGameRoute getGameRoute = new GetGameRoute(GET_GAME_UC, GAME_B_2_R_CONVERTER);
 
         when(ctx.pathParam("id")).thenReturn("id");
         getGameRoute.handle(ctx);
 
-        verify(ctx).json("{\n \"message\": \"Game not found!\"\n}");
+        verify(ctx).json(Map.of("message", "Game not found!"));
         verify(ctx).status(404);
-        verify(getGameUC).getGame("id");
+        verify(GET_GAME_UC).getGame("id");
     }
 }

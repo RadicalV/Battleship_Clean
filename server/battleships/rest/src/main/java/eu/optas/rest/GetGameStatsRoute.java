@@ -6,23 +6,26 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.Optional;
+
 public class GetGameStatsRoute implements Handler {
     private final GetGameStatsUC getGameStatsUC;
-    private final Boundary2RestConverter boundary2RestConverter;
+    private final GameStatsB2RConverter gameStatsB2RConverter;
 
-    public GetGameStatsRoute(GetGameStatsUC getGameStatsUC, Boundary2RestConverter boundary2RestConverter) {
+    public GetGameStatsRoute(GetGameStatsUC getGameStatsUC, GameStatsB2RConverter gameStatsB2RConverter) {
         this.getGameStatsUC = getGameStatsUC;
-        this.boundary2RestConverter = boundary2RestConverter;
+        this.gameStatsB2RConverter = gameStatsB2RConverter;
     }
 
     @Override
     public void handle(@NotNull Context ctx) {
-        BoundaryGameStats boundaryGameStats = getGameStatsUC.getGameStats(ctx.pathParam("id"));
-        if (boundaryGameStats != null)
-            ctx.json(boundary2RestConverter.convertGameStats(boundaryGameStats));
-        else {
-            ctx.json("{\n \"message\": \"Game not found!\"\n}");
-            ctx.status(404);
-        }
+        Optional<BoundaryGameStats> boundaryGameStats = getGameStatsUC.getGameStats(ctx.pathParam("id"));
+
+        boundaryGameStats.ifPresentOrElse(gameStats -> ctx.json(gameStatsB2RConverter.convertGameStats(gameStats)),
+                () -> {
+                    ctx.json(Map.of("message", "Game not found!"));
+                    ctx.status(404);
+                });
     }
 }

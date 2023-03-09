@@ -6,23 +6,26 @@ import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+import java.util.Optional;
+
 public class GetGameRoute implements Handler {
     private final GetGameUC getGameUC;
-    private final Boundary2RestConverter boundary2RestConverter;
+    private final GameB2RConverter gameB2RConverter;
 
-    public GetGameRoute(GetGameUC getGameUC, Boundary2RestConverter boundary2RestConverter) {
+    public GetGameRoute(GetGameUC getGameUC, GameB2RConverter gameB2RConverter) {
         this.getGameUC = getGameUC;
-        this.boundary2RestConverter = boundary2RestConverter;
+        this.gameB2RConverter = gameB2RConverter;
     }
 
     @Override
     public void handle(@NotNull Context ctx) {
-        BoundaryGame boundaryGame = getGameUC.getGame(ctx.pathParam("id"));
-        if (boundaryGame != null)
-            ctx.json(boundary2RestConverter.convertGame(boundaryGame));
-        else {
-            ctx.json("{\n \"message\": \"Game not found!\"\n}");
-            ctx.status(404);
-        }
+        Optional<BoundaryGame> boundaryGame = getGameUC.getGame(ctx.pathParam("id"));
+
+        boundaryGame.ifPresentOrElse(game -> ctx.json(gameB2RConverter.convertGame(game)),
+                () -> {
+                    ctx.json(Map.of("message", "Game not found!"));
+                    ctx.status(404);
+                });
     }
 }

@@ -2,13 +2,12 @@ package eu.optas.rest;
 
 import eu.optas.use_cases.api.BoundaryBoard;
 import eu.optas.use_cases.api.BoundaryGame;
-import eu.optas.use_cases.api.BoundaryGameStats;
 import eu.optas.use_cases.api.BoundaryShip;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Boundary2RestConverter {
+public class GameB2RConverter {
 
     public RestGame convertGame(BoundaryGame game) {
         return new RestGame(game.getId(), game.getState(), convertBoard(game.getBoard()),
@@ -25,9 +24,5 @@ public class Boundary2RestConverter {
 
     private List<RestShip> convertAllShips(List<BoundaryShip> ships) {
         return ships.stream().map(this::convertShip).collect(Collectors.toList());
-    }
-
-    public RestGameStats convertGameStats(BoundaryGameStats boundaryGameStats) {
-        return new RestGameStats(boundaryGameStats.getHitsRemaining(), boundaryGameStats.getShipsDestroyed());
     }
 }
