@@ -1,6 +1,7 @@
 package eu.optas.gateway.implementation;
 
 import eu.optas.domain.Game;
+import eu.optas.domain.GameStats;
 import eu.optas.utils.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,5 +29,29 @@ class InMemoryGameGatewayTest {
         assertThat(game.getHitsRemaining()).isEqualTo(25);
         assertThat(game.getShipsDestroyed()).isEqualTo(0);
         assertThat(game.getBoard().getGrid()).isEqualTo(expectedGrid);
+    }
+
+    @Test
+    void getGame() {
+        Game newGame = inMemoryGameGateway.createGame();
+
+        Game game = inMemoryGameGateway.getGame(newGame.getId());
+
+        assertThat(game).usingRecursiveComparison().isEqualTo(newGame);
+        assertThat(inMemoryGameGateway.getGame("1")).isNull();
+    }
+
+    @Test
+    void getGameStats() {
+        Game newGame = inMemoryGameGateway.createGame();
+
+        GameStats gameStats = inMemoryGameGateway.getGameStats(newGame.getId());
+
+        assertThat(gameStats.getHitsRemaining()).isEqualTo(newGame.getHitsRemaining());
+        assertThat(gameStats.getShipsDestroyed()).isEqualTo(newGame.getShipsDestroyed());
+
+        GameStats gameStats1 = inMemoryGameGateway.getGameStats("123456");
+
+        assertThat(gameStats1).isNull();
     }
 }

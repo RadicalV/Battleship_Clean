@@ -38,6 +38,7 @@ class GameD2BConverterTest {
         );
         BoundaryGame convertedGame = gameD2BConverter.convert(inputGame);
 
-        assertThat(convertedGame).usingRecursiveComparison().isEqualTo(expectedGame);
+        assertThat(convertedGame).usingRecursiveComparison().ignoringFields("board").isEqualTo(expectedGame);
+        assertThat(convertedGame.getBoard()).isEqualTo(boundaryBoard);
     }
 }

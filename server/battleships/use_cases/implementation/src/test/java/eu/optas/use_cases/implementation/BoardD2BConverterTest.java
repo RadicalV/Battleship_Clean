@@ -31,6 +31,7 @@ class BoardD2BConverterTest {
 
         BoundaryBoard convertedBoard = boardD2BConverter.convert(inputBoard);
 
-        assertThat(convertedBoard).usingRecursiveComparison().isEqualTo(expectedBoard);
+        assertThat(convertedBoard).usingRecursiveComparison().ignoringFields("ships").isEqualTo(expectedBoard);
+        assertThat(convertedBoard.getShips()).isEqualTo(boundaryShips);
     }
 }

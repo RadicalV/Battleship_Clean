@@ -2,6 +2,7 @@ package eu.optas.rest;
 
 import eu.optas.use_cases.api.BoundaryBoard;
 import eu.optas.use_cases.api.BoundaryGame;
+import eu.optas.use_cases.api.BoundaryGameStats;
 import eu.optas.use_cases.api.BoundaryShip;
 
 import java.util.List;
@@ -24,5 +25,9 @@ public class Boundary2RestConverter {
 
     private List<RestShip> convertAllShips(List<BoundaryShip> ships) {
         return ships.stream().map(this::convertShip).collect(Collectors.toList());
+    }
+
+    public RestGameStats convertGameStats(BoundaryGameStats boundaryGameStats) {
+        return new RestGameStats(boundaryGameStats.getHitsRemaining(), boundaryGameStats.getShipsDestroyed());
     }
 }

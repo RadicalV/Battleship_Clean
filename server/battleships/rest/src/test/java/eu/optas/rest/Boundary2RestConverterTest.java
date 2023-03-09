@@ -2,6 +2,7 @@ package eu.optas.rest;
 
 import eu.optas.use_cases.api.BoundaryBoard;
 import eu.optas.use_cases.api.BoundaryGame;
+import eu.optas.use_cases.api.BoundaryGameStats;
 import eu.optas.use_cases.api.BoundaryShip;
 import eu.optas.utils.Coordinates;
 import eu.optas.utils.GameState;
@@ -33,5 +34,15 @@ class Boundary2RestConverterTest {
         RestGame convertedGame = boundary2RestConverter.convertGame(boundaryGame);
 
         assertThat(convertedGame).usingRecursiveComparison().isEqualTo(restGame);
+    }
+
+    @Test
+    void convertGameStats() {
+        BoundaryGameStats inputGameStats = new BoundaryGameStats(25, 5);
+        RestGameStats expectedGameStats = new RestGameStats(25, 5);
+
+        RestGameStats convertedGameStats = boundary2RestConverter.convertGameStats(inputGameStats);
+
+        assertThat(convertedGameStats).usingRecursiveComparison().isEqualTo(expectedGameStats);
     }
 }
