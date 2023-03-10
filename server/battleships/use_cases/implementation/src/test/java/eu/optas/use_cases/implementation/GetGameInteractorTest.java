@@ -50,7 +50,6 @@ class GetGameInteractorTest {
     @Test
     void getGameNull() {
         when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(null);
-        when(GAME_D_2_B_CONVERTER_MOCK.convert(null)).thenReturn(null);
 
         Optional<BoundaryGame> returnedGame = GET_GAME_INTERACTOR.getGame(GAME_ID);
 

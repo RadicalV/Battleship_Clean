@@ -33,7 +33,6 @@ class GetGameStatsInteractorTest {
 
     @Test
     void getGameStatsNull() {
-
         when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(null);
 
         Optional<BoundaryGameStats> returnedGameStats = GET_GAME_STATS_INTERACTOR.getGameStats(GAME_ID);
