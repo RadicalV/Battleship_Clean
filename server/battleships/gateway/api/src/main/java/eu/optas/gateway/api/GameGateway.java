@@ -4,4 +4,6 @@ import eu.optas.domain.Game;
 
 public interface GameGateway {
     public Game createGame();
+
+    public Game getGame(String id);
 }

@@ -29,6 +29,11 @@ public class InMemoryGameGateway implements GameGateway {
         return game;
     }
 
+    @Override
+    public Game getGame(String id) {
+        return gameList.stream().filter(game -> game.getId().equals(id)).findFirst().orElse(null);
+    }
+
     private String generateId() {
         return UUID.randomUUID().toString();
     }

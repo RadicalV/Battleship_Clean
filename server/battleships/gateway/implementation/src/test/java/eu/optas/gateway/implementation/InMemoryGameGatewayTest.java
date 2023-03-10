@@ -29,4 +29,14 @@ class InMemoryGameGatewayTest {
         assertThat(game.getShipsDestroyed()).isEqualTo(0);
         assertThat(game.getBoard().getGrid()).isEqualTo(expectedGrid);
     }
+
+    @Test
+    void getGame() {
+        Game newGame = inMemoryGameGateway.createGame();
+
+        Game game = inMemoryGameGateway.getGame(newGame.getId());
+
+        assertThat(game).usingRecursiveComparison().isEqualTo(newGame);
+        assertThat(inMemoryGameGateway.getGame("1")).isNull();
+    }
 }

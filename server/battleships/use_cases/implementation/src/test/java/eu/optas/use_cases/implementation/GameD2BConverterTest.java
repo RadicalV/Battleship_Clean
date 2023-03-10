@@ -29,15 +29,9 @@ class GameD2BConverterTest {
                 25,
                 0
         );
-        BoundaryGame expectedGame = new BoundaryGame(
-                "123",
-                GameState.IN_PROGRESS,
-                boundaryBoard,
-                25,
-                0
-        );
         BoundaryGame convertedGame = gameD2BConverter.convert(inputGame);
 
-        assertThat(convertedGame).usingRecursiveComparison().isEqualTo(expectedGame);
+        assertThat(convertedGame).usingRecursiveComparison().ignoringFields("board").isEqualTo(inputGame);
+        assertThat(convertedGame.getBoard()).isEqualTo(boundaryBoard);
     }
 }

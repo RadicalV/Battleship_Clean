@@ -3,13 +3,15 @@ package eu.optas.rest;
 import eu.optas.use_cases.api.BoundaryBoard;
 import eu.optas.use_cases.api.BoundaryGame;
 import eu.optas.use_cases.api.BoundaryShip;
+import eu.optas.utils.Converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Boundary2RestConverter {
+public class GameB2RConverter extends Converter<BoundaryGame, RestGame> {
 
-    public RestGame convertGame(BoundaryGame game) {
+    @Override
+    public RestGame convert(BoundaryGame game) {
         return new RestGame(game.getId(), game.getState(), convertBoard(game.getBoard()),
                 game.getHitsRemaining(), game.getShipsDestroyed());
     }
