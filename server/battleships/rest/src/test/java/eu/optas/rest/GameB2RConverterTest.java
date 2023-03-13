@@ -29,6 +29,7 @@ class GameB2RConverterTest {
 
         RestGame convertedGame = gameB2RConverter.convert(boundaryGame);
 
-        assertThat(convertedGame).usingRecursiveComparison().isEqualTo(boundaryGame);
+        assertThat(convertedGame).usingRecursiveComparison().ignoringFields("state").isEqualTo(boundaryGame);
+        assertThat(convertedGame.getState()).isEqualTo(boundaryGame.getState().getLabel());
     }
 }

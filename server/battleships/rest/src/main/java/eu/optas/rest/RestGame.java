@@ -21,8 +21,8 @@ public class RestGame {
         return id;
     }
 
-    public GameState getState() {
-        return state;
+    public String getState() {
+        return state.getLabel();
     }
 
     public RestBoard getBoard() {

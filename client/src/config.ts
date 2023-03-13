@@ -20,31 +20,31 @@ import {
   GameStatsB2VConverter,
 } from "./controllers/implementation/";
 import { InMemoryGameStorage } from "./services/implementation/InMemoryGameStorage";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, map } from "rxjs";
+import { RestGameStorage } from "./services/implementation/RestGameStorage";
 
 const gameSubject$ = new BehaviorSubject<Game[]>([]);
 const inMemoryGameStorage = new InMemoryGameStorage(gameSubject$);
+const restGameStorage = new RestGameStorage();
 
 const shipD2BConverter = new ShipD2BConverter();
+
 const boardD2BConverter = new BoardD2BConverter(shipD2BConverter);
 const gameD2BConverter = new GameD2BConverter(boardD2BConverter);
 const shotResultD2BConverter = new ShotResultD2BConverter(shipD2BConverter);
 const gameStatsD2BConverter = new GameStatsD2BConverter();
 
-const gameInteractor = new GetGameInteractor(
-  inMemoryGameStorage,
-  gameD2BConverter
-);
+const gameInteractor = new GetGameInteractor(restGameStorage, gameD2BConverter);
 const startGameInteractor = new StartGameInteractor(
-  inMemoryGameStorage,
+  restGameStorage,
   gameD2BConverter
 );
 const shootInteractor = new ShootInteractor(
-  inMemoryGameStorage,
+  restGameStorage,
   shotResultD2BConverter
 );
 const getGameStatsInteractor = new GetGameStatsInteractor(
-  inMemoryGameStorage,
+  restGameStorage,
   gameStatsD2BConverter
 );
 

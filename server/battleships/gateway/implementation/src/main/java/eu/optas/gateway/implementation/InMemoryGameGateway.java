@@ -58,6 +58,9 @@ public class InMemoryGameGateway implements GameGateway {
         ships.add(new Ship(4, new ArrayList<>(Arrays.asList(new Coordinates(9, 9),
                 new Coordinates(9, 8), new Coordinates(9, 7), new Coordinates(9, 6))),
                 0, false));
+        ships.add(new Ship(1, List.of(new Coordinates(0, 0)), 0, false));
+        ships.add(new Ship(1, List.of(new Coordinates(0, 2)), 0, false));
+        ships.add(new Ship(1, List.of(new Coordinates(9, 0)), 0, false));
         return ships;
     }
 }

@@ -9,6 +9,7 @@ import eu.optas.use_cases.api.ShootUC;
 import eu.optas.use_cases.api.StartGameUC;
 import eu.optas.use_cases.implementation.*;
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +35,11 @@ public class Main {
         GetGameStatsUC getGameStatsUC = new GetGameStatsInteractor(gameGateway);
         ShootUC shootUC = new ShootInteractor(gameGateway, shotResultD2BConverter);
 
-        Javalin app = Javalin.create().start(3000);
+        Javalin app = Javalin.create(config -> {
+            config.plugins.enableCors(cors -> {
+                cors.add(CorsPluginConfig::anyHost);
+            });
+        }).start(3000);
 
         app.post("/games", new StartGameRoute(startGameUC, gameB2RConverter));
         app.get("/games/{id}", new GetGameRoute(getGameUC, gameB2RConverter));

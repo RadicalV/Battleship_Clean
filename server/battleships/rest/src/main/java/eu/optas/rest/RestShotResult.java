@@ -21,8 +21,8 @@ public class RestShotResult {
         return grid;
     }
 
-    public GameState getGameState() {
-        return gameState;
+    public String getGameState() {
+        return gameState.getLabel();
     }
 
     public RestShip getShip() {
