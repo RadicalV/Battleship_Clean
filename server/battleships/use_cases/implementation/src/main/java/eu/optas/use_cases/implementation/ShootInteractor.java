@@ -7,6 +7,7 @@ import eu.optas.domain.ShotResult;
 import eu.optas.gateway.api.GameGateway;
 import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.use_cases.api.ShootUC;
+import eu.optas.utils.GameNotFoundException;
 import eu.optas.utils.GameState;
 
 import java.util.List;
@@ -23,15 +24,31 @@ public class ShootInteractor implements ShootUC {
     }
 
     @Override
-    public BoundaryShotResult shoot(String gameId, int x, int y) throws Exception {
-        Game game = gameGateway.getGame(gameId);
-        if (nonNull(game)) {
-            return shotResultD2BConverter.convert(checkShot(game, x, y));
-        } else throw new Exception("Game doesn't exist!");
+    public BoundaryShotResult shoot(String gameId, int x, int y) {
+        return gameGateway.getGame(gameId)
+                .map(game -> shotResultD2BConverter.convert(checkShot(game, x, y)))
+                .orElseThrow(() -> new GameNotFoundException("Game was not found!"));
     }
 
     private ShotResult checkShot(Game game, int x, int y) {
         Ship foundShip = checkForShip(game, x, y);
+        Ship newShip = constructNewShip(foundShip);
+
+        Game updatedGame = constructUpdatedGame(game, newShip, foundShip, x, y);
+
+        gameGateway.updateGame(updatedGame);
+        return new ShotResult(updatedGame.getBoard().getGrid(), newShip, updatedGame.getState());
+    }
+
+    private Ship checkForShip(Game game, int x, int y) {
+        return game.getBoard().getShips().stream()
+                .filter(ship -> ship.getCoordinates().stream()
+                        .anyMatch(coordinates -> coordinates.getX() == x && coordinates.getY() == y))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private static Ship constructNewShip(Ship foundShip) {
         Ship newShip = null;
 
         if (nonNull(foundShip)) {
@@ -43,19 +60,7 @@ public class ShootInteractor implements ShootUC {
                     foundShip.getLength() <= hits
             );
         }
-
-        Game updatedGame = constructUpdatedGame(game, newShip, foundShip, x, y);
-
-        gameGateway.updateGame(updatedGame, game);
-        return new ShotResult(updatedGame.getBoard().getGrid(), newShip, updatedGame.getState());
-    }
-
-    private Ship checkForShip(Game game, int x, int y) {
-        return game.getBoard().getShips().stream()
-                .filter(ship -> ship.getCoordinates().stream()
-                        .anyMatch(coordinates -> coordinates.getX() == x && coordinates.getY() == y))
-                .findFirst()
-                .orElse(null);
+        return newShip;
     }
 
     private Game constructUpdatedGame(Game game, Ship newShip, Ship foundShip, int x, int y) {

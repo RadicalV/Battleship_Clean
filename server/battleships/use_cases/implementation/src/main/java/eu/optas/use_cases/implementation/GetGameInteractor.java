@@ -17,6 +17,6 @@ public class GetGameInteractor implements GetGameUC {
 
     @Override
     public Optional<BoundaryGame> getGame(String id) {
-        return Optional.ofNullable(gameGateway.getGame(id)).map(gameD2BConverter::convert);
+        return gameGateway.getGame(id).map(gameD2BConverter::convert);
     }
 }

@@ -47,10 +47,10 @@ class InMemoryGameGatewayTest {
 
         gameList.add(newGame);
 
-        Game game = inMemoryGameGateway.getGame(GAME_ID);
+        Game game = inMemoryGameGateway.getGame(GAME_ID).orElse(null);
 
         assertThat(game).usingRecursiveComparison().isEqualTo(newGame);
-        assertThat(inMemoryGameGateway.getGame("1")).isNull();
+        assertThat(inMemoryGameGateway.getGame("1")).isEmpty();
     }
 
     @Test
@@ -73,9 +73,9 @@ class InMemoryGameGatewayTest {
                 5
         );
 
-        inMemoryGameGateway.updateGame(updatedGame, newGame);
+        inMemoryGameGateway.updateGame(updatedGame);
 
-        Game retrievedGame = inMemoryGameGateway.getGame(GAME_ID);
+        Game retrievedGame = inMemoryGameGateway.getGame(GAME_ID).orElse(null);
 
         assertThat(retrievedGame).usingRecursiveComparison().isEqualTo(updatedGame);
     }

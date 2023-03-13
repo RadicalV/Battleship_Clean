@@ -4,11 +4,13 @@ import eu.optas.use_cases.api.BoundaryShip;
 import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.use_cases.api.ShootUC;
 import eu.optas.utils.Coordinates;
+import eu.optas.utils.GameNotFoundException;
 import eu.optas.utils.GameState;
 import io.javalin.http.Context;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -21,7 +23,7 @@ class ShootRouteTest {
     private static final int Y = 5;
 
     @Test
-    void handle() throws Exception {
+    void handle() {
         BoundaryShotResult boundaryShotResult =
                 new BoundaryShotResult(
                         List.of(List.of(0, 0, 0)),
@@ -51,9 +53,8 @@ class ShootRouteTest {
     }
 
     @Test
-    void handleWhenGameNotFound() throws Exception {
-        when(SHOOT_UC.shoot(GAME_ID, X, Y)).thenThrow(new Exception("Game doesn't exist!"));
-
+    void handleWhenGameNotFound() {
+        when(SHOOT_UC.shoot("id", X, Y)).thenThrow(new GameNotFoundException("Game doesn't exist!"));
 
         Context ctx = mock(Context.class);
         ShootRoute shootRoute = new ShootRoute(SHOOT_UC, SHOT_RESULT_B_2_R_CONVERTER);
@@ -62,8 +63,8 @@ class ShootRouteTest {
         when(ctx.bodyAsClass(Coordinates.class)).thenReturn(new Coordinates(X, Y));
         shootRoute.handle(ctx);
 
-//        verify(ctx).json(Map.of("message", "Game not found!"));
-//        verify(ctx).status(404);
-//        verify(SHOOT_UC).shoot("id", X, Y);
+        verify(ctx).json(Map.of("message", "Game not found!"));
+        verify(ctx).status(404);
+        verify(SHOOT_UC).shoot("id", X, Y);
     }
 }

@@ -7,10 +7,7 @@ import eu.optas.gateway.api.GameGateway;
 import eu.optas.utils.Coordinates;
 import eu.optas.utils.GameState;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryGameGateway implements GameGateway {
     private final List<Game> gameList;
@@ -30,14 +27,15 @@ public class InMemoryGameGateway implements GameGateway {
     }
 
     @Override
-    public Game getGame(String id) {
-        return gameList.stream().filter(game -> game.getId().equals(id)).findFirst().orElse(null);
+    public Optional<Game> getGame(String id) {
+        return gameList.stream().filter(game -> game.getId().equals(id)).findFirst();
     }
 
     @Override
-    public void updateGame(Game game, Game oldGame) {
-        int gameIndex = gameList.indexOf(oldGame);
-        gameList.set(gameIndex, game);
+    public void updateGame(Game game) {
+        gameList.stream().filter(g -> g.getId().equals(game.getId()))
+                .findFirst()
+                .ifPresent(g -> gameList.set(gameList.indexOf(g), game));
     }
 
     private String generateId() {

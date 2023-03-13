@@ -3,20 +3,22 @@ package eu.optas.use_cases.implementation;
 import eu.optas.domain.Board;
 import eu.optas.domain.Game;
 import eu.optas.domain.Ship;
+import eu.optas.domain.ShotResult;
 import eu.optas.gateway.api.GameGateway;
 import eu.optas.use_cases.api.BoundaryShip;
 import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.utils.Coordinates;
+import eu.optas.utils.GameNotFoundException;
 import eu.optas.utils.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -54,7 +56,7 @@ class ShootInteractorTest {
 
         Game game = new Game(GAME_ID, GameState.IN_PROGRESS, new Board(grid, ships), 25, 0);
 
-        when(gameGateway.getGame(GAME_ID)).thenReturn(game);
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryShotResult boundaryShotResult = new BoundaryShotResult(
                 expectedGrid,
@@ -62,17 +64,12 @@ class ShootInteractorTest {
                 null
         );
 
-        when(shotResultD2BConverter.convert(
-                argThat(argument -> argument.getGrid().equals(expectedGrid)
-                        && argument.getGameState() == GameState.IN_PROGRESS)
-        )).thenReturn(boundaryShotResult);
+        when(shotResultD2BConverter.convert(getArgThatWithoutHits(expectedGrid, GameState.IN_PROGRESS)))
+                .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
-        try {
-            returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
 
         assertThat(returnedShotResult.getGrid()).isEqualTo(expectedGrid);
         assertThat(returnedShotResult.getGameState()).isEqualTo(GameState.IN_PROGRESS);
@@ -92,7 +89,7 @@ class ShootInteractorTest {
 
         Game game = new Game(GAME_ID, GameState.IN_PROGRESS, new Board(grid, ships), 25, 0);
 
-        when(gameGateway.getGame(GAME_ID)).thenReturn(game);
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryShotResult boundaryShotResult = new BoundaryShotResult(
                 expectedGrid,
@@ -103,21 +100,17 @@ class ShootInteractorTest {
                         false)
         );
 
-        when(shotResultD2BConverter.convert(
-                argThat(argument -> argument.getGrid().equals(expectedGrid)
-                        && argument.getGameState() == GameState.IN_PROGRESS)
-        )).thenReturn(boundaryShotResult);
+        when(shotResultD2BConverter.convert(getArgThatWithHits(expectedGrid, GameState.IN_PROGRESS)))
+                .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
-        try {
-            returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
 
         assertThat(returnedShotResult.getGrid()).isEqualTo(expectedGrid);
         assertThat(returnedShotResult.getGameState()).isEqualTo(GameState.IN_PROGRESS);
         assertThat(returnedShotResult.getShip().get().getHits()).isEqualTo(1);
+        assertThat(returnedShotResult.getShip().get().isDestroyed()).isFalse();
     }
 
     @Test
@@ -138,7 +131,7 @@ class ShootInteractorTest {
 
         Game game = new Game(GAME_ID, GameState.IN_PROGRESS, new Board(grid, ships), 25, 0);
 
-        when(gameGateway.getGame(GAME_ID)).thenReturn(game);
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryShotResult boundaryShotResult = new BoundaryShotResult(
                 expectedGrid,
@@ -149,19 +142,12 @@ class ShootInteractorTest {
                         true)
         );
 
-        when(shotResultD2BConverter.convert(
-                argThat(argument -> argument.getGrid().equals(expectedGrid)
-                        && argument.getGameState() == GameState.IN_PROGRESS
-                        && argument.getShip().get().getHits() == 1
-                        && argument.getShip().get().isDestroyed())
-        )).thenReturn(boundaryShotResult);
+        when(shotResultD2BConverter.convert(getArgThatWithDestroyedShip(expectedGrid, GameState.IN_PROGRESS)))
+                .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
-        try {
-            returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
 
         assertThat(returnedShotResult.getGrid()).isEqualTo(expectedGrid);
         assertThat(returnedShotResult.getGameState()).isEqualTo(GameState.IN_PROGRESS);
@@ -182,7 +168,7 @@ class ShootInteractorTest {
 
         Game game = new Game(GAME_ID, GameState.IN_PROGRESS, new Board(grid, ships), 1, 0);
 
-        when(gameGateway.getGame(GAME_ID)).thenReturn(game);
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryShotResult boundaryShotResult = new BoundaryShotResult(
                 expectedGrid,
@@ -190,18 +176,12 @@ class ShootInteractorTest {
                 null
         );
 
-        when(shotResultD2BConverter.convert(
-                argThat(argument -> argument.getGrid().equals(expectedGrid)
-                        && argument.getGameState() == GameState.LOST
-                        && argument.getShip().isEmpty())
-        )).thenReturn(boundaryShotResult);
+        when(shotResultD2BConverter.convert(getArgThatWithoutHits(expectedGrid, GameState.LOST)))
+                .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
-        try {
-            returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
 
         assertThat(returnedShotResult.getGrid()).isEqualTo(expectedGrid);
         assertThat(returnedShotResult.getGameState()).isEqualTo(GameState.LOST);
@@ -221,7 +201,7 @@ class ShootInteractorTest {
 
         Game game = new Game(GAME_ID, GameState.IN_PROGRESS, new Board(grid, ships), 25, 0);
 
-        when(gameGateway.getGame(GAME_ID)).thenReturn(game);
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryShotResult boundaryShotResult = new BoundaryShotResult(
                 expectedGrid,
@@ -232,19 +212,12 @@ class ShootInteractorTest {
                         true)
         );
 
-        when(shotResultD2BConverter.convert(
-                argThat(argument -> argument.getGrid().equals(expectedGrid)
-                        && argument.getGameState() == GameState.WON
-                        && argument.getShip().get().getHits() == 1
-                        && argument.getShip().get().isDestroyed())
-        )).thenReturn(boundaryShotResult);
+        when(shotResultD2BConverter.convert(getArgThatWithDestroyedShip(expectedGrid, GameState.WON)))
+                .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
-        try {
-            returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.getMessage());
-        }
+
+        returnedShotResult = shootInteractor.shoot(GAME_ID, X, Y);
 
         assertThat(returnedShotResult.getGrid()).isEqualTo(expectedGrid);
         assertThat(returnedShotResult.getGameState()).isEqualTo(GameState.WON);
@@ -253,9 +226,33 @@ class ShootInteractorTest {
     }
 
     @Test
-    void shootNullWhenGameNotFound() throws Exception {
-        when(gameGateway.getGame(GAME_ID)).thenReturn(null);
+    void shootNullWhenGameNotFound() {
+        when(gameGateway.getGame(GAME_ID)).thenReturn(Optional.empty());
 
-        assertThrows(Exception.class, () -> shootInteractor.shoot(GAME_ID, X, Y));
+        assertThrowsExactly(GameNotFoundException.class,
+                () -> shootInteractor.shoot(GAME_ID, X, Y),
+                "Game was not found!");
+    }
+
+    private static ShotResult getArgThatWithoutHits(List<List<Integer>> expectedGrid, GameState inProgress) {
+        return argThat(argument -> argument.getGrid().equals(expectedGrid)
+                && argument.getGameState() == inProgress
+                && argument.getShip().isEmpty());
+    }
+
+    private static ShotResult getArgThatWithHits(List<List<Integer>> expectedGrid, GameState inProgress) {
+        return argThat(argument -> argument.getGrid().equals(expectedGrid)
+                && argument.getGameState() == inProgress
+                && argument.getShip().isPresent()
+                && argument.getShip().get().getHits() == 1
+                && !argument.getShip().get().isDestroyed());
+    }
+
+    private static ShotResult getArgThatWithDestroyedShip(List<List<Integer>> expectedGrid, GameState inProgress) {
+        return argThat(argument -> argument.getGrid().equals(expectedGrid)
+                && argument.getGameState() == inProgress
+                && argument.getShip().isPresent()
+                && argument.getShip().get().getHits() == 1
+                && argument.getShip().get().isDestroyed());
     }
 }
