@@ -39,7 +39,7 @@ class GetGameInteractorTest {
                 0
         );
 
-        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(expectedGame);
+        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(Optional.of(expectedGame));
         when(GAME_D_2_B_CONVERTER_MOCK.convert(expectedGame)).thenReturn(expectedBoundaryGame);
 
         BoundaryGame returnedGame = GET_GAME_INTERACTOR.getGame(GAME_ID).get();
@@ -49,11 +49,10 @@ class GetGameInteractorTest {
 
     @Test
     void getGameNull() {
-        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(null);
-        when(GAME_D_2_B_CONVERTER_MOCK.convert(null)).thenReturn(null);
+        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(Optional.empty());
 
         Optional<BoundaryGame> returnedGame = GET_GAME_INTERACTOR.getGame(GAME_ID);
 
-        assertThat(returnedGame.isEmpty()).isTrue();
+        assertThat(returnedGame).isEmpty();
     }
 }

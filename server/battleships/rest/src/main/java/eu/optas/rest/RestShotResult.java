@@ -1,5 +1,6 @@
 package eu.optas.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.optas.utils.GameState;
 
 import java.util.List;
@@ -9,7 +10,8 @@ public class RestShotResult {
     private final GameState gameState;
     private final RestShip ship;
 
-    public RestShotResult(List<List<Integer>> grid, GameState gameState, RestShip ship) {
+    public RestShotResult(@JsonProperty("grid") List<List<Integer>> grid, @JsonProperty("gameState") GameState gameState,
+                          @JsonProperty("ship") RestShip ship) {
         this.grid = grid;
         this.gameState = gameState;
         this.ship = ship;

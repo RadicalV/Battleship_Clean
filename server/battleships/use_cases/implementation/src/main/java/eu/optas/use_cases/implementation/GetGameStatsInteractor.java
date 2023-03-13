@@ -15,7 +15,7 @@ public class GetGameStatsInteractor implements GetGameStatsUC {
 
     @Override
     public Optional<BoundaryGameStats> getGameStats(String id) {
-        return Optional.ofNullable(gameGateway.getGame(id))
+        return gameGateway.getGame(id)
                 .map(game -> new BoundaryGameStats(game.getHitsRemaining(), game.getShipsDestroyed()));
     }
 }

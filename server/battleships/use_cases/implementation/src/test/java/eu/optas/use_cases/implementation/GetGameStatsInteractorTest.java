@@ -24,7 +24,7 @@ class GetGameStatsInteractorTest {
         Game game = new Game("123", GameState.IN_PROGRESS, mock(Board.class), 25, 0);
         BoundaryGameStats expectedGameStats = new BoundaryGameStats(25, 0);
 
-        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(game);
+        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(Optional.of(game));
 
         BoundaryGameStats returnedGameStats = GET_GAME_STATS_INTERACTOR.getGameStats(GAME_ID).get();
 
@@ -33,11 +33,10 @@ class GetGameStatsInteractorTest {
 
     @Test
     void getGameStatsNull() {
-
-        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(null);
+        when(GAME_GATEWAY_MOCK.getGame(GAME_ID)).thenReturn(Optional.empty());
 
         Optional<BoundaryGameStats> returnedGameStats = GET_GAME_STATS_INTERACTOR.getGameStats(GAME_ID);
 
-        assertThat(returnedGameStats.isEmpty()).isTrue();
+        assertThat(returnedGameStats).isEmpty();
     }
 }

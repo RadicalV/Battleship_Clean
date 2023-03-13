@@ -1,4 +1,8 @@
 dependencies {
     implementation project(':use_cases:api')
     implementation project(':utils')
+
+    def dep = rootProject.ext.dependencies
+
+    implementation dep.jackson
 }
