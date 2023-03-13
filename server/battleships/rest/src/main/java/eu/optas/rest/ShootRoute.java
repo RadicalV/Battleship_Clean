@@ -1,12 +1,11 @@
 package eu.optas.rest;
 
+import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.use_cases.api.ShootUC;
 import eu.optas.utils.Coordinates;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class ShootRoute implements Handler {
     private final ShootUC shootUC;
@@ -18,14 +17,10 @@ public class ShootRoute implements Handler {
     }
 
     @Override
-    public void handle(@NotNull Context ctx) {
+    public void handle(@NotNull Context ctx) throws Exception {
         Coordinates coordinates = ctx.bodyAsClass(Coordinates.class);
 
-        shootUC.shoot(ctx.pathParam("id"), coordinates.getX(), coordinates.getY())
-                .ifPresentOrElse(shotResult -> ctx.json(shotResultB2RConverter.convert(shotResult)),
-                        () -> {
-                            ctx.json(Map.of("message", "Game not found!"));
-                            ctx.status(404);
-                        });
+        BoundaryShotResult boundaryShotResult = shootUC.shoot(ctx.pathParam("id"), coordinates.getX(), coordinates.getY());
+        ctx.json(shotResultB2RConverter.convert(boundaryShotResult));
     }
 }

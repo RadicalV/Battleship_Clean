@@ -11,8 +11,10 @@ public class RestShip {
     private final int hits;
     private final boolean destroyed;
 
-    public RestShip(@JsonProperty("length") int length, @JsonProperty("coordinates") List<Coordinates> coordinates,
-                    @JsonProperty("hits") int hits, @JsonProperty("destroyed") boolean destroyed) {
+    public RestShip(@JsonProperty("length") int length,
+                    @JsonProperty("coordinates") List<Coordinates> coordinates,
+                    @JsonProperty("hits") int hits,
+                    @JsonProperty("destroyed") boolean destroyed) {
         this.length = length;
         this.coordinates = coordinates;
         this.hits = hits;

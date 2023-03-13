@@ -39,6 +39,6 @@ public class Main {
         app.post("/games", new StartGameRoute(startGameUC, gameB2RConverter));
         app.get("/games/{id}", new GetGameRoute(getGameUC, gameB2RConverter));
         app.get("/games/{id}/stats", new GetGameStatsRoute(getGameStatsUC, gameStatsB2RConverter));
-        app.post("/games/{id}/shoot", new ShootRoute(shootUC, shotResultB2RConverter));
+        app.post("/games/{id}/shot", new ShootRoute(shootUC, shotResultB2RConverter));
     }
 }
