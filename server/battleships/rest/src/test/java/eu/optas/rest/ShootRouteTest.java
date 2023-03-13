@@ -1,5 +1,7 @@
 package eu.optas.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.optas.use_cases.api.BoundaryShip;
 import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.use_cases.api.ShootUC;
@@ -23,7 +25,7 @@ class ShootRouteTest {
     private static final int Y = 5;
 
     @Test
-    void handle() {
+    void handle() throws JsonProcessingException {
         BoundaryShotResult boundaryShotResult =
                 new BoundaryShotResult(
                         List.of(List.of(0, 0, 0)),
@@ -45,7 +47,11 @@ class ShootRouteTest {
         ShootRoute shootRoute = new ShootRoute(SHOOT_UC, SHOT_RESULT_B_2_R_CONVERTER);
 
         when(ctx.pathParam("id")).thenReturn(GAME_ID);
-        when(ctx.bodyAsClass(Coordinates.class)).thenReturn(new Coordinates(X, Y));
+
+        Coordinates coordinates = new Coordinates(X, Y);
+        String requestBody = new ObjectMapper().writeValueAsString(coordinates);
+        when(ctx.body()).thenReturn(requestBody);
+        
         shootRoute.handle(ctx);
 
         verify(ctx).json(expectedRestShotResult);
@@ -53,14 +59,18 @@ class ShootRouteTest {
     }
 
     @Test
-    void handleWhenGameNotFound() {
+    void handleWhenGameNotFound() throws JsonProcessingException {
         when(SHOOT_UC.shoot("id", X, Y)).thenThrow(new GameNotFoundException("Game doesn't exist!"));
 
         Context ctx = mock(Context.class);
         ShootRoute shootRoute = new ShootRoute(SHOOT_UC, SHOT_RESULT_B_2_R_CONVERTER);
 
         when(ctx.pathParam("id")).thenReturn("id");
-        when(ctx.bodyAsClass(Coordinates.class)).thenReturn(new Coordinates(X, Y));
+
+        Coordinates coordinates = new Coordinates(X, Y);
+        String requestBody = new ObjectMapper().writeValueAsString(coordinates);
+        when(ctx.body()).thenReturn(requestBody);
+
         shootRoute.handle(ctx);
 
         verify(ctx).json(Map.of("message", "Game not found!"));
