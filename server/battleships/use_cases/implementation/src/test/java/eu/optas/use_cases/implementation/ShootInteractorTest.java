@@ -64,7 +64,7 @@ class ShootInteractorTest {
                 null
         );
 
-        when(shotResultD2BConverter.convert(getArgThatWithoutHits(expectedGrid, GameState.IN_PROGRESS)))
+        when(shotResultD2BConverter.convert(expectedNoHits(expectedGrid, GameState.IN_PROGRESS)))
                 .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
@@ -100,7 +100,7 @@ class ShootInteractorTest {
                         false)
         );
 
-        when(shotResultD2BConverter.convert(getArgThatWithHits(expectedGrid, GameState.IN_PROGRESS)))
+        when(shotResultD2BConverter.convert(expectedHit(expectedGrid, GameState.IN_PROGRESS)))
                 .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
@@ -142,7 +142,7 @@ class ShootInteractorTest {
                         true)
         );
 
-        when(shotResultD2BConverter.convert(getArgThatWithDestroyedShip(expectedGrid, GameState.IN_PROGRESS)))
+        when(shotResultD2BConverter.convert(expectedHitAndDestroyedShip(expectedGrid, GameState.IN_PROGRESS)))
                 .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
@@ -176,7 +176,7 @@ class ShootInteractorTest {
                 null
         );
 
-        when(shotResultD2BConverter.convert(getArgThatWithoutHits(expectedGrid, GameState.LOST)))
+        when(shotResultD2BConverter.convert(expectedNoHits(expectedGrid, GameState.LOST)))
                 .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
@@ -212,7 +212,7 @@ class ShootInteractorTest {
                         true)
         );
 
-        when(shotResultD2BConverter.convert(getArgThatWithDestroyedShip(expectedGrid, GameState.WON)))
+        when(shotResultD2BConverter.convert(expectedHitAndDestroyedShip(expectedGrid, GameState.WON)))
                 .thenReturn(boundaryShotResult);
 
         BoundaryShotResult returnedShotResult = null;
@@ -234,13 +234,13 @@ class ShootInteractorTest {
                 "Game was not found!");
     }
 
-    private static ShotResult getArgThatWithoutHits(List<List<Integer>> expectedGrid, GameState inProgress) {
+    private static ShotResult expectedNoHits(List<List<Integer>> expectedGrid, GameState inProgress) {
         return argThat(argument -> argument.getGrid().equals(expectedGrid)
                 && argument.getGameState() == inProgress
                 && argument.getShip().isEmpty());
     }
 
-    private static ShotResult getArgThatWithHits(List<List<Integer>> expectedGrid, GameState inProgress) {
+    private static ShotResult expectedHit(List<List<Integer>> expectedGrid, GameState inProgress) {
         return argThat(argument -> argument.getGrid().equals(expectedGrid)
                 && argument.getGameState() == inProgress
                 && argument.getShip().isPresent()
@@ -248,7 +248,7 @@ class ShootInteractorTest {
                 && !argument.getShip().get().isDestroyed());
     }
 
-    private static ShotResult getArgThatWithDestroyedShip(List<List<Integer>> expectedGrid, GameState inProgress) {
+    private static ShotResult expectedHitAndDestroyedShip(List<List<Integer>> expectedGrid, GameState inProgress) {
         return argThat(argument -> argument.getGrid().equals(expectedGrid)
                 && argument.getGameState() == inProgress
                 && argument.getShip().isPresent()

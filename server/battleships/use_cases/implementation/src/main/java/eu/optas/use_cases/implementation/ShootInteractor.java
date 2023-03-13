@@ -32,7 +32,7 @@ public class ShootInteractor implements ShootUC {
 
     private ShotResult checkShot(Game game, int x, int y) {
         Ship foundShip = checkForShip(game, x, y);
-        Ship newShip = constructNewShip(foundShip);
+        Ship newShip = damageShip(foundShip);
 
         Game updatedGame = constructUpdatedGame(game, newShip, foundShip, x, y);
 
@@ -48,7 +48,7 @@ public class ShootInteractor implements ShootUC {
                 .orElse(null);
     }
 
-    private static Ship constructNewShip(Ship foundShip) {
+    private static Ship damageShip(Ship foundShip) {
         Ship newShip = null;
 
         if (nonNull(foundShip)) {
@@ -74,7 +74,8 @@ public class ShootInteractor implements ShootUC {
             int index = ships.indexOf(foundShip);
             ships.set(index, newShip);
             if (newShip.isDestroyed()) {
-                shipsDestroyed = updateShipsDestroyed(newShip, grid, shipsDestroyed);
+                newShip.getCoordinates().forEach(coordinates -> grid.get(coordinates.getX()).set(coordinates.getY(), 3));
+                shipsDestroyed += 1;
             } else grid.get(x).set(y, 2);
         } else {
             grid.get(x).set(y, 1);
@@ -85,11 +86,5 @@ public class ShootInteractor implements ShootUC {
         else if (hitsRemaining <= 0) gameState = GameState.LOST;
 
         return new Game(game.getId(), gameState, new Board(grid, ships), hitsRemaining, shipsDestroyed);
-    }
-
-    private static int updateShipsDestroyed(Ship newShip, List<List<Integer>> grid, int shipsDestroyed) {
-        newShip.getCoordinates().forEach(coordinates -> grid.get(coordinates.getX()).set(coordinates.getY(), 3));
-        shipsDestroyed += 1;
-        return shipsDestroyed;
     }
 }
