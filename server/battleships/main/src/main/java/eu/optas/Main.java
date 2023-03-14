@@ -8,11 +8,14 @@ import eu.optas.use_cases.api.GetGameUC;
 import eu.optas.use_cases.api.ShootUC;
 import eu.optas.use_cases.api.StartGameUC;
 import eu.optas.use_cases.implementation.*;
+import eu.optas.utils.GameNotFoundException;
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Main {
     private final static Logger LOGGER = LogManager.getLogger(Main.class);
@@ -34,7 +37,16 @@ public class Main {
         GetGameStatsUC getGameStatsUC = new GetGameStatsInteractor(gameGateway);
         ShootUC shootUC = new ShootInteractor(gameGateway, shotResultD2BConverter);
 
-        Javalin app = Javalin.create().start(3000);
+        Javalin app = Javalin.create(config -> {
+            config.plugins.enableCors(cors -> {
+                cors.add(CorsPluginConfig::anyHost);
+            });
+        }).start(3000);
+
+        app.exception(GameNotFoundException.class, (exception, ctx) -> {
+            ctx.json(Map.of("message", "Game not found!"));
+            ctx.status(404);
+        });
 
         app.post("/games", new StartGameRoute(startGameUC, gameB2RConverter));
         app.get("/games/{id}", new GetGameRoute(getGameUC, gameB2RConverter));

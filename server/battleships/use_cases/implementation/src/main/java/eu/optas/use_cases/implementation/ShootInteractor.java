@@ -31,13 +31,33 @@ public class ShootInteractor implements ShootUC {
     }
 
     private ShotResult checkShot(Game game, int x, int y) {
+        Pair<Ship, Game> updated = updateShipAndGame(game, x, y);
+
+        gameGateway.updateGame(updated.getSecond());
+        return new ShotResult(updated.getSecond().getBoard().getGrid(), updated.getFirst(), updated.getSecond().getState());
+    }
+
+    private Pair<Ship, Game> updateShipAndGame(Game game, int x, int y) {
+        List<Ship> ships = game.getBoard().getShips();
+        List<List<Integer>> grid = game.getBoard().getGrid();
+        int shipsDestroyed = game.getShipsDestroyed();
+        int hitsRemaining = game.getHitsRemaining();
+
         Ship foundShip = checkForShip(game, x, y);
         Ship newShip = damageShip(foundShip);
 
-        Game updatedGame = constructUpdatedGame(game, newShip, foundShip, x, y);
+        if (nonNull(newShip) && nonNull(foundShip)) {
+            updateShips(ships, foundShip, newShip);
+            shipsDestroyed += updateHitShot(x, y, grid, newShip);
+        } else {
+            grid.get(x).set(y, 1);
+            hitsRemaining -= 1;
+        }
 
-        gameGateway.updateGame(updatedGame);
-        return new ShotResult(updatedGame.getBoard().getGrid(), newShip, updatedGame.getState());
+        GameState gameState = updateGameState(ships, shipsDestroyed, hitsRemaining);
+
+        Game updatedGame = new Game(game.getId(), gameState, new Board(grid, ships), hitsRemaining, shipsDestroyed);
+        return new Pair<>(newShip, updatedGame);
     }
 
     private Ship checkForShip(Game game, int x, int y) {
@@ -51,40 +71,51 @@ public class ShootInteractor implements ShootUC {
     private static Ship damageShip(Ship foundShip) {
         Ship newShip = null;
 
-        if (nonNull(foundShip)) {
-            int hits = foundShip.getHits() + 1;
+        if (nonNull(foundShip))
             newShip = new Ship(
                     foundShip.getLength(),
                     foundShip.getCoordinates(),
-                    hits,
-                    foundShip.getLength() <= hits
+                    foundShip.getHits() + 1,
+                    foundShip.getLength() <= foundShip.getHits() + 1
             );
-        }
         return newShip;
     }
 
-    private Game constructUpdatedGame(Game game, Ship newShip, Ship foundShip, int x, int y) {
-        List<Ship> ships = game.getBoard().getShips();
-        List<List<Integer>> grid = game.getBoard().getGrid();
-        int shipsDestroyed = game.getShipsDestroyed();
-        int hitsRemaining = game.getHitsRemaining();
-        GameState gameState = game.getState();
+    private static void updateShips(List<Ship> ships, Ship foundShip, Ship newShip) {
+        int index = ships.indexOf(foundShip);
+        ships.set(index, newShip);
+    }
 
-        if (nonNull(newShip) && nonNull(foundShip)) {
-            int index = ships.indexOf(foundShip);
-            ships.set(index, newShip);
-            if (newShip.isDestroyed()) {
-                newShip.getCoordinates().forEach(coordinates -> grid.get(coordinates.getX()).set(coordinates.getY(), 3));
-                shipsDestroyed += 1;
-            } else grid.get(x).set(y, 2);
-        } else {
-            grid.get(x).set(y, 1);
-            hitsRemaining -= 1;
+    private static int updateHitShot(int x, int y, List<List<Integer>> grid, Ship newShip) {
+        int shipsDestroyed = 0;
+        if (newShip.isDestroyed()) {
+            newShip.getCoordinates().forEach(coordinates -> grid.get(coordinates.getX()).set(coordinates.getY(), 3));
+            shipsDestroyed += 1;
+        } else grid.get(x).set(y, 2);
+        return shipsDestroyed;
+    }
+
+    private static GameState updateGameState(List<Ship> ships, int shipsDestroyed, int hitsRemaining) {
+        if (shipsDestroyed >= ships.size()) return GameState.WON;
+        else if (hitsRemaining <= 0) return GameState.LOST;
+        else return GameState.IN_PROGRESS;
+    }
+
+    private class Pair<Ship, Game> {
+        private final Ship ship;
+        private final Game game;
+
+        public Pair(Ship ship, Game game) {
+            this.ship = ship;
+            this.game = game;
         }
 
-        if (shipsDestroyed >= ships.size()) gameState = GameState.WON;
-        else if (hitsRemaining <= 0) gameState = GameState.LOST;
+        public Ship getFirst() {
+            return ship;
+        }
 
-        return new Game(game.getId(), gameState, new Board(grid, ships), hitsRemaining, shipsDestroyed);
+        public Game getSecond() {
+            return game;
+        }
     }
 }
