@@ -9,7 +9,6 @@ import eu.optas.use_cases.api.BoundaryShotResult;
 import eu.optas.use_cases.api.ShootUC;
 import eu.optas.utils.GameNotFoundException;
 import eu.optas.utils.GameState;
-import kotlin.Pair;
 
 import java.util.List;
 
@@ -50,8 +49,10 @@ public class ShootInteractor implements ShootUC {
         if (nonNull(newShip) && nonNull(foundShip)) {
             updateShips(ships, foundShip, newShip);
             shipsDestroyed += updateHitShot(x, y, grid, newShip);
-        } else
-            hitsRemaining -= updateMissedShot(x, y, grid);
+        } else {
+            grid.get(x).set(y, 1);
+            hitsRemaining -= 1;
+        }
 
         GameState gameState = updateGameState(ships, shipsDestroyed, hitsRemaining);
 
@@ -94,14 +95,27 @@ public class ShootInteractor implements ShootUC {
         return shipsDestroyed;
     }
 
-    private static int updateMissedShot(int x, int y, List<List<Integer>> grid) {
-        grid.get(x).set(y, 1);
-        return 1;
-    }
-
     private static GameState updateGameState(List<Ship> ships, int shipsDestroyed, int hitsRemaining) {
         if (shipsDestroyed >= ships.size()) return GameState.WON;
         else if (hitsRemaining <= 0) return GameState.LOST;
         else return GameState.IN_PROGRESS;
+    }
+
+    private class Pair<Ship, Game> {
+        private final Ship ship;
+        private final Game game;
+
+        public Pair(Ship ship, Game game) {
+            this.ship = ship;
+            this.game = game;
+        }
+
+        public Ship getFirst() {
+            return ship;
+        }
+
+        public Game getSecond() {
+            return game;
+        }
     }
 }

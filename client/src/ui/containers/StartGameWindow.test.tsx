@@ -1,17 +1,37 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import StartGameWindow from "./StartGameWindow";
+import * as hook from "./useStartGame";
 
 describe("Start game window container", () => {
-  const setStateMock = jest.fn();
+  let setStateMock: () => void;
 
-  jest.mock("./useStartGame", () => () => setStateMock);
+  beforeEach(() => {
+    setStateMock = jest.fn();
+  });
 
   it("calls hook and sets game state on click", () => {
-    render(<StartGameWindow setGame={setStateMock} />);
+    jest
+      .spyOn(hook, "useStartGame")
+      .mockReturnValue({ handleClick: setStateMock });
 
-    fireEvent.click(screen.getByTestId("start-btn"));
+    const renderContainer = render(<StartGameWindow setGame={() => {}} />);
+
+    act(() => renderContainer.getByTestId("start-btn").click());
 
     expect(setStateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("passes setGame callback to hook", () => {
+    const cb = jest.fn();
+
+    const hookSpy = jest.spyOn(hook, "useStartGame");
+    hookSpy.mockReturnValue({ handleClick: setStateMock });
+
+    const renderContainer = render(<StartGameWindow setGame={cb} />);
+
+    act(() => renderContainer.getByTestId("start-btn").click());
+
+    expect(hookSpy).toHaveBeenCalledWith(cb);
   });
 });
