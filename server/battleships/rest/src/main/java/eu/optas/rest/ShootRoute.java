@@ -24,6 +24,5 @@ public class ShootRoute implements Handler {
         Coordinates coordinates = objectMapper.readValue(ctx.body(), Coordinates.class);
         BoundaryShotResult boundaryShotResult = shootUC.shoot(ctx.pathParam("id"), coordinates.getX(), coordinates.getY());
         ctx.json(shotResultB2RConverter.convert(boundaryShotResult));
-
     }
 }

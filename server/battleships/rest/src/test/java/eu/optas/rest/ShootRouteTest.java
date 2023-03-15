@@ -12,8 +12,9 @@ import io.javalin.http.Context;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class ShootRouteTest {
@@ -51,7 +52,7 @@ class ShootRouteTest {
         Coordinates coordinates = new Coordinates(X, Y);
         String requestBody = new ObjectMapper().writeValueAsString(coordinates);
         when(ctx.body()).thenReturn(requestBody);
-        
+
         shootRoute.handle(ctx);
 
         verify(ctx).json(expectedRestShotResult);
@@ -71,10 +72,9 @@ class ShootRouteTest {
         String requestBody = new ObjectMapper().writeValueAsString(coordinates);
         when(ctx.body()).thenReturn(requestBody);
 
-        shootRoute.handle(ctx);
+        Throwable exception = assertThrows(GameNotFoundException.class, () -> shootRoute.handle(ctx));
 
-        verify(ctx).json(Map.of("message", "Game not found!"));
-        verify(ctx).status(404);
+        assertThat(exception.getMessage()).isEqualTo("Game doesn't exist!");
         verify(SHOOT_UC).shoot("id", X, Y);
     }
 }

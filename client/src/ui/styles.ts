@@ -43,6 +43,18 @@ export const useStyles = makeStyles()(() => ({
   },
   startGameBtn: {
     fontSize: "3rem",
+    borderRadius: "40px",
+    fontFamily: "Bangers",
+    width: "300px",
+    background: "linear-gradient(to right,#021B79,#0575E6,#65C7F7,#9CECFB)",
+    backgroundSize: "300%",
+    backgroundPosition: "left",
+    transition: "background-position 2s",
+    color: "white",
+    "&:hover": {
+      border: "1px solid #0575E6",
+      backgroundPosition: "right",
+    },
   },
   gridWrapper: {
     padding: 50,
@@ -99,7 +111,7 @@ export const useStyles = makeStyles()(() => ({
     width: "400px",
     backgroundColor: "white",
     padding: 20,
-    border: "2px solid #000",
+    border: "2px solid rgba(113, 167, 223, 0.59)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -112,6 +124,11 @@ export const useStyles = makeStyles()(() => ({
     color: "white",
     fontFamily: "Bangers",
     fontSize: "1.5rem",
+    borderRadius: "10px",
+    backgroundColor: "rgb(5,117,230)",
+    "&:hover": {
+      backgroundColor: "rgb(61,155,251)",
+    },
   },
   snackbar: {
     width: "400px",

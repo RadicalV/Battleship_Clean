@@ -8,7 +8,7 @@ export function useShowSnackbar() {
   const showSnackbar = (variant: VariantType, message: string) => {
     enqueueSnackbar(message, {
       autoHideDuration: 3000,
-      anchorOrigin: { horizontal: "right", vertical: "bottom" },
+      anchorOrigin: { horizontal: "right", vertical: "top" },
       variant: variant,
       className: `${classes.snackbar}`,
     });

@@ -7,7 +7,7 @@ export class RestGameGateway implements GameStorage {
   private readonly url: string;
 
   constructor() {
-    this.url = "http://localhost:3000/games";
+    this.url = "http://10.0.1.5:3000/games";
   }
 
   getGame(id: string): Observable<Game> {
